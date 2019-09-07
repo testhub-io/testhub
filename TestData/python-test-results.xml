@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="0" name="pytest" skipped="0" tests="4" time="0.090">
+
+	<testcase classname="tests.StringMethods_tests.TestStringMethods" file="tests/StringMethods_tests.py" line="19" name="test_get_hello_world" time="0.003"></testcase>
+	<testcase classname="tests.StringMethods_tests.TestStringMethods" file="tests/StringMethods_tests.py" line="8" name="test_isupper" time="0.002"></testcase>
+	<testcase classname="tests.StringMethods_tests.TestStringMethods" file="tests/StringMethods_tests.py" line="12" name="test_split" time="0.002"></testcase>
+	<testcase classname="tests.StringMethods_tests.TestStringMethods" file="tests/StringMethods_tests.py" line="5" name="test_upper" time="0.003"></testcase>
+</testsuite>

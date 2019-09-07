@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsHubUploadEndpoint", "TestsHubUploadEndpoint\TestsHubUploadEndpoint.csproj", "{A2931CE7-1BF0-42CB-ADBC-797668E58EE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsHubUploadEndpoint.Tests", "TestsHubUploadEndpoint.Tests\TestsHubUploadEndpoint.Tests.csproj", "{386FEC3E-76CC-427B-A906-DCE04D7A331D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2931CE7-1BF0-42CB-ADBC-797668E58EE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2931CE7-1BF0-42CB-ADBC-797668E58EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2931CE7-1BF0-42CB-ADBC-797668E58EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2931CE7-1BF0-42CB-ADBC-797668E58EE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{386FEC3E-76CC-427B-A906-DCE04D7A331D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{386FEC3E-76CC-427B-A906-DCE04D7A331D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{386FEC3E-76CC-427B-A906-DCE04D7A331D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{386FEC3E-76CC-427B-A906-DCE04D7A331D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {069C0E33-37FB-4052-BF99-87A9B973F598}
+	EndGlobalSection
+EndGlobal
