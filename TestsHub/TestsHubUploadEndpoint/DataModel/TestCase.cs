@@ -16,5 +16,6 @@ namespace TestsHubUploadEndpoint.DataModel
 
         public string Status { get; set; }
         public string Time { get; internal set; }
+        public object File { get; internal set; }
     }
 }

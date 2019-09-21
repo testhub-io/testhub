@@ -20,7 +20,7 @@ namespace Tests
         }
 
         [Test]
-        public void Read    ()
+        public void Test_Read ()
         {
             // Arrange 
             var dataLoaderMock = new Mock<IDataLoader>();

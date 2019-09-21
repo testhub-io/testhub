@@ -6,7 +6,7 @@ namespace TestsHubUploadEndpoint.DataModel
 {
     public class TestRun
     {
-        public string TestRunId { get; set; }
+        public string TestRunName { get; set; }
 
     }
 }
