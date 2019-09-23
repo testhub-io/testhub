@@ -1,5 +1,5 @@
 ﻿using System;
-using TestsHubUploadEndpoint.DataModel;
+using TestsHub.Data.DataModel;
 
 namespace TestsHubUploadEndpoint
 {

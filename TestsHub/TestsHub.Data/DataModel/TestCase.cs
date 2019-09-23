@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace TestsHubUploadEndpoint.DataModel
+namespace TestsHub.Data.DataModel
 {
     public class TestCase
     {
+        [Key]
+        public long Id { get; set; }
         public int TestRunId { get; set; }
 
         public string Name { get; set; }
@@ -15,7 +18,7 @@ namespace TestsHubUploadEndpoint.DataModel
         public string SystemOut { get; set; }
 
         public string Status { get; set; }
-        public string Time { get; internal set; }
-        public object File { get; internal set; }
+        public string Time { get; set; }
+        public string File { get; set; }
     }
 }

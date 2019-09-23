@@ -1,3 +1,4 @@
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
 using NUnit.Framework;
 using Shouldly;
@@ -5,8 +6,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml;
 using TestsHubUploadEndpoint;
-using TestsHubUploadEndpoint.DataModel;
 using TestsHubUploadEndpoint.Tests.TestData;
+using TestsHub.Data.DataModel;
 
 namespace Tests
 {
@@ -24,8 +25,8 @@ namespace Tests
         {
             // Arrange 
             var dataLoaderMock = new Mock<IDataLoader>();
-            var caseseReported = new List<TestCase>();
-            dataLoaderMock.Setup(s => s.Add(It.IsAny<TestCase>())).Callback<TestCase>(t => caseseReported.Add(t));
+            var caseseReported = new List<TestsHub.Data.DataModel.TestCase>();
+            dataLoaderMock.Setup(s => s.Add(It.IsAny<TestsHub.Data.DataModel.TestCase>())).Callback<TestsHub.Data.DataModel.TestCase>(t => caseseReported.Add(t));
 
             var reader = new JUnitReader(dataLoaderMock.Object);
 

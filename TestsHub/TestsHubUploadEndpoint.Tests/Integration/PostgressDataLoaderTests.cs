@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TestsHubUploadEndpoint.DataModel;
+using TestsHub.Data.DataModel;
 
 namespace TestsHubUploadEndpoint.Tests.Integration
 {
