@@ -5,7 +5,6 @@ namespace TestsHubUploadEndpoint
 {
     public interface IDataLoader : IDisposable
     {
-        void Add(TestRun testRun);
-        void Add(TestCase testCase);
+        void Add(TestRun testRun);       
     }
 }

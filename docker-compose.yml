@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
       PGDATA: /data/postgres
     volumes:
-       - /mnt/d/TestHub/postgres:/data/postgres
+       - /d/TestHub/postgres:/data/postgres
     ports:
       - "5432:5432"
     networks:

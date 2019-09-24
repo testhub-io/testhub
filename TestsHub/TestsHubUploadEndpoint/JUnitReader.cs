@@ -64,7 +64,7 @@ namespace TestsHubUploadEndpoint
                                     reader.MoveToElement();
                                 }
 
-                                _dataLoader.Add(testCase);
+                                result.Add(testCase);
                             }
                             break;
 

@@ -9,38 +9,17 @@ namespace TestsHubUploadEndpoint
 {
     public class PostgressDataLoader : IDataLoader
     {
-        NpgsqlConnection _connection;
-
-        private NpgsqlConnection Connection
-        {
-            get
-            {
-                if (_connection == null)
-                {                    
-                    var connString = "Host=localhost;Username=postgres;Password=changeme;Database=test-hub";
-                    _connection = new NpgsqlConnection(connString);
-                    _connection.Open();
-                    return _connection;
-                }
-
-                return _connection;
-            }
-        }
-
+        TestHubDBContext _testHubDBContext = new TestHubDBContext();
 
         public void Add(TestRun testRun)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Add(TestCase testCase)
-        {
-            throw new NotImplementedException();
+            _testHubDBContext.TestRuns.Add(testRun);
+            _testHubDBContext.SaveChanges();
         }
 
         public void Dispose()
         {
-            _connection?.Close();
+            _testHubDBContext.Dispose();
         }
     }
 }

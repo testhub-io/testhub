@@ -25,8 +25,9 @@ namespace Tests
         {
             // Arrange 
             var dataLoaderMock = new Mock<IDataLoader>();
-            var caseseReported = new List<TestsHub.Data.DataModel.TestCase>();
-            dataLoaderMock.Setup(s => s.Add(It.IsAny<TestsHub.Data.DataModel.TestCase>())).Callback<TestsHub.Data.DataModel.TestCase>(t => caseseReported.Add(t));
+            var testRunReported = new TestsHub.Data.DataModel.TestRun();
+            dataLoaderMock.Setup(s => s.Add(It.IsAny<TestsHub.Data.DataModel.TestRun>()))
+                .Callback<TestsHub.Data.DataModel.TestRun>(t => testRunReported = t);
 
             var reader = new JUnitReader(dataLoaderMock.Object);
 
@@ -36,9 +37,9 @@ namespace Tests
             Task.WaitAll(reader.Read(xmlReader));
 
             // Assert
-            caseseReported.Count.ShouldBe(2);
+            testRunReported.TestCases.Count.ShouldBe(2);
 
-            var case1 = caseseReported[0];
+            var case1 = testRunReported.TestCases[0];
             case1.Name.ShouldBe("PassedTest");
             case1.ClassName .ShouldBe("aspnetappDependency.Tests.UnitTest1");
             case1.Status.ShouldBeNull();

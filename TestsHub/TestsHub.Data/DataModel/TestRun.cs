@@ -11,6 +11,6 @@ namespace TestsHub.Data.DataModel
         public int Id { get; set; }
         public string TestRunName { get; set; }
 
-        public IEnumerable<TestCase> TestCases { get; set; }
+        public List<TestCase> TestCases { get; set; }
     }
 }
