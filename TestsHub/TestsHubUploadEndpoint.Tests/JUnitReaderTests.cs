@@ -44,7 +44,6 @@ namespace Tests
             case1.ClassName .ShouldBe("aspnetappDependency.Tests.UnitTest1");
             case1.Status.ShouldBeNull();
             case1.Time.ShouldBe("0.0000749");
-
-        }
+        }     
     }
 }

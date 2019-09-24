@@ -1,8 +1,11 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using TestsHub.Data.DataModel;
+using TestsHubUploadEndpoint.Tests.TestData;
 
 namespace TestsHubUploadEndpoint.Tests.Integration
 {
@@ -18,6 +21,21 @@ namespace TestsHubUploadEndpoint.Tests.Integration
                 new TestCase(){ Name = "Case 2"}
             } };
             dataLoader.Add(testRun);
+            Assert.Pass();
+        }
+
+        [Test]
+        public void JustUpload()
+        {
+            var dataLoader = new PostgressDataLoader();
+            var sw = new Stopwatch();
+            sw.Start();
+            var jUnitReader = new JUnitReader(new PostgressDataLoader());
+            var task = jUnitReader.Read(TestData.TestData.GetFile("Kiln\\HugeNumberOfTests.xml"));
+            Task.WaitAll(task);
+            sw.Stop();
+
+            System.Diagnostics.Debug.WriteLine("Load time: " + sw.ElapsedMilliseconds);
             Assert.Pass();
         }
     }
