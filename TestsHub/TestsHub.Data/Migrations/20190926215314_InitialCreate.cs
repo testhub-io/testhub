@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace TestsHub.Data.Migrations
 {
@@ -12,7 +11,7 @@ namespace TestsHub.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("MySQL:AutoIncrement", true),
                     TestRunName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -25,7 +24,7 @@ namespace TestsHub.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("MySQL:AutoIncrement", true),
                     TestRunId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     ClassName = table.Column<string>(nullable: true),

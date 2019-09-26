@@ -13,7 +13,7 @@ namespace TestsHub.Data.DataModel
         public DbSet<TestRun> TestRuns { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=localhost;Database=testHub;Username=postgres;Password=911");
+            => optionsBuilder.UseMySQL("Host=localhost;Database=testHub;Username=root;Password=test_pass");
     }
 
 }
