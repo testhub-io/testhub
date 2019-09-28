@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using TestsHubUploadEndpoint.DataModel;
+using TestsHub.Data.DataModel;
 
 namespace TestsHubUploadEndpoint
 {
@@ -64,26 +64,28 @@ namespace TestsHubUploadEndpoint
                                     reader.MoveToElement();
                                 }
 
-                                _dataLoader.Add(testCase);
+                                result.Add(testCase);
                             }
                             break;
 
                         case XmlNodeType.Text:
-                            Console.WriteLine("Text Node: {0}",
-                                     await reader.GetValueAsync());
+                            //Console.WriteLine("Text Node: {0}",
+                            //         await reader.GetValueAsync());
                             break;
 
                         case XmlNodeType.EndElement:
-                            Console.WriteLine("End Element {0}", reader.Name);
+                            //Console.WriteLine("End Element {0}", reader.Name);
                             break;
 
                         default:
-                            Console.WriteLine("Other node {0} with value {1}",
-                                            reader.NodeType, reader.Value);
+                            //Console.WriteLine("Other node {0} with value {1}",
+                            //                reader.NodeType, reader.Value);
                             break;
                     }
                 }
             }
+
+            _dataLoader.Add(new TestRun() { TestCases = result });
         }
     }
 }
