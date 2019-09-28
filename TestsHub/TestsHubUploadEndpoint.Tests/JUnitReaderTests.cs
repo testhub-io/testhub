@@ -1,13 +1,9 @@
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
 using NUnit.Framework;
 using Shouldly;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Xml;
 using TestsHubUploadEndpoint;
-using TestsHubUploadEndpoint.Tests.TestData;
-using TestsHub.Data.DataModel;
+using TestsHubUploadEndpoint.Tests;
 
 namespace Tests
 {

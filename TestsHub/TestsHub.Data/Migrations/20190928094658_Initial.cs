@@ -2,21 +2,41 @@
 
 namespace TestsHub.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Projects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projects", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "TestRuns",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
-                    TestRunName = table.Column<string>(nullable: true)
+                    TestRunName = table.Column<string>(nullable: true),
+                    ProjectId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TestRuns", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TestRuns_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,6 +68,11 @@ namespace TestsHub.Data.Migrations
                 name: "IX_TestCases_TestRunId",
                 table: "TestCases",
                 column: "TestRunId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestRuns_ProjectId",
+                table: "TestRuns",
+                column: "ProjectId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -57,6 +82,9 @@ namespace TestsHub.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "TestRuns");
+
+            migrationBuilder.DropTable(
+                name: "Projects");
         }
     }
 }

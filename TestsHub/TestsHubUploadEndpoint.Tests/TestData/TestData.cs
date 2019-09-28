@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace TestsHubUploadEndpoint.Tests.TestData
+namespace TestsHubUploadEndpoint.Tests
 {
     internal static class TestData
     {
