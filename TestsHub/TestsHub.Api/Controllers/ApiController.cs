@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using TestsHub.Api.Data;
 
 namespace TestsHub.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    [Produces("application/json")]
+    public class ApiController : ControllerBase
     {
         // GET api/values
         [HttpGet]
@@ -18,10 +21,19 @@ namespace TestsHub.Api.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpGet("{org}/{project}/{testrun}")]
+        public ActionResult<string> Get(string org, string project, int testRun)
         {
-            return "value";
+            var testRunData = new TestRun()
+            {
+                TestCases = new List<TestCase>()
+             {
+                 new TestCase() { Status = "Success", Name = "test_dm" }
+             },
+                Id = "2"
+            };
+            return new JsonResult(testRunData, new JsonSerializerSettings()
+            { Formatting = Formatting.Indented });
         }
 
         // POST api/values
