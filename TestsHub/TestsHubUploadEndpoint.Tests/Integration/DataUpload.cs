@@ -12,6 +12,31 @@ namespace TestsHubUploadEndpoint.Tests.Integration
     [TestFixture(Category = "Integration")]
     public class DataUpload
     {
+        TestHubDBContext _testHubDBContext = new TestHubDBContext();
+        Organisation _org = new Organisation() { Name = "Test-org" };
+
+        [SetUp]
+        public void Inti()
+        {
+            _testHubDBContext.Add(_org);
+        }
+
+        [Test]
+        public void FillInDb()
+        {                      
+            UploadHugeJUnitFile();
+            UploadHugeJUnitFile();
+            UploadHugeJUnitFile();
+
+            for (var i=0;i< 20; i++)
+            {
+                UploadRegularJUnitFile();
+            }
+
+            UploadSmallJUnitFile();
+            UploadSmallJUnitFile();
+        }
+
         [Test]
         public void UploadHugeJUnitFile()
         {
@@ -33,12 +58,12 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             Assert.Pass();
         }
 
-        private static void LoadJunitFile(Stream stream, string projectName)
+        private void LoadJunitFile(Stream stream, string projectName)
         {
             var sw = new Stopwatch();
             sw.Start();
             var jUnitReader = new JUnitReader(
-                new DataLoader(new TestHubDBContext(), projectName));
+                new DataLoader(new TestHubDBContext(), projectName, _org.Name));
             
             var task = jUnitReader.Read( stream);
             Task.WaitAll(task);

@@ -11,5 +11,7 @@ namespace TestsHub.Data.DataModel
         public string Name { get; set; }
 
         public List<TestRun> TestRuns { get; set; } = new List<TestRun>();
+
+        public Organisation Organisation { get; set; }
     }
 }

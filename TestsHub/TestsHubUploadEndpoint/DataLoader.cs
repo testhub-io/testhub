@@ -11,13 +11,17 @@ namespace TestsHubUploadEndpoint
     {
         TestHubDBContext _testHubDBContext = new TestHubDBContext();
 
-        public DataLoader(TestHubDBContext testHubDBContext, string projectName)
+
+        public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org)
         {
             _testHubDBContext = testHubDBContext;
             ProjectName = projectName;
+            Organisation = new Organisation() { Name = org };
+            testHubDBContext.Entry<Organisation>(Organisation);
         }
 
         public string ProjectName { get; }
+        public Organisation Organisation { get; private set; }
 
         public void Add(TestRun testRun)
         {
@@ -30,8 +34,9 @@ namespace TestsHubUploadEndpoint
                 };
                 _testHubDBContext.Projects.Add(project);
             }
-
+            
             testRun.Project = project;
+            testRun.Project.Organisation = Organisation;
             var testCases = testRun.TestCases;
             testRun.TestCases = null;
             _testHubDBContext.TestRuns.Add(testRun);
