@@ -5,7 +5,6 @@ using System.Text;
 using TestsHub.Data.DataModel;
 using RandomNameGenerator;
 
-
 namespace TestsHubUploadEndpoint
 {
     public class DataLoader : IDataLoader
@@ -22,7 +21,6 @@ namespace TestsHubUploadEndpoint
 
         public void Add(TestRun testRun)
         {
-            _testHubDBContext.ChangeTracker.AutoDetectChangesEnabled = false;
             var project = _testHubDBContext.Projects.SingleOrDefault(p => p.Name == ProjectName);
             if (project == null && testRun.Project == null)
             {
@@ -32,10 +30,32 @@ namespace TestsHubUploadEndpoint
                 };
                 _testHubDBContext.Projects.Add(project);
             }
-            testRun.Project = project;            
-            _testHubDBContext.TestRuns.Add(testRun);
-            
 
+            testRun.Project = project;
+            var testCases = testRun.TestCases;
+            testRun.TestCases = null;
+            _testHubDBContext.TestRuns.Add(testRun);
+            _testHubDBContext.SaveChanges();
+
+            BatchInsert(testCases, testRun.Id);
+        }
+
+        private void BatchInsert(List<TestCase> testCases, int testRunId)
+        {
+            var batch = new List<TestCase>();
+            for (var i = 0; i < testCases.Count; i++)
+            {
+                testCases[i].TestRunId = testRunId;
+                batch.Add(testCases[i]);
+                if (i % 1000 == 0)
+                {
+                    _testHubDBContext.TestCases.AddRange(batch);
+                    _testHubDBContext.SaveChanges();
+                    batch = new List<TestCase>();
+                }
+            }
+
+            _testHubDBContext.TestCases.AddRange(batch);
             _testHubDBContext.SaveChanges();
         }
 
