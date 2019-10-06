@@ -15,7 +15,11 @@ namespace TestsHubUploadEndpoint.Tests.Integration
         [Test]
         public void AddTestRun_test()
         {
-            var dataLoader = new DataLoader(new TestHubDBContext(), "DataLoaderTests-Integration");
+            var dataContext = new TestHubDBContext();
+            var org = new Organisation() { Name = "Integration-org" };
+            dataContext.Entry(org);
+            dataContext.SaveChanges();
+            var dataLoader = new DataLoader(dataContext, "DataLoaderTests-Integration", org.Name);
             var testRun = new TestRun() { TestRunName = "Some test run", TestCases = new List<TestCase>() {
                 new TestCase(){ Name = "Case 1"},
                 new TestCase(){ Name = "Case 2"}
