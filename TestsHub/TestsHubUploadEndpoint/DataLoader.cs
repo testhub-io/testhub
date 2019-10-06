@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TestsHub.Data.DataModel;
-using RandomNameGenerator;
 
 namespace TestsHubUploadEndpoint
 {
@@ -16,7 +15,12 @@ namespace TestsHubUploadEndpoint
         {
             _testHubDBContext = testHubDBContext;
             ProjectName = projectName;
-            Organisation = new Organisation() { Name = org };
+            Organisation = testHubDBContext.Organisations.SingleOrDefault(s => s.Name == org);
+            if (Organisation == null)
+            {
+                Organisation = new Organisation() { Name = org };
+            }
+
             testHubDBContext.Entry<Organisation>(Organisation);
         }
 
@@ -45,13 +49,14 @@ namespace TestsHubUploadEndpoint
             BatchInsert(testCases, testRun.Id);
         }
 
-        private void BatchInsert(List<TestCase> testCases, int testRunId)
+        private void BatchInsert(ICollection<TestCase> testCases, int testRunId)
         {
             var batch = new List<TestCase>();
-            for (var i = 0; i < testCases.Count; i++)
+            var testCasesList = testCases.ToList();
+            for (var i = 0; i < testCasesList.Count; i++)
             {
-                testCases[i].TestRunId = testRunId;
-                batch.Add(testCases[i]);
+                testCasesList[i].TestRunId = testRunId;
+                batch.Add(testCasesList[i]);
                 if (i % 1000 == 0)
                 {
                     _testHubDBContext.TestCases.AddRange(batch);

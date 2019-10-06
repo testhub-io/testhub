@@ -2,6 +2,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/TestsHub.Api",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:63216",
       "sslPort": 44355
@@ -12,7 +16,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "https://localhost:44355/api/Test-org/TestDataUpload-Regular/8",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -26,17 +30,10 @@
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },
-    "Docker": {
+    "LocalDev": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api/values",
-      "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:80",
-        "ASPNETCORE_HTTPS_PORT": "44356"
-      },
-      "httpPort": 63217,
-      "useSSL": true,
-      "sslPort": 44356
+      "launchUrl": "http://localhost:63216/api/Test-org/TestDataUpload%20-%20Regular/5"
     }
   }
 }

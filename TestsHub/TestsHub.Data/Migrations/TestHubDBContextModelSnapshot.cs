@@ -18,12 +18,14 @@ namespace TestsHub.Data.Migrations
 
             modelBuilder.Entity("TestsHub.Data.DataModel.Organisation", b =>
                 {
-                    b.Property<string>("Name")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.HasKey("Name");
+                    b.Property<string>("Name");
 
-                    b.ToTable("Organsations");
+                    b.HasKey("Id");
+
+                    b.ToTable("Organisations");
                 });
 
             modelBuilder.Entity("TestsHub.Data.DataModel.Project", b =>
@@ -33,9 +35,11 @@ namespace TestsHub.Data.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("OrganisationId");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("OrganisationId");
 
                     b.ToTable("Projects");
                 });
@@ -73,7 +77,8 @@ namespace TestsHub.Data.Migrations
 
                     b.Property<int?>("ProjectId");
 
-                    b.Property<string>("TestRunName");
+                    b.Property<string>("TestRunName")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -84,9 +89,9 @@ namespace TestsHub.Data.Migrations
 
             modelBuilder.Entity("TestsHub.Data.DataModel.Project", b =>
                 {
-                    b.HasOne("TestsHub.Data.DataModel.Organisation")
+                    b.HasOne("TestsHub.Data.DataModel.Organisation", "Organisation")
                         .WithMany("Projects")
-                        .HasForeignKey("Name");
+                        .HasForeignKey("OrganisationId");
                 });
 
             modelBuilder.Entity("TestsHub.Data.DataModel.TestCase", b =>

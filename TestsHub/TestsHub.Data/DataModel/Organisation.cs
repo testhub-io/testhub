@@ -8,9 +8,11 @@ namespace TestsHub.Data.DataModel
     public class Organisation
     {
         [Key]
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
-        public List<Project> Projects { get; set; } = new List<Project>();
+        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 
     }
 }

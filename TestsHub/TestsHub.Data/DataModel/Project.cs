@@ -8,10 +8,13 @@ namespace TestsHub.Data.DataModel
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
-        public List<TestRun> TestRuns { get; set; } = new List<TestRun>();
+        public virtual ICollection<TestRun> TestRuns { get; set; }
 
-        public Organisation Organisation { get; set; }
+        public virtual Organisation Organisation { get; set; }
+
+        public int OrganisationId { get; set; }
     }
 }

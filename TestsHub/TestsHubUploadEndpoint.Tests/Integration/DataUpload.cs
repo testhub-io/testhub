@@ -14,6 +14,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
     {
         TestHubDBContext _testHubDBContext = new TestHubDBContext();
         Organisation _org = new Organisation() { Name = "Test-org" };
+        static int counter = 1;
 
         [SetUp]
         public void Inti()
@@ -23,18 +24,16 @@ namespace TestsHubUploadEndpoint.Tests.Integration
 
         [Test]
         public void FillInDb()
-        {                      
-            UploadHugeJUnitFile();
-            UploadHugeJUnitFile();
-            UploadHugeJUnitFile();
+        {
+            LoadJunitFile(TestData.GetFile("Kiln\\HugeNumberOfTests.xml"), "TestDataUpload-HugeReport");
 
             for (var i=0;i< 20; i++)
             {
-                UploadRegularJUnitFile();
+                LoadJunitFile(TestData.GetFile("Kiln\\Frontend-JUnit.xml"), "TestDataUpload-Regular");
             }
 
-            UploadSmallJUnitFile();
-            UploadSmallJUnitFile();
+            LoadJunitFile(TestData.GetFile("test-results-rpclib.xml"), "TestDataUpload-SmallJUnit");
+            LoadJunitFile(TestData.GetFile("test-results-rpclib.xml"), "TestDataUpload-SmallJUnit");
         }
 
         [Test]
@@ -65,7 +64,8 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             var jUnitReader = new JUnitReader(
                 new DataLoader(new TestHubDBContext(), projectName, _org.Name));
             
-            var task = jUnitReader.Read( stream);
+            var task = jUnitReader.Read(stream, (++counter).ToString());
+
             Task.WaitAll(task);
             sw.Stop();
 

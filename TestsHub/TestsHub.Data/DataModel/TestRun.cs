@@ -10,11 +10,14 @@ namespace TestsHub.Data.DataModel
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public string TestRunName { get; set; }
 
-        public List<TestCase> TestCases { get; set; }
+        public virtual ICollection<TestCase> TestCases { get; set; }
 
-        public Project Project { get; set; }
+        public virtual Project Project { get; set; }
+
+        public int ProjectId { get; set; }
 
     }
 }

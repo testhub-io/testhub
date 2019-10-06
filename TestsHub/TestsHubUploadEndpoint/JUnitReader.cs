@@ -16,7 +16,7 @@ namespace TestsHubUploadEndpoint
             _dataLoader = dataLoader;
         }
 
-        public async Task Read(Stream stream)
+        public async Task Read(Stream stream, string testRunName)
         {
             var settings = new XmlReaderSettings
             {
@@ -85,7 +85,7 @@ namespace TestsHubUploadEndpoint
                 }
             }
 
-            _dataLoader.Add(new TestRun() { TestCases = result });
+            _dataLoader.Add(new TestRun() { TestCases = result, TestRunName = testRunName });
         }
     }
 }

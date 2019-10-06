@@ -1,6 +1,7 @@
 using Moq;
 using NUnit.Framework;
 using Shouldly;
+using System.Linq;
 using System.Threading.Tasks;
 using TestsHubUploadEndpoint;
 using TestsHubUploadEndpoint.Tests;
@@ -30,12 +31,12 @@ namespace Tests
             var xmlReader = TestData.GetFile("MInimalJUnit.xml");
 
             // Act 
-            Task.WaitAll(reader.Read(xmlReader));
+            Task.WaitAll(reader.Read(xmlReader, "tr1"));
 
             // Assert
             testRunReported.TestCases.Count.ShouldBe(2);
 
-            var case1 = testRunReported.TestCases[0];
+            var case1 = testRunReported.TestCases.First();
             case1.Name.ShouldBe("PassedTest");
             case1.ClassName .ShouldBe("aspnetappDependency.Tests.UnitTest1");
             case1.Status.ShouldBeNull();

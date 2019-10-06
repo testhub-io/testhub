@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TestsHub.Api.Data;
+using TestsHub.Data;
 
 namespace TestsHub.Api.Controllers
 {
@@ -13,6 +15,8 @@ namespace TestsHub.Api.Controllers
     [Produces("application/json")]
     public class ApiController : ControllerBase
     {
+        IMapper _mapper = Automapper.MapperConfiguration.Mapper;
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
@@ -22,18 +26,17 @@ namespace TestsHub.Api.Controllers
 
         // GET api/values/5
         [HttpGet("{org}/{project}/{testrun}")]
-        public ActionResult<string> Get(string org, string project, int testRun)
+        public ActionResult<string> Get(string org, string project, string testRun)
         {
-            var testRunData = new TestRun()
+            var repository = RepositoryFactory.GetTestHubRepository(org);
+            var testRunEntity = repository.GetTestRun(project, testRun);
+
+            var testRunDto = _mapper.Map<Data.TestRun>(testRunEntity);
+
+            return new JsonResult(testRunDto, new JsonSerializerSettings()
             {
-                TestCases = new List<TestCase>()
-             {
-                 new TestCase() { Status = "Success", Name = "test_dm" }
-             },
-                Id = "2"
-            };
-            return new JsonResult(testRunData, new JsonSerializerSettings()
-            { Formatting = Formatting.Indented });
+                Formatting = Formatting.Indented
+            });
         }
 
         // POST api/values

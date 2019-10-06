@@ -20,5 +20,7 @@ namespace TestsHub.Data.DataModel
         public string Time { get; set; }
 
         public string File { get; set; }
+
+        public virtual TestRun TestRun { get; set; }
     }
 }
