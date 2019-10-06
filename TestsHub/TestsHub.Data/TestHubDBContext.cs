@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace TestsHub.Data.DataModel
 {
     public class TestHubDBContext : DbContext
     {
+
         public DbSet<TestCase> TestCases { get; set; }
 
         public DbSet<TestRun> TestRuns { get; set; }
@@ -13,9 +16,15 @@ namespace TestsHub.Data.DataModel
         public DbSet<Organisation> Organisations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder
-                .UseMySQL("Host=localhost;Database=testHub;Username=root;Password=test_pass")
-                .UseLazyLoadingProxies();
+        {
+            var configuration = new ConfigurationBuilder()
+                       .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                       .AddJsonFile("appsettings.json")
+                       .Build();
+            optionsBuilder
+               .UseMySQL(configuration.GetConnectionString("DefaultConnection"))
+               .UseLazyLoadingProxies();
+        }
     }
 
 }

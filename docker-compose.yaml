@@ -9,8 +9,18 @@ services:
       MYSQL_USER: 'test'
       MYSQL_PASS: 'pass'
     volumes:
-      - ./database:/var/lib/mysql
+      - ./mysql/database:/var/lib/mysql
     ports:
       - "3306:3306"
+  
+  testhub_api:
+    container_name: test_hub_api
+    restart: always
+    build: 
+      context: ./TestsHub/
+      dockerfile: TestsHub.Api/Dockerfile
+    ports: 
+        - "80:80"
+        - "443:443"
 volumes:
   my-datavolume:
