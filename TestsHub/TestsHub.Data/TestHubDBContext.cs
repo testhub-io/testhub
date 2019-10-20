@@ -6,6 +6,10 @@ namespace TestsHub.Data.DataModel
 {
     public class TestHubDBContext : DbContext
     {
+        public TestHubDBContext (IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         public DbSet<TestCase> TestCases { get; set; }
 
@@ -14,15 +18,12 @@ namespace TestsHub.Data.DataModel
         public DbSet<Project> Projects { get; set; }
 
         public DbSet<Organisation> Organisations { get; set; }
+        public IConfiguration Configuration { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var configuration = new ConfigurationBuilder()
-                       .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                       .AddJsonFile("appsettings.json")
-                       .Build();
+        {                       
             optionsBuilder
-               .UseMySQL(configuration.GetConnectionString("DefaultConnection"))
+               .UseMySQL(Configuration.GetConnectionString("DefaultConnection"))
                .UseLazyLoadingProxies();
         }
     }

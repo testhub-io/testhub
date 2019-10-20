@@ -1,14 +1,21 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace TestsHub.Data
 {
-    public class RepositoryFactory
+    public class RepositoryFactory : IRepositoryFactory
     {
-        public static ITestHubRepository GetTestHubRepository(string organisation)
+        private readonly IConfiguration _configuration;
+
+        public RepositoryFactory (IConfiguration configuration)
         {
-            return new TestHubRepository(new DataModel.TestHubDBContext(), organisation);
+            this._configuration = configuration;
+        }
+        public ITestHubRepository GetTestHubRepository(string organisation)
+        {
+            return new TestHubRepository(new DataModel.TestHubDBContext(_configuration), organisation);
         }
     }
 }

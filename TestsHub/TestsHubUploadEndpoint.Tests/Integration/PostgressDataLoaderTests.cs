@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Extensions.Configuration;
+using Moq;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,17 +17,23 @@ namespace TestsHubUploadEndpoint.Tests.Integration
         [Test]
         public void AddTestRun_test()
         {
-            var dataContext = new TestHubDBContext();
+            var dataContext = new TestHubDBContext(TestHubMocks.ConfigurationMock.Object);
             var org = new Organisation() { Name = "Integration-org" };
             dataContext.Entry(org);
             dataContext.SaveChanges();
             var dataLoader = new DataLoader(dataContext, "DataLoaderTests-Integration", org.Name);
-            var testRun = new TestRun() { TestRunName = "Some test run", TestCases = new List<TestCase>() {
+            var testRun = new TestRun()
+            {
+                TestRunName = "Some test run",
+                TestCases = new List<TestCase>() {
                 new TestCase(){ Name = "Case 1"},
                 new TestCase(){ Name = "Case 2"}
-            } };
+            }
+            };
             dataLoader.Add(testRun);
             Assert.Pass();
-        }      
+        }
+
+      
     }
 }

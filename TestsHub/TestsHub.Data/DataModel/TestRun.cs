@@ -19,5 +19,9 @@ namespace TestsHub.Data.DataModel
 
         public int ProjectId { get; set; }
 
+        public DateTime Timestamp { get; set; }
+
+        public decimal Time { get; set; }
+       
     }
 }

@@ -12,7 +12,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
     [TestFixture(Category = "Integration")]
     public class DataUpload
     {
-        TestHubDBContext _testHubDBContext = new TestHubDBContext();
+        TestHubDBContext _testHubDBContext;
         Organisation _org = new Organisation() { Name = "Test-org" };
         static int counter = 1;
 
@@ -20,6 +20,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
         public void Inti()
         {
             _testHubDBContext.Add(_org);
+            _testHubDBContext = new TestHubDBContext(TestHubMocks.ConfigurationMock.Object);
         }
 
         [Test]
@@ -62,7 +63,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             var sw = new Stopwatch();
             sw.Start();
             var jUnitReader = new JUnitReader(
-                new DataLoader(new TestHubDBContext(), projectName, _org.Name));
+                new DataLoader(new TestHubDBContext(TestHubMocks.ConfigurationMock.Object), projectName, _org.Name));
             
             var task = jUnitReader.Read(stream, (++counter).ToString());
 

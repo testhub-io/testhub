@@ -8,8 +8,7 @@ namespace TestsHubUploadEndpoint
 {
     public class DataLoader : IDataLoader
     {
-        TestHubDBContext _testHubDBContext = new TestHubDBContext();
-
+        TestHubDBContext _testHubDBContext;
 
         public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org)
         {

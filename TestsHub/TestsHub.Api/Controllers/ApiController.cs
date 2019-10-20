@@ -16,6 +16,12 @@ namespace TestsHub.Api.Controllers
     public class ApiController : ControllerBase
     {
         IMapper _mapper = Automapper.MapperConfiguration.Mapper;
+        IRepositoryFactory RepositoryFactory { get; }
+
+        public ApiController(IRepositoryFactory repositoryFactory)
+        {
+            RepositoryFactory = repositoryFactory;
+        }
 
         // GET api/values
         [HttpGet]
