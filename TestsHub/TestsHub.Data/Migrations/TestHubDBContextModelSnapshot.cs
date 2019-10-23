@@ -14,7 +14,7 @@ namespace TestsHub.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
             modelBuilder.Entity("TestsHub.Data.DataModel.Organisation", b =>
                 {
@@ -33,9 +33,10 @@ namespace TestsHub.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
-                    b.Property<int?>("OrganisationId");
+                    b.Property<int>("OrganisationId");
 
                     b.HasKey("Id");
 
@@ -75,10 +76,14 @@ namespace TestsHub.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ProjectId");
+                    b.Property<int>("ProjectId");
 
                     b.Property<string>("TestRunName")
                         .IsRequired();
+
+                    b.Property<decimal>("Time");
+
+                    b.Property<DateTime>("Timestamp");
 
                     b.HasKey("Id");
 
@@ -91,12 +96,13 @@ namespace TestsHub.Data.Migrations
                 {
                     b.HasOne("TestsHub.Data.DataModel.Organisation", "Organisation")
                         .WithMany("Projects")
-                        .HasForeignKey("OrganisationId");
+                        .HasForeignKey("OrganisationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TestsHub.Data.DataModel.TestCase", b =>
                 {
-                    b.HasOne("TestsHub.Data.DataModel.TestRun")
+                    b.HasOne("TestsHub.Data.DataModel.TestRun", "TestRun")
                         .WithMany("TestCases")
                         .HasForeignKey("TestRunId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -106,7 +112,8 @@ namespace TestsHub.Data.Migrations
                 {
                     b.HasOne("TestsHub.Data.DataModel.Project", "Project")
                         .WithMany("TestRuns")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

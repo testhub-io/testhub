@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TestsHub.Data.Migrations
 {
-    public partial class Initialmigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,8 +26,8 @@ namespace TestsHub.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    OrganisationId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    OrganisationId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,7 +37,7 @@ namespace TestsHub.Data.Migrations
                         column: x => x.OrganisationId,
                         principalTable: "Organisations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,7 +47,9 @@ namespace TestsHub.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     TestRunName = table.Column<string>(nullable: false),
-                    ProjectId = table.Column<int>(nullable: true)
+                    ProjectId = table.Column<int>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: false),
+                    Time = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,7 +59,7 @@ namespace TestsHub.Data.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

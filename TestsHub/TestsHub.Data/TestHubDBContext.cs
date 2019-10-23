@@ -6,9 +6,16 @@ namespace TestsHub.Data.DataModel
 {
     public class TestHubDBContext : DbContext
     {
+        private readonly string _connectionString;
+
         public TestHubDBContext (IConfiguration configuration)
         {
-            Configuration = configuration;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");            
+        }
+
+        public TestHubDBContext()
+        {
+            _connectionString = "Host=localhost;Database=testHub;Username=root;Password=test_pass";
         }
 
         public DbSet<TestCase> TestCases { get; set; }
@@ -18,12 +25,12 @@ namespace TestsHub.Data.DataModel
         public DbSet<Project> Projects { get; set; }
 
         public DbSet<Organisation> Organisations { get; set; }
-        public IConfiguration Configuration { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {                       
+        {
+            
             optionsBuilder
-               .UseMySQL(Configuration.GetConnectionString("DefaultConnection"))
+               .UseMySQL(_connectionString)
                .UseLazyLoadingProxies();
         }
     }
