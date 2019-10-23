@@ -22,6 +22,9 @@ namespace TestsHub.Data.DataModel
         public DateTime Timestamp { get; set; }
 
         public decimal Time { get; set; }
-       
+        public string Name { get; set; }
+        public string Hostname { get; set; }
+        public string Package { get; set; }
+        public string JUnitId { get; set; }
     }
 }

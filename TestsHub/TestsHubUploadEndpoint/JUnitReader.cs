@@ -24,6 +24,7 @@ namespace TestsHubUploadEndpoint
             };
 
             var result = new List<TestCase>();
+            var testRun = new TestRun();
 
             using (var reader = XmlReader.Create(stream, settings))
             {
@@ -31,7 +32,7 @@ namespace TestsHubUploadEndpoint
                 {
                     switch (reader.NodeType)
                     {
-                        case XmlNodeType.Element:
+                        case XmlNodeType.Element:                            
                             if (string.Equals(reader.Name, "testcase", StringComparison.OrdinalIgnoreCase))
                             {
                                 var testCase = new TestCase();
@@ -56,7 +57,8 @@ namespace TestsHubUploadEndpoint
 
                                             case "time":
                                                 testCase.Time = reader.Value;
-                                                break;
+                                                break;                                            
+
                                         }
                                     }
 
@@ -65,6 +67,46 @@ namespace TestsHubUploadEndpoint
                                 }
 
                                 result.Add(testCase);
+                            }
+                            else if (string.Equals(reader.Name, "testsuite", StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (reader.HasAttributes)
+                                {
+                                    while (reader.MoveToNextAttribute())
+                                    {
+                                        switch (reader.Name)
+                                        {
+                                            case "name":
+                                                testRun.Name = reader.Value;
+                                                break;
+
+                                            case "hostname":
+                                                testRun.Hostname = reader.Value;
+                                                break;
+
+                                            case "package":
+                                                testRun.Package = reader.Value;
+                                                break;
+
+                                            case "junit_id":
+                                                testRun.JUnitId = reader.Value;
+                                                break;
+
+                                            case "timestamp":
+                                                testRun.Timestamp = DateTime.Parse(reader.Value);
+                                                break;
+
+                                            case "time":
+                                                testRun.Time = decimal.Parse(reader.Value, System.Globalization.CultureInfo.InvariantCulture);
+                                                break;
+
+                                        }
+                                    }
+
+                                    // Move the reader back to the element node.
+                                    reader.MoveToElement();
+                                }
+
                             }
                             break;
 
@@ -84,8 +126,9 @@ namespace TestsHubUploadEndpoint
                     }
                 }
             }
-
-            _dataLoader.Add(new TestRun() { TestCases = result, TestRunName = testRunName });
+            testRun.TestCases = result;
+            testRun.TestRunName = testRunName;
+            _dataLoader.Add(testRun);
         }
     }
 }
