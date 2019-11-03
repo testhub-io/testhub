@@ -22,11 +22,11 @@ services:
     ports: 
         - "80:80"
         - "443:443"
-  graphana:
-    container_name: graphana
-    restart: always
-    image: grafana/grafana
-    ports:
-      - 3000:3000
+  # graphana:
+  #   container_name: graphana
+  #   restart: always
+  #   image: grafana/grafana
+  #   ports:
+  #     - 3000:3000
 volumes:
   my-datavolume:

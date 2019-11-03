@@ -9,5 +9,6 @@ namespace TestsHub.Data
     {
         string Organisation { get; }
         TestRun GetTestRun(string project, string testRunId);
+        dynamic GetProjectSummary(string project);
     }
 }

@@ -45,6 +45,19 @@ namespace TestsHub.Api.Controllers
             });
         }
 
+        // GET api/values/5
+        [HttpGet("{org}/{project}")]
+        public ActionResult<string> GetProject(string org, string project)
+        {
+            var repository = RepositoryFactory.GetTestHubRepository(org);
+            var projectData = repository.GetProjectSummary(project);
+
+            return new JsonResult(projectData, new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented
+            });
+        }
+
         // POST api/values
         [HttpPost]
         public void Post([FromBody] string value)

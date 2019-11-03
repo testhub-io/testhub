@@ -11,7 +11,7 @@ namespace TestsHub.Api.Automapper
             {
                 cfg.CreateMap<TestRun, Data.TestRun>(MemberList.Destination)
                 .ForMember(m=>m.Name, c=>c.MapFrom(t=>t.TestRunName));                
-                cfg.CreateMap<TestCase, Data.TestCase>(MemberList.Destination);
+                cfg.CreateMap<TestCase, Data.TestCase>(MemberList.Destination);              
             });
 
             Mapper = configuration.CreateMapper();

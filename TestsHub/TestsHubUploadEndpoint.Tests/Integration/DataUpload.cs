@@ -18,9 +18,9 @@ namespace TestsHubUploadEndpoint.Tests.Integration
 
         [SetUp]
         public void Inti()
-        {
+        {            
+            _testHubDBContext = new TestHubDBContext();
             _testHubDBContext.Add(_org);
-            _testHubDBContext = new TestHubDBContext(TestHubMocks.ConfigurationMock.Object);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             var sw = new Stopwatch();
             sw.Start();
             var jUnitReader = new JUnitReader(
-                new DataLoader(new TestHubDBContext(TestHubMocks.ConfigurationMock.Object), projectName, _org.Name));
+                new DataLoader(new TestHubDBContext(), projectName, _org.Name));
             
             var task = jUnitReader.Read(stream, (++counter).ToString());
 
