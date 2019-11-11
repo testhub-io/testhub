@@ -10,7 +10,7 @@ namespace TestsHub.Data.DataModel
 
         public TestHubDBContext (IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");              
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         public TestHubDBContext()

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TestsHub.Api.Data;
 using TestsHub.Data;
+using TestsHubUploadEndpoint;
 
 namespace TestsHub.Api.Controllers
 {
@@ -35,11 +37,9 @@ namespace TestsHub.Api.Controllers
         public ActionResult<string> Get(string org, string project, string testRun)
         {
             var repository = RepositoryFactory.GetTestHubRepository(org);
-            var testRunEntity = repository.GetTestRun(project, testRun);
+            var testRunEntity = repository.GetTestRun(project, testRun);            
 
-            var testRunDto = _mapper.Map<Data.TestRun>(testRunEntity);
-
-            return new JsonResult(testRunDto, new JsonSerializerSettings()
+            return new JsonResult(testRunEntity, new JsonSerializerSettings()
             {
                 Formatting = Formatting.Indented
             });
@@ -58,22 +58,53 @@ namespace TestsHub.Api.Controllers
             });
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
+        
+        [HttpGet("{org}")]
+        public ActionResult<string> GetOrganisation(string org)
         {
+            var repository = RepositoryFactory.GetTestHubRepository(org);
+            var projectData = repository.GetOrgSummary(org);
+
+            return new JsonResult(projectData, new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented
+            });
         }
+
+        //// POST api/values
+        //[HttpPost]
+        //public void Post([FromBody] string value)
+        //{
+        //}
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{org}/{project}/{testrun}")]
+        public ActionResult<string> Put(string org, string project, string testRun)
         {
+            var repository = RepositoryFactory.GetTestHubRepository(org);
+            var files = Request.Form.Files; 
+            long size = files.Sum(f => f.Length);
+
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    var jUnitReader = new JUnitReader(
+                    new DataLoader(repository.TestHubDBContext, project, org));                    
+                    var task = jUnitReader.Read(formFile.OpenReadStream(), testRun);
+                }
+            }
+
+            // Process uploaded files
+            // Don't rely on or trust the FileName property without validation.
+
+            return Ok(new { count = files.Count, size });
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //// DELETE api/values/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

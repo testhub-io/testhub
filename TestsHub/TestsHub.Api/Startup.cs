@@ -19,6 +19,8 @@ namespace TestsHub.Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            new TestsHub.Data.DataModel.TestHubDBContext(configuration).Database.EnsureCreated();
         }
 
         public IConfiguration Configuration { get; }

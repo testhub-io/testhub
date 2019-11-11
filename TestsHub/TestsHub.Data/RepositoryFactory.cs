@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TestsHub.Data.DataModel;
 
 namespace TestsHub.Data
 {
@@ -9,13 +10,16 @@ namespace TestsHub.Data
     {
         private readonly IConfiguration _configuration;
 
-        public RepositoryFactory (IConfiguration configuration)
+        public RepositoryFactory(IConfiguration configuration)
         {
-            this._configuration = configuration;
+            _configuration = configuration;
         }
+
         public ITestHubRepository GetTestHubRepository(string organisation)
         {
-            return new TestHubRepository(new DataModel.TestHubDBContext(_configuration), organisation);
+            var context = new TestHubDBContext(_configuration);            
+            return new TestHubRepository(context, organisation);
+
         }
     }
 }

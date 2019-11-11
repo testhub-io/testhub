@@ -11,11 +11,15 @@ namespace TestsHub.Data
 {
     public class TestHubRepository : ITestHubRepository
     {
+        private const string PassedTestValue = "Passed";
+        private const string FailedTestValue = "Failed";
+        private const string SkippedTestValue = "Skipped";
         private readonly Organisation _organisation;
         private readonly TestHubDBContext _testHubDBContext;
         public string Organisation => _organisation.Name;
 
         public IDbConnection DbConnection => _testHubDBContext.Database.GetDbConnection();
+        public TestHubDBContext TestHubDBContext => _testHubDBContext;
 
         public TestHubRepository(TestHubDBContext testHubDBContext, string organisation)
         {
@@ -23,7 +27,7 @@ namespace TestsHub.Data
             _organisation = _testHubDBContext.Organisations.Single(o => o.Name == organisation);
         }
 
-        public TestRun GetTestRun(string projectName, string testRunName)
+        public dynamic GetTestRun(string projectName, string testRunName)
         {
             var project = _testHubDBContext.Projects
                 .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase) && p.Organisation.Id == _organisation.Id);
@@ -33,9 +37,31 @@ namespace TestsHub.Data
                 var testRun = _testHubDBContext.TestRuns
                     .FirstOrDefault(t => t.ProjectId == project.Id && t.TestRunName == testRunName);
 
-                _testHubDBContext.Entry(testRun).Collection(c => c.TestCases);
+                var testCases = _testHubDBContext.TestCases.Where(t => t.TestRunId == testRun.Id)
+                    .Select(s => new {
+                        s.ClassName,
+                        s.File,
+                        s.Name,
+                        s.Status,
+                        s.SystemOut,
+                        s.Time                       
+                    });
+                
 
-                return testRun;
+                return new
+                {
+                    Name = testRun.TestRunName,
+                    testRun.Time,
+                    testRun.Timestamp,
+                    uri = BuildUri(Organisation, project.Name, testRun.TestRunName),
+                    Summary = new {
+                        TestsCount = testCases.Count(),
+                        Passed = testCases.Count(t=>t.Status.Equals(PassedTestValue, StringComparison.OrdinalIgnoreCase)),
+                        Failed = testCases.Count(t=>t.Status.Equals(FailedTestValue, StringComparison.OrdinalIgnoreCase) ),
+                        Skipped = testCases.Count(t => t.Status.Equals(SkippedTestValue, StringComparison.OrdinalIgnoreCase))
+                    },
+                    TestCases = testCases
+                };
             }
             else
             {
@@ -60,11 +86,12 @@ namespace TestsHub.Data
                      r.TestRunName,                  
                      r.Time,
                      r.Timestamp,
+                     uri = BuildUri(Organisation, project.Name, r.TestRunName),
                      Count = new
                      {
-                         Passed = c.Count(ic => ic.Status.Equals("Passed", StringComparison.OrdinalIgnoreCase)),
-                         Failed = c.Count(ic => ic.Status.Equals("Failed", StringComparison.OrdinalIgnoreCase)),
-                         Skipped = c.Count(ic => ic.Status.Equals("Skipped", StringComparison.OrdinalIgnoreCase))
+                         Passed = c.Count(ic => ic.Status.Equals(PassedTestValue, StringComparison.OrdinalIgnoreCase)),
+                         Failed = c.Count(ic => ic.Status.Equals(FailedTestValue, StringComparison.OrdinalIgnoreCase)),
+                         Skipped = c.Count(ic => ic.Status.Equals(SkippedTestValue, StringComparison.OrdinalIgnoreCase))
                      }
                  });
 
@@ -73,8 +100,42 @@ namespace TestsHub.Data
             {
                 Project = project.Name,
                 TestRunsCount = testRuns.Count(),
-                TestRuns = testRuns
+                TestRuns = testRuns.ToList()
             };
+        }
+
+        public dynamic GetOrgSummary(string org)
+        {
+            var organisation = _testHubDBContext.Organisations 
+              .Where(o => o.Name.Equals(org, StringComparison.OrdinalIgnoreCase))
+              .FirstOrDefault();
+
+            var projects = _testHubDBContext.Projects
+              .Where(r => r.OrganisationId == organisation.Id)
+              .GroupJoin(_testHubDBContext.TestRuns,
+               r => r.Id,
+               c => c.ProjectId,
+               (r, c) => new
+               {
+                   r.Name,
+                   Status =  new {
+                       TestRunsCount = c.Count(),
+                       RecentTestRun = c.OrderBy(s=>s.Timestamp).First().Timestamp
+                   },
+                   uri = BuildUri(org, r.Name)
+               });
+
+            return new
+            {
+                Name = organisation.Name,
+                uri = BuildUri(org),
+                Projects = projects.ToList()              
+            };            
+        }
+
+        private string BuildUri(params string [] uriParts)
+        {
+            return string.Join('/', uriParts);
         }
     }
 
