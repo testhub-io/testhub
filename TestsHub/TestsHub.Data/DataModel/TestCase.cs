@@ -9,12 +9,14 @@ namespace TestsHub.Data.DataModel
 
         public int TestRunId { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         public string ClassName { get; set; }
 
         public string SystemOut { get; set; }
 
+        [Required]
         public string Status { get; set; }
 
         public string Time { get; set; }

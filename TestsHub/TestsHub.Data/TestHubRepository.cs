@@ -24,7 +24,12 @@ namespace TestsHub.Data
         public TestHubRepository(TestHubDBContext testHubDBContext, string organisation)
         {
             _testHubDBContext = testHubDBContext;
-            _organisation = _testHubDBContext.Organisations.Single(o => o.Name == organisation);
+            _organisation = _testHubDBContext.Organisations.SingleOrDefault(o => o.Name == organisation);
+            if (_organisation == null)
+            {
+                _testHubDBContext.Organisations.Add(new DataModel.Organisation() { Name = organisation });
+                _testHubDBContext.SaveChanges();
+            }
         }
 
         public dynamic GetTestRun(string projectName, string testRunName)

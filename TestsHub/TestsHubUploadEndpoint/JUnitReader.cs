@@ -52,7 +52,7 @@ namespace TestsHubUploadEndpoint
                                                 break;
 
                                             case "status":
-                                                testCase.Status = reader.Value;
+                                                testCase.Status = reader.Value.ToLowerInvariant();
                                                 break;
 
                                             case "time":

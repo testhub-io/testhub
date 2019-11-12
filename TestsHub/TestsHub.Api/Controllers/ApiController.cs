@@ -92,6 +92,7 @@ namespace TestsHub.Api.Controllers
                     var jUnitReader = new JUnitReader(
                     new DataLoader(repository.TestHubDBContext, project, org));                    
                     var task = jUnitReader.Read(formFile.OpenReadStream(), testRun);
+                    Task.WaitAll(task);
                 }
             }
 
