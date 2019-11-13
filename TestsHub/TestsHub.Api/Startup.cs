@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,8 @@ namespace TestsHub.Api
         {
             Configuration = configuration;
 
-            new TestsHub.Data.DataModel.TestHubDBContext(configuration).Database.EnsureCreated();
+            var context = new TestsHub.Data.DataModel.TestHubDBContext(configuration);           
+            context.Database.Migrate();
         }
 
         public IConfiguration Configuration { get; }

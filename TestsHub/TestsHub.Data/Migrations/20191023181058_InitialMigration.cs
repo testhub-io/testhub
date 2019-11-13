@@ -69,10 +69,10 @@ namespace TestsHub.Data.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     TestRunId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     ClassName = table.Column<string>(nullable: true),
                     SystemOut = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: false),
                     Time = table.Column<string>(nullable: true),
                     File = table.Column<string>(nullable: true)
                 },
