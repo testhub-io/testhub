@@ -17,12 +17,15 @@ namespace TestsHub.Data.DataModel
         public string SystemOut { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public string Status { get; set; } = "passed";
 
         public string Time { get; set; }
 
         public string File { get; set; }
 
         public virtual TestRun TestRun { get; set; }
+        
+        // there could be several of them, consider separate records
+        public string TestOutput { get; set; }
     }
 }

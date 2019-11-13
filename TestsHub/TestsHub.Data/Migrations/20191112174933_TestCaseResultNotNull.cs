@@ -9,12 +9,13 @@ namespace TestsHub.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "TestCases",
-                nullable: true);
+                nullable: false,
+                defaultValue: "passed");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "TestCases",
-                nullable: true);
+                nullable: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -22,12 +23,12 @@ namespace TestsHub.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "TestCases",
-                nullable: false);
+                nullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "TestCases",
-                nullable: false);
+                nullable: true);
         }
     }
 }

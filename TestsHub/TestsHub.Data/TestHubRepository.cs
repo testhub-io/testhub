@@ -47,8 +47,8 @@ namespace TestsHub.Data
                         s.ClassName,
                         s.File,
                         s.Name,
-                        s.Status,
-                        s.SystemOut,
+                        s.Status,                        
+                        s.TestOutput,
                         s.Time                       
                     });
                 

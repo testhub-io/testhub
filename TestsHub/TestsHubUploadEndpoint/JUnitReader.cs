@@ -38,7 +38,7 @@ namespace TestsHubUploadEndpoint
                                 var testCase = new TestCase();
 
                                 if (reader.HasAttributes)
-                                {                                   
+                                {                                       
                                     while (reader.MoveToNextAttribute())
                                     {
                                         switch (reader.Name)
@@ -52,7 +52,8 @@ namespace TestsHubUploadEndpoint
                                                 break;
 
                                             case "status":
-                                                testCase.Status = reader.Value.ToLowerInvariant();
+                                                // ignore status, it's optional in schema
+                                                testCase.Status = "passed";
                                                 break;
 
                                             case "time":
@@ -62,12 +63,26 @@ namespace TestsHubUploadEndpoint
                                         }
                                     }
 
+                                                                        
                                     // Move the reader back to the element node.
                                     reader.MoveToElement();
+                   
+                                    if (!ReadTestCaseErrorContent("failure", reader, testCase) 
+                                        && !ReadTestCaseErrorContent("error", reader, testCase)
+                                        && !ReadTestCaseErrorContent("system-err", reader, testCase)
+                                        && reader.ReadToDescendant("skipped"))
+                                    {
+                                        testCase.Status = "skipped";
+                                    }
+                                    else if (reader.ReadToDescendant("system-out"))
+                                    {
+                                        testCase.Status = "passed";
+                                        testCase.TestOutput = reader.ReadContentAsString();
+                                    }
                                 }
 
                                 result.Add(testCase);
-                            }
+                            }                     
                             else if (string.Equals(reader.Name, "testsuite", StringComparison.OrdinalIgnoreCase))
                             {
                                 if (reader.HasAttributes)
@@ -129,6 +144,23 @@ namespace TestsHubUploadEndpoint
             testRun.TestCases = result;
             testRun.TestRunName = testRunName;
             _dataLoader.Add(testRun);
+        }
+
+        bool ReadTestCaseErrorContent(string elementName, XmlReader reader, TestCase testCase)
+        {            
+            if (reader.ReadToDescendant(elementName))
+            {
+                testCase.Status = "failed";
+                var errorText = new StringBuilder();
+                do
+                {
+                    errorText.AppendLine(reader.ReadElementContentAsString());
+                    
+                } while (reader.ReadToNextSibling(elementName));
+                testCase.TestOutput = errorText.ToString();
+                return true;
+            }
+            return false;
         }
     }
 }
