@@ -1,0 +1,16 @@
+<table class="table mt-20 table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Project Name</th>
+        <th scope="col">TestRun Count</th>
+        <th scope="col">Recent TestRun</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let jpsp of jsonParsed.Projects">
+        <td><a [routerLink]="'/'+jpsp.uri" >{{jpsp.Name}}</a></td>
+        <td>{{jpsp.Status.TestRunsCount}}</td>
+        <td>{{jpsp.Status.RecentTestRun}}</td>
+      </tr>
+    </tbody>
+</table>

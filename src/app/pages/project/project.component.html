@@ -1,0 +1,26 @@
+<div class="mb-6">
+  <canvas baseChart
+    [colors]="chartColors"
+    [datasets]="barChartData"
+    [labels]="barChartLabels"
+    [options]="barChartOptions"
+    [legend]="barChartLegend"
+    [chartType]="barChartType">
+  </canvas>
+</div>
+<table class="table mt-20 table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Timestemp</th>
+        <th scope="col">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let jpsp of jsonParsed.TestRuns">
+        <td><a [routerLink]="'/'+jpsp.uri" >{{jpsp.Name}}</a></td>
+        <td>{{jpsp.Timestamp}}</td>
+        <td>{{jpsp.Time}}</td>
+      </tr>
+    </tbody>
+</table>
