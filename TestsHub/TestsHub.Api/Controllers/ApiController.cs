@@ -12,6 +12,7 @@ using TestsHubUploadEndpoint;
 
 namespace TestsHub.Api.Controllers
 {
+    [Route("")]
     [Route("[controller]")]
     [ApiController]
     [Produces("application/json")]
