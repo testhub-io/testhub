@@ -1,3 +1,4 @@
+<app-breadcrumb></app-breadcrumb>
 <table class="table mt-20 table-hover">
     <thead>
       <tr>
@@ -7,7 +8,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let jpsp of jsonParsed.Projects">
+      <tr *ngFor="let jpsp of jsonParsed?.Projects">
         <td><a [routerLink]="'/'+jpsp.uri" >{{jpsp.Name}}</a></td>
         <td>{{jpsp.Status.TestRunsCount}}</td>
         <td>{{jpsp.Status.RecentTestRun}}</td>

@@ -11,6 +11,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ProjectComponent } from './pages/project/project.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ProjectComponent } from './pages/project/project.component';
     BrowserModule,
     AppRoutingModule,
     NgbModule.forRoot(),
-    ChartsModule
+    ChartsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

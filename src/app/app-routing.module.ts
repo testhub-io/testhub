@@ -17,31 +17,19 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    data: {
-        breadcrumb: ''
-    }
   },
   {
-    path: 'Test-org',
-    data: {
-      breadcrumb: 'Test-org'
-    },
+    // redirects all unknovn root URIs to OrganizationComponent
+    path: ':term',
     children: [
       {
         path: '',
         component: OrganizationComponent,
       },
       {
-        path: 'TestDataUpload-HugeReport',
-        component: ProjectComponent,
-        data: {
-          breadcrumb: 'TestDataUpload-HugeReport'
-        },
-      },
-      {
         path: '**',
-        redirectTo: ''
-      }
+        component: ProjectComponent,
+      },
     ]
   },
   {

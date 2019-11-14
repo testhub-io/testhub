@@ -1,10 +1,9 @@
-$footer-height: 40px;
-
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: $footer-height;
-  line-height: $footer-height;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 7px;
   background-color: #eee;
 }

@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵCompiler_compileModuleSync__POST_R3__ } from '@angular/core';
+import { ApiService } from '../../services/api.service';
+import { Router } from '@angular/router';
+import { Organisation } from '../../interfaces/organisation';
+import { BreadcrumbComponent } from '../../breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-organization',
@@ -7,12 +11,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrganizationComponent implements OnInit {
 
-  // This var should receive parsed organization JSON data from back-end API
-  public jsonParsed = JSON.parse('{"Name": "Test-org","uri": "Test-org","Projects": [  {    "Name": "TestDataUpload-HugeReport",   "Status": {"TestRunsCount": 1,"RecentTestRun": "2018-12-04T04:02:21"    },    "uri": "Test-org/TestDataUpload-HugeReport"  },  {    "Name": "TestDataUpload-Regular",    "Status": {"TestRunsCount": 20,"RecentTestRun": "2019-08-02T20:20:14"    },    "uri": "Test-org/TestDataUpload-Regular"  },  {    "Name": "TestDataUpload-SmallJUnit",    "Status": {"TestRunsCount": 2,"RecentTestRun": "0001-01-01T00:00:00"    },    "uri": "Test-org/TestDataUpload-SmallJUnit"  }]    }');
+  public jsonParsed: Organisation;
 
-  constructor() { }
+  constructor(private apiService: ApiService, private router: Router) { }
 
   ngOnInit() {
-
+    this.apiService.getData(this.router.url).subscribe((data: Organisation) => {
+      this.jsonParsed = data;
+    });
   }
+
 }
