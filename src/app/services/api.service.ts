@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry, catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
+import { environment } from './../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  private apiURL = 'https://testshubapi20191111073103.azurewebsites.net/api';
+  private apiURL = environment.apiURL;
 
   constructor(private http: HttpClient) { }
 
