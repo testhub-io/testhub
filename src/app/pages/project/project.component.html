@@ -19,7 +19,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let jpsp of jsonParsed?.TestRuns">
-        <td><a [routerLink]="'/'+jpsp.uri" >{{jpsp.Name}}</a></td>
+        <td><a [routerLink]="'/'+jpsp.uri" >{{jpsp.TestRunName}}</a></td>
         <td>{{jpsp.Timestamp}}</td>
         <td>{{jpsp.Time}}</td>
       </tr>
