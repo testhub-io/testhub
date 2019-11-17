@@ -20,7 +20,7 @@ services:
       context: ./TestsHub/
       dockerfile: TestsHub.Api/Dockerfile
     ports: 
-        - "80:80"
+        - "8080:80"
         - "443:443"
   # graphana:
   #   container_name: graphana
@@ -28,5 +28,12 @@ services:
   #   image: grafana/grafana
   #   ports:
   #     - 3000:3000
+  testhub_frontend:
+    container_name: testhub_frontend
+    restart: always
+    image: testshub-frontend:latest
+    ports:
+      - "80:80"
+
 volumes:
   my-datavolume:
