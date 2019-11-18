@@ -12,6 +12,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ProjectComponent } from './pages/project/project.component';
 import { HttpClientModule } from '@angular/common/http';
+import { TestrunComponent } from './pages/testrun/testrun.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     BreadcrumbComponent,
     HomeComponent,
     LoginComponent,
-    ProjectComponent
+    ProjectComponent,
+    TestrunComponent
   ],
   imports: [
     BrowserModule,
