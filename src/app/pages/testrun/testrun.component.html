@@ -1,1 +1,17 @@
-<p>testrun works!</p>
+<app-breadcrumb></app-breadcrumb>
+<table class="table mt-20 table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Status</th>
+        <th scope="col">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let jpsp of jsonParsed?.TestCases">
+        <td>{{jpsp.Name}}</td>
+        <td>{{jpsp.Status}}</td>
+        <td>{{jpsp.Time}}</td>
+      </tr>
+    </tbody>
+</table>

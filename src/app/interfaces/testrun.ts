@@ -9,4 +9,5 @@ export interface Testrun {
     Failed: number;
     Skipped: number;
   };
+  TestCases: [];
 }
