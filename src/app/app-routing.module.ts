@@ -19,33 +19,17 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
   },
-  {
-    // redirects all unknovn root URIs to OrganizationComponent
-    path: ':term/:term2',
-    children: [
-      {
-        path: '',
-        component: OrganizationComponent,
-      },
-      {
-        path: '**',
-        component: TestrunComponent,
-      },
-    ]
-  },
-  {
-    // redirects all unknovn root URIs to OrganizationComponent
+  {    
     path: ':term',
-    children: [
-      {
-        path: '',
-        component: OrganizationComponent,
-      },
-      {
-        path: '**',
-        component: ProjectComponent,
-      },
-    ]
+    component: OrganizationComponent,
+  },
+  {    
+    path: ':term/:term2',
+    component: ProjectComponent,
+  },
+  {    
+    path: ':term/:term2/:term3',
+    component:  TestrunComponent,
   },
   {
     path: '**',
@@ -54,7 +38,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

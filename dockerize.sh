@@ -9,8 +9,11 @@ echo -e "\e[35m -- (3/4) MAKING DOCKER IMAGE \e[0m"
 docker build -t testshub-frontend .
 # echo -e "\e[35m -- (4/4) SAVING IMAGE FILE \e[0m"
 # docker save -o ./testshub-frontend-docker-image testshub-frontend
-echo -e "\n\n"
-echo -e "Docker image is saved in project dir with name \e[7m testshub-frontend-docker-image \e[0m"
-echo -e "\n\n"
-#sleep 2
-#read -p "(Press enter to close)"
+# echo -e "\n\n"
+# echo -e "Docker image is saved in project dir with name \e[7m testshub-frontend-docker-image \e[0m"
+# echo -e "\n\n"
+# #sleep 2
+# #read -p "(Press enter to close)"
+echo -e "\e[35m -- (3/4) Pushing DOCKER IMAGE \e[0m"
+docker tag  testshub-frontend registry20191111073104.azurecr.io/testhub-frontend
+docker push  registry20191111073104.azurecr.io/testhub-frontend
