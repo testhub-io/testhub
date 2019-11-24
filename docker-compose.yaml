@@ -22,6 +22,8 @@ services:
     ports: 
         - "8080:80"
         - "443:443"
+    environment:
+      ASPNETCORE_ENVIRONMENT: 'Docker'
   # graphana:
   #   container_name: graphana
   #   restart: always

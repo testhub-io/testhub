@@ -14,6 +14,8 @@ RUN dotnet build "TestsHub.Api.csproj" -c Release -o /app
 FROM build AS publish
 RUN dotnet publish "TestsHub.Api.csproj" -c Release -o /app
 
+ENV ASPNETCORE_ENVIRONMENT Docker
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .

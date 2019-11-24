@@ -16,6 +16,7 @@ namespace TestsHub.Data
         private const string SkippedTestValue = "Skipped";
         private readonly Organisation _organisation;
         private readonly TestHubDBContext _testHubDBContext;
+        private const int RECORDS_LIMIT = 200;
         public string Organisation => _organisation.Name;
 
         public IDbConnection DbConnection => _testHubDBContext.Database.GetDbConnection();
@@ -50,7 +51,7 @@ namespace TestsHub.Data
                         s.Status,                        
                         s.TestOutput,
                         s.Time                       
-                    });
+                    }).Take(RECORDS_LIMIT);
                 
 
                 return new
@@ -98,7 +99,7 @@ namespace TestsHub.Data
                          Failed = c.Count(ic => ic.Status.Equals(FailedTestValue, StringComparison.OrdinalIgnoreCase)),
                          Skipped = c.Count(ic => ic.Status.Equals(SkippedTestValue, StringComparison.OrdinalIgnoreCase))
                      }
-                 });
+                 }).Take(RECORDS_LIMIT);
 
 
             return new
