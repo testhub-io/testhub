@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry, catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { environment } from './../../environments/environment';
-import { pluck, share, shareReplay, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +17,7 @@ export class ApiService {
     return this.http.get<any>(this.apiURL + uri)
     .pipe(
       retry(1),
-      tap(_ => console.log('executed')),
-      pluck('url'),
-      catchError(this.errorHandl),
-      shareReplay(1),
+      catchError(this.errorHandl)
     );
   }
 
