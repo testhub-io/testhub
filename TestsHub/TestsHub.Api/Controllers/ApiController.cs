@@ -1,14 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using TestsHub.Api.Data;
 using TestsHub.Data;
 using TestsHubUploadEndpoint;
+
+
 
 namespace TestsHub.Api.Controllers
 {
@@ -17,8 +14,7 @@ namespace TestsHub.Api.Controllers
     [ApiController]
     [Produces("application/json")]
     public class ApiController : ControllerBase
-    {
-        IMapper _mapper = Automapper.MapperConfiguration.Mapper;
+    {        
         IRepositoryFactory RepositoryFactory { get; }
 
         public ApiController(IRepositoryFactory repositoryFactory)
@@ -38,12 +34,9 @@ namespace TestsHub.Api.Controllers
         public ActionResult<string> Get(string org, string project, string testRun)
         {
             var repository = RepositoryFactory.GetTestHubRepository(org);
-            var testRunEntity = repository.GetTestRun(project, testRun);            
+            var testRunEntity = repository.GetTestRun(project, testRun);
 
-            return new JsonResult(testRunEntity, new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            return new JsonResult(testRunEntity);
         }
 
         // GET api/values/5
@@ -53,10 +46,7 @@ namespace TestsHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubRepository(org);
             var projectData = repository.GetProjectSummary(project);
 
-            return new JsonResult(projectData, new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            return new JsonResult(projectData);
         }
 
         
@@ -66,10 +56,7 @@ namespace TestsHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubRepository(org);
             var projectData = repository.GetOrgSummary(org);
 
-            return new JsonResult(projectData, new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            return new JsonResult(projectData);
         }
 
         //// POST api/values
@@ -84,7 +71,7 @@ namespace TestsHub.Api.Controllers
         {
             var repository = RepositoryFactory.GetTestHubRepository(org);
             var files = Request.Form.Files; 
-            long size = files.Sum(f => f.Length);
+            var size = files.Sum(f => f.Length);
 
             foreach (var formFile in files)
             {
@@ -103,10 +90,5 @@ namespace TestsHub.Api.Controllers
             return Ok(new { count = files.Count, size });
         }
 
-        //// DELETE api/values/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }
