@@ -26,8 +26,7 @@ namespace TestsHub.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+            services.AddControllers();
 
             services.AddCors(options => options.AddPolicy(AllowTestsHubOrigins,
                 builder=>
@@ -35,7 +34,8 @@ namespace TestsHub.Api
                            .AllowAnyHeader()
                            .AllowAnyMethod()));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
             services.AddRazorPages();
             services.AddSingleton(Configuration);
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();             

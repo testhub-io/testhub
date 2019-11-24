@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0.101-buster AS build
 WORKDIR /src
 COPY ["TestsHub.Api/TestsHub.Api.csproj", "TestsHub.Api/"]
 RUN dotnet restore "TestsHub.Api/TestsHub.Api.csproj"

@@ -41,11 +41,20 @@ namespace TestsHubUploadEndpoint
             testRun.Project = project;
             testRun.Project.Organisation = Organisation;
             var testCases = testRun.TestCases;
-            testRun.TestCases = null;
-            _testHubDBContext.TestRuns.Add(testRun);
-            _testHubDBContext.SaveChanges();
 
-            BatchInsert(testCases, testRun.Id);
+            var existingTestRun = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id
+                && t.TestRunName.Equals(testRun.TestRunName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            if (existingTestRun == null)
+            {
+                testRun.TestCases = null;
+                _testHubDBContext.TestRuns.Add(testRun);
+                _testHubDBContext.SaveChanges();
+                BatchInsert(testCases, testRun.Id);
+            }
+            else
+            {                
+                BatchInsert(testCases, existingTestRun.Id);
+            }
         }
 
         private void BatchInsert(ICollection<TestCase> testCases, int testRunId)
