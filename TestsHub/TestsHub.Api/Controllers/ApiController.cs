@@ -33,10 +33,14 @@ namespace TestsHub.Api.Controllers
         [HttpGet("{org}/{project}/{testrun}")]
         public ActionResult<string> Get(string org, string project, string testRun)
         {
+            if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
+            {
+
+            }
             var repository = RepositoryFactory.GetTestHubRepository(org);
             var testRunEntity = repository.GetTestRun(project, testRun);
 
-            return new JsonResult(testRunEntity);
+            return FormateResult(testRunEntity, $"{org}/{project}/{testRun}");
         }
 
         // GET api/values/5
@@ -46,17 +50,26 @@ namespace TestsHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubRepository(org);
             var projectData = repository.GetProjectSummary(project);
 
-            return new JsonResult(projectData);
+            return FormateResult(projectData, $"{org}/{project}");
         }
 
-        
+        private static ActionResult FormateResult(dynamic data, string request)
+        {
+            if (data == null)
+            {
+
+                return new NotFoundObjectResult(request);
+            }
+            return new JsonResult(data);
+        }
+
         [HttpGet("{org}")]
         public ActionResult<string> GetOrganisation(string org)
         {
             var repository = RepositoryFactory.GetTestHubRepository(org);
-            var projectData = repository.GetOrgSummary(org);
+            var orgSummary = repository.GetOrgSummary(org);
 
-            return new JsonResult(projectData);
+            return FormateResult(orgSummary, $"{org}");
         }
 
         //// POST api/values

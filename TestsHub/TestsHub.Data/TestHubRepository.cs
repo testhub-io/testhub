@@ -80,34 +80,38 @@ namespace TestsHub.Data
             var project = _testHubDBContext.Projects
                 .Where(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase))
                 .FirstOrDefault();
-
-            var testRuns = _testHubDBContext.TestRuns
-                .Where(r => r.ProjectId == project.Id)
-                .GroupJoin(_testHubDBContext.TestCases,
-                 r => r.Id,
-                 c => c.TestRunId,
-                 (r, c) => new
-                 {
-                     r.Name,
-                     r.TestRunName,                  
-                     r.Time,
-                     r.Timestamp,
-                     uri = BuildUri(Organisation, project.Name, r.TestRunName),
-                     Count = new
-                     {
-                         Passed = c.Count(ic => ic.Status.Equals(PassedTestValue, StringComparison.OrdinalIgnoreCase)),
-                         Failed = c.Count(ic => ic.Status.Equals(FailedTestValue, StringComparison.OrdinalIgnoreCase)),
-                         Skipped = c.Count(ic => ic.Status.Equals(SkippedTestValue, StringComparison.OrdinalIgnoreCase))
-                     }
-                 }).Take(RECORDS_LIMIT);
-
-
-            return new
+            if (project != null)
             {
-                Project = project.Name,
-                TestRunsCount = testRuns.Count(),
-                TestRuns = testRuns.ToList()
-            };
+                var testRuns = _testHubDBContext.TestRuns
+                    .Where(r => r.ProjectId == project.Id)
+                    .GroupJoin(_testHubDBContext.TestCases,
+                     r => r.Id,
+                     c => c.TestRunId,
+                     (r, c) => new
+                     {
+                         r.Name,
+                         r.TestRunName,
+                         r.Time,
+                         r.Timestamp,
+                         uri = BuildUri(Organisation, project.Name, r.TestRunName),
+                         Count = new
+                         {
+                             Passed = c.Count(ic => ic.Status.Equals(PassedTestValue, StringComparison.OrdinalIgnoreCase)),
+                             Failed = c.Count(ic => ic.Status.Equals(FailedTestValue, StringComparison.OrdinalIgnoreCase)),
+                             Skipped = c.Count(ic => ic.Status.Equals(SkippedTestValue, StringComparison.OrdinalIgnoreCase))
+                         }
+                     }).Take(RECORDS_LIMIT);
+
+
+                return new
+                {
+                    Project = project.Name,
+                    TestRunsCount = testRuns.Count(),
+                    TestRuns = testRuns.ToList()
+                };
+            }
+
+            return null;
         }
 
         public dynamic GetOrgSummary(string org)
@@ -115,28 +119,35 @@ namespace TestsHub.Data
             var organisation = _testHubDBContext.Organisations 
               .Where(o => o.Name.Equals(org, StringComparison.OrdinalIgnoreCase))
               .FirstOrDefault();
-
-            var projects = _testHubDBContext.Projects
-              .Where(r => r.OrganisationId == organisation.Id)
-              .GroupJoin(_testHubDBContext.TestRuns,
-               r => r.Id,
-               c => c.ProjectId,
-               (r, c) => new
-               {
-                   r.Name,
-                   Status =  new {
-                       TestRunsCount = c.Count(),
-                       RecentTestRun = c.OrderBy(s=>s.Timestamp).First().Timestamp
-                   },
-                   uri = BuildUri(org, r.Name)
-               });
-
-            return new
+            if (organisation != null)
             {
-                Name = organisation.Name,
-                uri = BuildUri(org),
-                Projects = projects.ToList()              
-            };            
+                var projects = _testHubDBContext.Projects
+                  .Where(r => r.OrganisationId == organisation.Id)
+                  .GroupJoin(_testHubDBContext.TestRuns,
+                   r => r.Id,
+                   c => c.ProjectId,
+                   (r, c) => new
+                   {
+                       r.Name,
+                       Status = new
+                       {
+                           TestRunsCount = c.Count(),
+                           RecentTestRun = c.OrderBy(s => s.Timestamp).First().Timestamp
+                       },
+                       uri = BuildUri(org, r.Name)
+                   });
+
+                return new
+                {
+                    Name = organisation.Name,
+                    uri = BuildUri(org),
+                    Projects = projects.ToList()
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private string BuildUri(params string [] uriParts)

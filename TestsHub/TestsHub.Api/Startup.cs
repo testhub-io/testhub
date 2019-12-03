@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 using System;
 using TestsHub.Data;
 
@@ -38,7 +39,13 @@ namespace TestsHub.Api
                 .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
             services.AddRazorPages();
             services.AddSingleton(Configuration);
-            services.AddScoped<IRepositoryFactory, RepositoryFactory>();             
+            services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", 
+                    new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Values Api", Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +65,7 @@ namespace TestsHub.Api
             app.UseRouting();
             app.UseAuthorization();
             app.UseHttpsRedirection();
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/swagger.json", "Swagger"); });
 
             app.UseEndpoints(endpoints =>
             {
