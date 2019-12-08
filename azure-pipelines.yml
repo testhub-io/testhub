@@ -39,3 +39,13 @@ steps:
     containerRegistry: $(dockerRegistryServiceConnection)	
     tags: |	
       $(tag)
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Pay-As-You-Go(f6fa6598-4cb3-4343-82b6-0a8cc159f475)'
+    appType: 'webAppContainer'
+    WebAppName: 'testhub-frontend'
+    DockerNamespace: '$(containerRegistry)'
+    DockerRepository: '$(imageRepository)'
+    DockerImageTag: '$(tag)'
