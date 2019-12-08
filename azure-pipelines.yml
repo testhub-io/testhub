@@ -12,8 +12,7 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'e6ec1411-f29a-405a-821d-b1bc36082acd'
   imageRepository: 'testhubapi'
-  containerRegistry: 'registry20191111073104.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/TestsHub.Api/Dockerfile'
+  containerRegistry: 'registry20191111073104.azurecr.io'  
   tag: '$(Build.BuildId)'
   
   # Agent VM image name
@@ -33,7 +32,9 @@ stages:
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        dockerfile: '$(Build.SourcesDirectory)/TestsHub.Api/Dockerfile'
         containerRegistry: $(dockerRegistryServiceConnection)
+        buildContext: $(Build.SourcesDirectory)
         tags: |
           $(tag)
+
