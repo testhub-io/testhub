@@ -24,9 +24,9 @@ namespace TestsHub.Api.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return  "I'm OK";
         }
 
         // GET api/values/5
