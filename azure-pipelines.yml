@@ -9,6 +9,15 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+  
+variables:	
+  # Container registry service connection established during pipeline creation	
+  dockerRegistryServiceConnection: '4a3907e6-4d78-49c5-bbab-0f5b6f1964f1'	
+  imageRepository: 'testhubfrontend'	
+  containerRegistry: 'registry20191111073104.azurecr.io'	
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'	
+  tag: '$(Build.BuildId)'
+
 steps:
 - task: NodeTool@0
   inputs:
@@ -20,3 +29,13 @@ steps:
     npm install
     ng build --prod
   displayName: 'npm install and build'
+
+- task: Docker@2	
+  displayName: Build and push an image to container registry	
+  inputs:	
+    command: buildAndPush	
+    repository: $(imageRepository)	
+    dockerfile: $(dockerfilePath)	
+    containerRegistry: $(dockerRegistryServiceConnection)	
+    tags: |	
+      $(tag)
