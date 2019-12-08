@@ -31,7 +31,8 @@ namespace TestsHub.Api
 
             services.AddCors(options => options.AddPolicy(AllowTestsHubOrigins,
                 builder=>
-                       builder.WithOrigins("http://testshub.com", "https://testshub.com")
+                       builder.WithOrigins("http://testshub.com", "https://testshub.com", 
+                        "https://test-hub.io", "http://test-hub.io")
                            .AllowAnyHeader()
                            .AllowAnyMethod()));
 
