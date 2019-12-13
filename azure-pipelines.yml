@@ -11,10 +11,8 @@ pool:
 
   
 variables:	
-  # Container registry service connection established during pipeline creation	
-  dockerRegistryServiceConnection: '4a3907e6-4d78-49c5-bbab-0f5b6f1964f1'	
   imageRepository: 'testhub-frontend'	
-  containerRegistry: 'registry20191111073104.azurecr.io'	
+  containerRegistry: 'testhubio.azurecr.io'	
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'	
   tag: '$(Build.BuildId)'
 
@@ -36,16 +34,6 @@ steps:
     command: buildAndPush	
     repository: $(imageRepository)	
     dockerfile: $(dockerfilePath)	
-    containerRegistry: $(dockerRegistryServiceConnection)	
+    containerRegistry: 'testhub-registry-connection'
     tags: |	
       $(tag)
-
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Pay-As-You-Go(f6fa6598-4cb3-4343-82b6-0a8cc159f475)'
-    appType: 'webAppContainer'
-    WebAppName: 'testhub-frontend'
-    DockerNamespace: '$(containerRegistry)'
-    DockerRepository: '$(imageRepository)'
-    DockerImageTag: '$(tag)'
