@@ -36,12 +36,3 @@ stages:
         buildContext: $(Build.SourcesDirectory)
         tags: |
           $(tag)
-    - task: AzureRmWebAppDeployment@4
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'Pay-As-You-Go(1e321cad-92ae-4632-a2f1-f596e0a060a9)'
-        appType: 'webAppContainer'
-        WebAppName: 'testhub-api'
-        DockerNamespace: '$(containerRegistry)'
-        DockerRepository: '$(imageRepository)'
-        DockerImageTag: '$(tag)'
