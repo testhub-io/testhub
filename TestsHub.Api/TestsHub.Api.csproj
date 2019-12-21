@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TestsHub.Commons\TestsHub.Commons.csproj" />
     <ProjectReference Include="..\TestsHub.Data\TestsHub.Data.csproj" />
     <ProjectReference Include="..\TestsHubUploadEndpoint\TestsHubUploadEndpoint.csproj" />
   </ItemGroup>

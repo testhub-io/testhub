@@ -16,7 +16,7 @@ namespace TestsHub.Api
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration;            
 
             var context = new TestsHub.Data.DataModel.TestHubDBContext(configuration);           
             context.Database.Migrate();

@@ -15,5 +15,9 @@
   <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.17" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TestsHub.Commons\TestsHub.Commons.csproj" />
+  </ItemGroup>
+
  
 </Project>
