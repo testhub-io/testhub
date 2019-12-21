@@ -9,10 +9,9 @@ resources:
 - repo: self
 
 variables:
-  # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'e6ec1411-f29a-405a-821d-b1bc36082acd'
+   
   imageRepository: 'testhub-api'
-  containerRegistry: 'registry20191111073104.azurecr.io'  
+  containerRegistry: 'testhubio.azurecr.io'  
   tag: '$(Build.BuildId)'
   
   # Agent VM image name
@@ -33,8 +32,7 @@ stages:
         command: buildAndPush
         repository: $(imageRepository)
         dockerfile: '$(Build.SourcesDirectory)/TestsHub.Api/Dockerfile'
-        containerRegistry: $(dockerRegistryServiceConnection)
+        containerRegistry: 'testhub-registry-connection'
         buildContext: $(Build.SourcesDirectory)
         tags: |
           $(tag)
-
