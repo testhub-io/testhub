@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TestsHub.Data;
 using TestsHubUploadEndpoint;
@@ -26,7 +27,7 @@ namespace TestsHub.Api.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-            return new string[] { "I'm ok" };
+            return $"I'm ok. {Assembly.GetExecutingAssembly().GetName().FullName}";
         }
 
         // GET api/values/5

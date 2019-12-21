@@ -20,4 +20,15 @@
     <ProjectReference Include="..\TestsHubUploadEndpoint\TestsHubUploadEndpoint.csproj" />
   </ItemGroup>
 
+  <PropertyGroup Condition=" '$(Version)' == '' ">
+    <VersionPrefix Condition=" '$(VersionPrefix)' == '' ">1.0.0-dev</VersionPrefix>
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+    <Version Condition=" '$(Version)' == '' ">$(VersionPrefix)-DEV</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(AssemblyVersion)' == '' ">
+    <AssemblyVersion>0.0.$([System.DateTime]::UtcNow.ToString("MMdd")).$([System.DateTime]::UtcNow.ToString("HHmm"))</AssemblyVersion>   
+  </PropertyGroup>
+  
+
 </Project>
