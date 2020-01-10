@@ -16,7 +16,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:44355/api/Test-org/TestDataUpload-Regular",
+      "launchUrl": "https://localhost:44355/api/Test-org",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
