@@ -78,11 +78,11 @@ export class ProjectComponent implements OnInit {
       this.jsonParsed = data;
 
       // Loading chart data sets into barChartData array
-      this.jsonParsed.TestRuns.forEach((element: Testrun) => {
-        this.barChartData[0].data.push(element.Count.Skipped);
-        this.barChartData[1].data.push(element.Count.Failed);
-        this.barChartData[2].data.push(element.Count.Passed);
-        this.barChartLabels.push(element.Timestamp.split('T')[0]);
+      this.jsonParsed.testRuns.forEach((element: Testrun) => {
+        this.barChartData[0].data.push(element.count.skipped);
+        this.barChartData[1].data.push(element.count.failed);
+        this.barChartData[2].data.push(element.count.passed);
+        this.barChartLabels.push(element.timestamp.split('T')[0]);
       });
       console.log(this.router.url);
     });

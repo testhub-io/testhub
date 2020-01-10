@@ -1,5 +1,5 @@
 export interface Organisation {
-  Name: string;
+  name: string;
   uri: string;
-  Projects: [];
+  projects: [];
 }

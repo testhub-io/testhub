@@ -1,13 +1,13 @@
 export interface Testrun {
-  Name: string;
-  TestRunName: string;
-  Time: string;
-  Timestamp: string;
+  name: string;
+  testRunName: string;
+  time: string;
+  timestamp: string;
   uri: string;
-  Count: {
-    Passed: number;
-    Failed: number;
-    Skipped: number;
+  count: {
+    passed: number;
+    failed: number;
+    skipped: number;
   };
-  TestCases: [];
+  testCases: [];
 }

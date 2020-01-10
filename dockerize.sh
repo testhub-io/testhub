@@ -15,5 +15,5 @@ docker build -t testshub-frontend .
 # #sleep 2
 # #read -p "(Press enter to close)"
 echo -e "\e[35m -- (3/4) Pushing DOCKER IMAGE \e[0m"
-docker tag  testshub-frontend registry20191111073104.azurecr.io/testhub-frontend
-docker push  registry20191111073104.azurecr.io/testhub-frontend
+docker tag  testshub-frontend testhubio.azurecr.io/testhub-frontend
+docker push  testhubio.azurecr.io/testhub-frontend
