@@ -36,6 +36,7 @@ stages:
         buildContext: $(Build.SourcesDirectory)
         tags: |
           $(tag)
+          latest
 
     - task: AzureRmWebAppDeployment@4
       inputs:
@@ -43,6 +44,6 @@ stages:
         azureSubscription: 'Pay-As-You-Go(1e321cad-92ae-4632-a2f1-f596e0a060a9)'
         appType: 'webAppContainer'
         WebAppName: 'test-hub-api'
-        DockerNamespace: '''$(containerRegistry)'''
-        DockerRepository: '''$(imageRepository)'''
-        DockerImageTag: 'latest'
+        DockerNamespace: '$(containerRegistry)'
+        DockerRepository: '$(imageRepository)'
+        DockerImageTag: '$(tag)'
