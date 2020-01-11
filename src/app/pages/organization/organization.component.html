@@ -11,8 +11,8 @@
     <tbody>
       <tr *ngFor="let jpsp of jsonParsed?.projects">
         <td><a [routerLink]="'/'+jpsp.uri" >{{jpsp.name}}</a></td>
-        <td>{{jpsp.Status.testRunsCount}}</td>
-        <td>{{jpsp.Status.recentTestRun}}</td>
+        <td>{{jpsp.status.testRunsCount}}</td>
+        <td>{{jpsp.status.recentTestRun}}</td>
       </tr>
     </tbody>
 </table>
