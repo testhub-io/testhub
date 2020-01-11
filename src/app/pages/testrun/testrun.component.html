@@ -1,5 +1,5 @@
 <app-breadcrumb></app-breadcrumb>
-<table class="table mt-20 table-hover">
+<table class="table mt-20 table-hover table-sm" >
     <thead>
       <tr>
         <th scope="col">Name</th>
@@ -8,10 +8,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let jpsp of jsonParsed?.testCases">
-        <td>{{jpsp.name}}</td>
-        <td>{{jpsp.status}}</td>
-        <td>{{jpsp.time}}</td>
+
+      <tr *ngFor="let jpsp of jsonParsed?.testCases" [ngClass]="{'table-danger' : jpsp.status=='failed'}"  >
+        <td><small>{{jpsp.name}}</small></td>
+        <td><small>{{jpsp.status}}</small></td>
+        <td><small>{{jpsp.time |number:'1.0-2'}}</small></td>
       </tr>
     </tbody>
 </table>
