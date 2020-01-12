@@ -25,6 +25,7 @@ for root, dirs, files in os.walk("."):
             testRunId = root.split("/")[1]
             
             url = "https://test-hub-api.azurewebsites.net/{}/{}/{}".format(args.org, args.project, args.build)
+            print("Uploading to:" + url)
             content = Path(os.path.join(root, file)).read_text()             
             response = requests.put(url,
                         files=dict(file=content),
