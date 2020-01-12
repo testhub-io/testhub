@@ -38,6 +38,13 @@ stages:
         testResultsFormat: 'JUnit'
         testResultsFiles: '**/th-test-results.xml'
         mergeTestResults: true
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+        addToPath: true
+        architecture: 'x64'
+        
     - task: PythonScript@0
       displayName: Upload test results to testhub
       inputs:
