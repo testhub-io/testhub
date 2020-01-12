@@ -39,7 +39,7 @@ namespace Tests
             var case1 = testRunReported.TestCases.First();
             case1.Name.ShouldBe("PassedTest");
             case1.ClassName .ShouldBe("aspnetappDependency.Tests.UnitTest1");
-            case1.Status.ShouldBeNull();
+            case1.Status.ShouldBe("passed");
             case1.Time.ShouldBe("0.0000749");
         }
 
