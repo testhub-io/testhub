@@ -26,6 +26,27 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: 'TestsHub.sln'
+
+    - task: VSTest@2
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: |
+          **\*test*.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        codeCoverageEnabled: true
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/TEST-*.xml'
+        mergeTestResults: true
+
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
@@ -47,3 +68,4 @@ stages:
         DockerNamespace: '$(containerRegistry)'
         DockerRepository: '$(imageRepository)'
         DockerImageTag: '$(tag)'
+
