@@ -9,7 +9,7 @@ namespace TestsHubUploadEndpoint.Tests
     {
         public static Stream GetFile (string name)
         {
-            var stream = File.OpenRead($"..\\..\\..\\TestData\\{name}");
+            var stream = File.OpenRead($"../../../TestData/{name}");
             return stream;
         }
     }

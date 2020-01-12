@@ -28,7 +28,7 @@ namespace Tests
 
             var reader = new JUnitReader(dataLoaderMock.Object);
 
-            var xmlReader = TestData.GetFile("MInimalJUnit.xml");
+            var xmlReader = TestData.GetFile("MinimalJUnit.xml");
 
             // Act 
             Task.WaitAll(reader.Read(xmlReader, "tr1"));
