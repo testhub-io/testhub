@@ -38,6 +38,12 @@ stages:
         testResultsFormat: 'JUnit'
         testResultsFiles: '**/th-test-results.xml'
         mergeTestResults: true
+    - task: PythonScript@0
+      displayName: Upload test results to testhub
+      inputs:
+        scriptSource: 'filePath'
+        scriptPath: 'upload-test-results.py'
+        arguments: '--file th-test-results.xml --org test-hub --project $(System.TeamProject) --build $(Build.BuildNumber)'
 
     - task: Docker@2
       displayName: Build and push an image to container registry
