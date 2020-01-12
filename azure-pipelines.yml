@@ -44,12 +44,12 @@ stages:
         versionSpec: '3.x'
         addToPath: true
         architecture: 'x64'
-
-    - script: |         
-         python -m pip install --upgrade pip
-         pip install requests         
-       workingDirectory: $(projectRoot)
-       displayName: "Install requirements"
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          python -m pip install --upgrade pip
+          pip install requests
           
     - task: PythonScript@0
       displayName: Upload test results to testhub
