@@ -30,13 +30,13 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'test'
-        arguments: '--logger "junit;LogFilePath=test-results/results.xml" --filter  TestCategory!=Integration'
+        arguments: '--logger "junit;LogFilePath=test-results/test-results.xml" --filter  TestCategory!=Integration'
         projects: 'TestsHub.sln'
 
     - task: PublishTestResults@2
       inputs:
         testResultsFormat: 'JUnit'
-        testResultsFiles: 'test-results/results.xml'
+        testResultsFiles: '**/test-results.xml'
         mergeTestResults: true
 
     - task: Docker@2
