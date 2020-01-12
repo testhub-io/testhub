@@ -60,15 +60,17 @@ namespace Tests
             Task.WaitAll(reader.Read(xmlReader, "tr1"));
 
             // Assert
+            var faileDetstOutput = testRunReported.TestCases
+                    .Single(t => t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
+                    .TestOutput;
+
             testRunReported.TestCases.ShouldSatisfyAllConditions(
                 ()=> testRunReported.TestCases.Count.ShouldBe(7),
                 () => testRunReported.TestCases
                     .Count(t=>t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
                     .ShouldBe(1),
-                 () => testRunReported.TestCases
-                    .Single(t => t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
-                    .TestOutput
-                    .ShouldBe("error creating cluster\r\nSecond string\r\n")
+                 () => faileDetstOutput.ShouldContain("error creating cluster"),
+                 () => faileDetstOutput.ShouldContain("\nSecond string")
                 );
                      
             
