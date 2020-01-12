@@ -32,15 +32,11 @@ stages:
         command: 'build'
         projects: 'TestsHub.sln'
 
-    - task: VSTest@2
+    - task: DotNetCoreCLI@2
       inputs:
-        testSelector: 'testAssemblies'
-        testAssemblyVer2: |
-          **\*test*.dll
-          !**\*TestAdapter.dll
-          !**\obj\**
-        searchFolder: '$(System.DefaultWorkingDirectory)'
-        codeCoverageEnabled: true
+        command: 'test'
+        projects: 'TestsHub.sln'
+
     - task: PublishTestResults@2
       inputs:
         testResultsFormat: 'JUnit'
