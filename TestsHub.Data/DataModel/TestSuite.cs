@@ -5,24 +5,21 @@ using System.Text;
 
 namespace TestsHub.Data.DataModel
 {
-    public class TestRun
+    public class TestSuite
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public string TestRunName { get; set; }
-
-        public virtual ICollection<TestCase> TestCases { get; set; }        
-
-        public virtual Project Project { get; set; }
-
-        public int ProjectId { get; set; }
-
-        public DateTime Timestamp { get; set; }
-
-        public decimal Time { get; set; }
         public string Name { get; set; }
+        
+        public virtual ICollection<TestCase> TestCases { get; set; }
+
+        public string Hostname { get; set; }
+        public string Package { get; set; }
+        public string JUnitId { get; set; }
+        public DateTime Timestamp { get; set; }
+        public decimal Time { get; set; }
         
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestsHub.Data.DataModel;
 
 namespace TestsHub.Data.Migrations
 {
     [DbContext(typeof(TestHubDBContext))]
-    partial class TestHubDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200114181031_TestNameIndex")]
+    partial class TestNameIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,15 +68,11 @@ namespace TestsHub.Data.Migrations
 
                     b.Property<int>("TestRunId");
 
-                    b.Property<int?>("TestSuiteId");
-
-                    b.Property<decimal>("Time");
+                    b.Property<string>("Time");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TestRunId");
-
-                    b.HasIndex("TestSuiteId");
 
                     b.ToTable("TestCases");
                 });
@@ -84,7 +82,13 @@ namespace TestsHub.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Hostname");
+
+                    b.Property<string>("JUnitId");
+
                     b.Property<string>("Name");
+
+                    b.Property<string>("Package");
 
                     b.Property<int>("ProjectId");
 
@@ -102,29 +106,6 @@ namespace TestsHub.Data.Migrations
                     b.ToTable("TestRuns");
                 });
 
-            modelBuilder.Entity("TestsHub.Data.DataModel.TestSuite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Hostname");
-
-                    b.Property<string>("JUnitId");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<string>("Package");
-
-                    b.Property<decimal>("Time");
-
-                    b.Property<DateTime>("Timestamp");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TestSuite");
-                });
-
             modelBuilder.Entity("TestsHub.Data.DataModel.Project", b =>
                 {
                     b.HasOne("TestsHub.Data.DataModel.Organisation", "Organisation")
@@ -139,10 +120,6 @@ namespace TestsHub.Data.Migrations
                         .WithMany("TestCases")
                         .HasForeignKey("TestRunId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("TestsHub.Data.DataModel.TestSuite", "TestSuite")
-                        .WithMany("TestCases")
-                        .HasForeignKey("TestSuiteId");
                 });
 
             modelBuilder.Entity("TestsHub.Data.DataModel.TestRun", b =>

@@ -40,6 +40,7 @@ namespace TestsHubUploadEndpoint
             
             testRun.Project = project;
             testRun.Project.Organisation = Organisation;
+            testRun.Time = testRun.TestCases.Sum(t => t.Time);
             var testCases = testRun.TestCases;
 
             var existingTestRun = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id

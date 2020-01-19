@@ -22,12 +22,13 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             dataContext.Entry(org);
             dataContext.SaveChanges();
             var dataLoader = new DataLoader(dataContext, "DataLoaderTests-Integration", org.Name);
+            var testSuite = new TestSuite() { Name = "TestSuite1" };
             var testRun = new TestRun()
             {
                 TestRunName = "Some test run",
                 TestCases = new List<TestCase>() {
-                new TestCase(){ Name = "Case 1"},
-                new TestCase(){ Name = "Case 2"}
+                new TestCase(){ Name = "Case 1", TestSuite = testSuite },
+                new TestCase(){ Name = "Case 2",TestSuite = testSuite}
             }
             };
             dataLoader.Add(testRun);

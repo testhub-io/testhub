@@ -11,10 +11,10 @@ namespace TestsHub.Data.DataModel
         [Required]
         public string Name { get; set; }
 
+        public int OrganisationId { get; set; }
+
         public virtual ICollection<TestRun> TestRuns { get; set; }
 
         public virtual Organisation Organisation { get; set; }
-
-        public int OrganisationId { get; set; }
     }
 }

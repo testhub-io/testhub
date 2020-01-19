@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace TestsHubUploadEndpoint
     public class JUnitReader
     {
         IDataLoader _dataLoader;
+        IVisitor Visitor { get; set; }
+
         public JUnitReader  (IDataLoader dataLoader)
         {
             _dataLoader = dataLoader;
@@ -24,10 +27,11 @@ namespace TestsHubUploadEndpoint
             };
 
             var result = new List<TestCase>();
-            var testRun = new TestRun();
+            var testRun = new TestRun() { Timestamp = DateTime.UtcNow };
 
             using (var reader = XmlReader.Create(stream, settings))
             {
+                TestSuite testSuite = null;
                 while (await reader.ReadAsync())
                 {
                     switch (reader.NodeType)
@@ -36,6 +40,7 @@ namespace TestsHubUploadEndpoint
                             if (string.Equals(reader.Name, "testcase", StringComparison.OrdinalIgnoreCase))
                             {
                                 var testCase = new TestCase();
+                                testCase.TestSuite = testSuite;
 
                                 if (reader.HasAttributes)
                                 {                                       
@@ -57,8 +62,9 @@ namespace TestsHubUploadEndpoint
                                                 break;
 
                                             case "time":
-                                                testCase.Time = reader.Value;
-                                                break;                                            
+                                                testCase.Time = ParseFloatWithDefault(reader.Value);
+
+                                                break;
 
                                         }
                                     }
@@ -81,43 +87,46 @@ namespace TestsHubUploadEndpoint
                                     }
                                 }
 
+
+                                Visitor?.TestCaseAdded(testCase);
                                 result.Add(testCase);
                             }                     
                             else if (string.Equals(reader.Name, "testsuite", StringComparison.OrdinalIgnoreCase))
                             {
+                                testSuite = new TestSuite();
                                 if (reader.HasAttributes)
                                 {
                                     while (reader.MoveToNextAttribute())
-                                    {
+                                    {                                        
                                         switch (reader.Name)
                                         {
                                             case "name":
-                                                testRun.Name = reader.Value;
+                                                testSuite.Name = reader.Value;
                                                 break;
 
                                             case "hostname":
-                                                testRun.Hostname = reader.Value;
+                                                testSuite.Hostname = reader.Value;
                                                 break;
 
                                             case "package":
-                                                testRun.Package = reader.Value;
+                                                testSuite.Package = reader.Value;
                                                 break;
 
                                             case "junit_id":
-                                                testRun.JUnitId = reader.Value;
+                                                testSuite.JUnitId = reader.Value;
                                                 break;
 
                                             case "timestamp":
-                                                testRun.Timestamp = DateTime.Parse(reader.Value);
+                                                testSuite.Timestamp = DateTime.Parse(reader.Value);
                                                 break;
 
                                             case "time":
-                                                testRun.Time = decimal.Parse(reader.Value, System.Globalization.CultureInfo.InvariantCulture);
+                                                testSuite.Time = decimal.Parse(reader.Value, System.Globalization.CultureInfo.InvariantCulture);
                                                 break;
 
-                                        }
+                                        }                                                                                
                                     }
-
+                                                                                                            
                                     // Move the reader back to the element node.
                                     reader.MoveToElement();
                                 }
@@ -144,6 +153,24 @@ namespace TestsHubUploadEndpoint
             testRun.TestCases = result;
             testRun.TestRunName = testRunName;
             _dataLoader.Add(testRun);
+
+        }
+
+        private static decimal ParseFloatWithDefault(string value)
+        {
+            if (decimal.TryParse(value,System.Globalization.NumberStyles.Float,
+                    CultureInfo.InvariantCulture,  out var decimalTime))
+            {
+                return decimalTime;
+            }
+            else if (float.TryParse(value, out var floatTime))
+            {
+                return Convert.ToDecimal(floatTime);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         bool ReadTestCaseErrorContent(string elementName, XmlReader reader, TestCase testCase)

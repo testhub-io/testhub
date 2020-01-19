@@ -12,10 +12,15 @@ namespace TestsHubUploadEndpoint.Tests.Integration
         {
             get
             {
-                var configurationMock = new Mock<IConfiguration>();
-                configurationMock
-                    .Setup(c => c.GetConnectionString("DefaultConnection"))
+                var configurationMock = new Mock<IConfiguration>( MockBehavior.Strict);
+
+                var configSection = new Mock<IConfigurationSection>(MockBehavior.Strict);
+                configSection.SetupGet(c => c["DefaultConnection"])
                     .Returns("Host=localhost;Database=testHub;Username=root;Password=test_pass");
+
+                configurationMock
+                    .Setup(c => c.GetSection("ConnectionStrings"))
+                    .Returns(configSection.Object);
                 return configurationMock;
             }
         }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestsHub.Data.DataModel;
 
 namespace TestsHub.Data.Migrations
 {
     [DbContext(typeof(TestHubDBContext))]
-    partial class TestHubDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200115190709_TestSuite")]
+    partial class TestSuite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +70,7 @@ namespace TestsHub.Data.Migrations
 
                     b.Property<int?>("TestSuiteId");
 
-                    b.Property<decimal>("Time");
+                    b.Property<string>("Time");
 
                     b.HasKey("Id");
 

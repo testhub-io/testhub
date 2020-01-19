@@ -40,7 +40,7 @@ namespace Tests
             case1.Name.ShouldBe("PassedTest");
             case1.ClassName .ShouldBe("aspnetappDependency.Tests.UnitTest1");
             case1.Status.ShouldBe("passed");
-            case1.Time.ShouldBe("0.0000749");
+            case1.Time.ShouldBe(0.0000749m);
         }
 
         [Test]

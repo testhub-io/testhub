@@ -9,6 +9,10 @@ namespace TestsHubUploadEndpoint.Tests
     {
         public static Stream GetFile (string name)
         {
+            if (!File.Exists($"../../../TestData/{name}"))
+            {
+                throw new Exception("File does not exist");
+            }
             var stream = File.OpenRead($"../../../TestData/{name}");
             return stream;
         }

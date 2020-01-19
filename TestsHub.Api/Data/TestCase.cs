@@ -10,7 +10,7 @@
 
         public string Status { get; set; }
 
-        public string Time { get; set; }
+        public float Time { get; set; }
 
         public string File { get; set; }
     }

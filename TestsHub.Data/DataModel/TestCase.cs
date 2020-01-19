@@ -19,12 +19,16 @@ namespace TestsHub.Data.DataModel
         [Required]
         public string Status { get; set; } = "passed";
 
-        public string Time { get; set; }
+        public decimal Time { get; set; }
 
         public string File { get; set; }
 
         public virtual TestRun TestRun { get; set; }
-        
+
+        public virtual TestSuite TestSuite { get; set; }
+
+        public int? TestSuiteId { get; set; }
+
         // there could be several of them, consider separate records
         public string TestOutput { get; set; }
     }

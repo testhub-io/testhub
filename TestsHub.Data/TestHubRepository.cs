@@ -36,7 +36,8 @@ namespace TestsHub.Data
         public dynamic GetTestRun(string projectName, string testRunName)
         {
             var project = _testHubDBContext.Projects
-                .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase) && p.Organisation.Id == _organisation.Id);
+                .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase) 
+                && p.Organisation.Id == _organisation.Id);
 
             if (project != null)
             {
@@ -56,9 +57,7 @@ namespace TestsHub.Data
 
                 return new
                 {
-                    Name = testRun.TestRunName,
-                    testRun.Time,
-                    testRun.Timestamp,
+                    Name = testRun.TestRunName,                    
                     uri = BuildUri(Organisation, project.Name, testRun.TestRunName),
                     Summary = new {
                         TestsCount = testCases.Count(),
