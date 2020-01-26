@@ -103,7 +103,7 @@ namespace TestsHubUploadEndpoint
 
         public void Add(report.TestRun testRun, IEnumerable<report.TestCase> testCases)
         {
-            TestRun testRunDto = _mapper.Map<TestRun>(testRun);
+            var testRunDto = _mapper.Map<TestRun>(testRun);
             testRunDto.TestCases = _mapper.Map<ICollection<TestCase>>(testCases);
             Add(testRunDto);
         }

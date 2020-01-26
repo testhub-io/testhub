@@ -44,34 +44,59 @@ namespace TestsHub.Data
                 var testRun = _testHubDBContext.TestRuns
                     .FirstOrDefault(t => t.ProjectId == project.Id && t.TestRunName == testRunName);
 
+                var history = GetTestCaseHistory(project, testRun);
+
                 var testCases = _testHubDBContext.TestCases.Where(t => t.TestRunId == testRun.Id)
-                    .Select(s => new {
+                    .Select(s => new
+                    {
                         s.ClassName,
                         s.File,
                         s.Name,
-                        s.Status,                        
+                        s.Status,
                         s.TestOutput,
-                        s.Time                       
+                        s.Time,
+                        recentResults = history[s.Name]
                     }).Take(RECORDS_LIMIT);
-                
 
                 return new
                 {
-                    Name = testRun.TestRunName,                    
+                    Name = testRun.TestRunName,
                     uri = BuildUri(Organisation, project.Name, testRun.TestRunName),
-                    Summary = new {
+                    Summary = new
+                    {
                         TestsCount = testCases.Count(),
-                        Passed = testCases.Count(t=>t.Status.Equals(PassedTestValue, StringComparison.OrdinalIgnoreCase)),
-                        Failed = testCases.Count(t=>t.Status.Equals(FailedTestValue, StringComparison.OrdinalIgnoreCase) ),
+                        Passed = testCases.Count(t => t.Status.Equals(PassedTestValue, StringComparison.OrdinalIgnoreCase)),
+                        Failed = testCases.Count(t => t.Status.Equals(FailedTestValue, StringComparison.OrdinalIgnoreCase)),
                         Skipped = testCases.Count(t => t.Status.Equals(SkippedTestValue, StringComparison.OrdinalIgnoreCase))
                     },
-                    TestCases = testCases
+                    TestCases = testCases,
+
                 };
             }
             else
             {
                 return null;
             }
+        }
+
+        private Dictionary<string, IEnumerable<string>> GetTestCaseHistory(Project project, TestRun testRun)
+        {
+            //@"SELECT name, status  from TestCases c
+            //        inner join(select id from TestRuns WHERE projectid = 1
+            //        order by TimeStamp desc LIMIt 3) tr
+            //        on tr.id = c.TestRunId
+            //        order by c.Name"
+
+            var recentTrs = _testHubDBContext.TestRuns.Where(
+                    t => t.ProjectId == project.Id && t.Id < testRun.Id).OrderBy(t => t.Timestamp).Take(5).Select(t => t.Id).ToList();
+
+            var history = _testHubDBContext.TestCases.Where(c => recentTrs.Contains(c.TestRunId))
+                .GroupBy(c => c.Name,
+                 pair => pair, 
+                 (k,c)=> new { Key = k, Statuses = c.Select(c2 => c2.Status) })
+                .ToDictionary(g => g.Key, v=> v.Statuses);
+            
+            return history;
         }
 
         public dynamic GetProjectSummary(string projectName)
