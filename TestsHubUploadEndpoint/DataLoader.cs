@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TestsHub.Data.DataModel;
+using report = TestsHubUploadEndpoint.ReportModel;
+using AutoMapper;
 
 namespace TestsHubUploadEndpoint
 {
+    
     public class DataLoader : IDataLoader
     {
         TestHubDBContext _testHubDBContext;
+        IMapper _mapper;
 
         public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org)
         {
@@ -21,6 +25,20 @@ namespace TestsHubUploadEndpoint
             }
 
             testHubDBContext.Entry<Organisation>(Organisation);
+
+            InitMapper();
+        }
+
+        private void InitMapper()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<report.TestCase, TestCase>();
+                cfg.CreateMap<report.TestRun, TestRun>();
+                cfg.CreateMap<report.TestSuite, TestSuite>();
+            });
+            
+            _mapper = new Mapper(config);     
         }
 
         public string ProjectName { get; }
@@ -81,6 +99,13 @@ namespace TestsHubUploadEndpoint
         public void Dispose()
         {
             _testHubDBContext.Dispose();
+        }
+
+        public void Add(report.TestRun testRun, IEnumerable<report.TestCase> testCases)
+        {
+            TestRun testRunDto = _mapper.Map<TestRun>(testRun);
+            testRunDto.TestCases = _mapper.Map<ICollection<TestCase>>(testCases);
+            Add(testRunDto);
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
-using TestsHub.Data.DataModel;
+using System.Collections.Generic;
+using TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint
 {
     public interface IDataLoader : IDisposable
     {
-        void Add(TestRun testRun);       
+        void Add(TestRun testRun, IEnumerable<TestCase> testCases);       
     }
 }

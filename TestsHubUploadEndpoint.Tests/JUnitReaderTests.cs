@@ -1,9 +1,11 @@
 using Moq;
 using NUnit.Framework;
 using Shouldly;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TestsHubUploadEndpoint;
+using TestsHubUploadEndpoint.ReportModel;
 using TestsHubUploadEndpoint.Tests;
 
 namespace Tests
@@ -22,9 +24,15 @@ namespace Tests
         {
             // Arrange 
             var dataLoaderMock = new Mock<IDataLoader>();
-            var testRunReported = new TestsHub.Data.DataModel.TestRun();
-            dataLoaderMock.Setup(s => s.Add(It.IsAny<TestsHub.Data.DataModel.TestRun>()))
-                .Callback<TestsHub.Data.DataModel.TestRun>(t => testRunReported = t);
+            var testRunReported = new TestRun();
+            var testCasesReported = new List<TestCase>();
+            dataLoaderMock.Setup(s => s.Add(It.IsAny<TestRun>(), It.IsAny<IEnumerable<TestCase>>()))
+                .Callback<TestRun, IEnumerable<TestCase>>((t, c) =>
+                {
+                    testRunReported = t;
+                    testCasesReported = c.ToList();
+                });
+
 
             var reader = new JUnitReader(dataLoaderMock.Object);
 
@@ -34,13 +42,14 @@ namespace Tests
             Task.WaitAll(reader.Read(xmlReader, "tr1"));
 
             // Assert
-            testRunReported.TestCases.Count.ShouldBe(2);
+            testCasesReported.Count.ShouldBe(2);
 
-            var case1 = testRunReported.TestCases.First();
+            var case1 = testCasesReported.First();
             case1.Name.ShouldBe("PassedTest");
             case1.ClassName .ShouldBe("aspnetappDependency.Tests.UnitTest1");
             case1.Status.ShouldBe("passed");
             case1.Time.ShouldBe(0.0000749m);
+            case1.TestSuite.Name.ShouldBe("aspnetappDependency.Tests.UnitTest1");
         }
 
         [Test]
@@ -48,9 +57,15 @@ namespace Tests
         {
             // Arrange 
             var dataLoaderMock = new Mock<IDataLoader>();
-            var testRunReported = new TestsHub.Data.DataModel.TestRun();
-            dataLoaderMock.Setup(s => s.Add(It.IsAny<TestsHub.Data.DataModel.TestRun>()))
-                .Callback<TestsHub.Data.DataModel.TestRun>(t => testRunReported = t);
+            var testRunReported = new TestRun();
+            var testCasesReported = new List<TestCase>();
+            dataLoaderMock.Setup(s => s.Add(It.IsAny<TestRun>(), It.IsAny<IEnumerable<TestCase>>()))
+                .Callback<TestRun, IEnumerable<TestCase>>((t, c) =>
+                {
+                    testRunReported = t;
+                    testCasesReported = c.ToList();
+                });
+
 
             var reader = new JUnitReader(dataLoaderMock.Object);
 
@@ -60,13 +75,13 @@ namespace Tests
             Task.WaitAll(reader.Read(xmlReader, "tr1"));
 
             // Assert
-            var faileDetstOutput = testRunReported.TestCases
+            var faileDetstOutput = testCasesReported
                     .Single(t => t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
                     .TestOutput;
 
-            testRunReported.TestCases.ShouldSatisfyAllConditions(
-                ()=> testRunReported.TestCases.Count.ShouldBe(7),
-                () => testRunReported.TestCases
+            testCasesReported.ShouldSatisfyAllConditions(
+                ()=> testCasesReported.Count.ShouldBe(7),
+                () => testCasesReported
                     .Count(t=>t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
                     .ShouldBe(1),
                  () => faileDetstOutput.ShouldContain("error creating cluster"),

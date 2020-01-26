@@ -1,10 +1,11 @@
-﻿using TestsHub.Data.DataModel;
+﻿
+using TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint
 {
     internal interface IVisitor
     {
-        void TestCaseAdded(TestCase testCase);
-        void SetCurrentTestRun(TestRun testRun);
+        void TestCaseAdded(TestCase testCase); 
+        void SetCurrentTestRun(TestRun testRun);  
     }
 }

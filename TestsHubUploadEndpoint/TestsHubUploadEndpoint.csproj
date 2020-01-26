@@ -16,6 +16,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="JUnitTestLogger" Version="1.1.0" />
   </ItemGroup>
 </Project>

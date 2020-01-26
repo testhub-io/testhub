@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using TestsHub.Data.DataModel;
+using TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint
 {
@@ -39,8 +39,10 @@ namespace TestsHubUploadEndpoint
                         case XmlNodeType.Element:                            
                             if (string.Equals(reader.Name, "testcase", StringComparison.OrdinalIgnoreCase))
                             {
-                                var testCase = new TestCase();
-                                testCase.TestSuite = testSuite;
+                                var testCase = new TestCase
+                                {
+                                    TestSuite = testSuite
+                                };
 
                                 if (reader.HasAttributes)
                                 {                                       
@@ -130,7 +132,6 @@ namespace TestsHubUploadEndpoint
                                     // Move the reader back to the element node.
                                     reader.MoveToElement();
                                 }
-
                             }
                             break;
 
@@ -150,9 +151,9 @@ namespace TestsHubUploadEndpoint
                     }
                 }
             }
-            testRun.TestCases = result;
+      
             testRun.TestRunName = testRunName;
-            _dataLoader.Add(testRun);
+            _dataLoader.Add(testRun, result);
 
         }
 
