@@ -12,7 +12,7 @@ namespace TestsHubUploadEndpoint
     public class JUnitReader
     {
         IDataLoader _dataLoader;
-        IVisitor Visitor { get; set; }
+        public IVisitor Visitor { get; set; }
 
         public JUnitReader  (IDataLoader dataLoader)
         {

@@ -3,7 +3,7 @@ using TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint
 {
-    internal interface IVisitor
+    public interface IVisitor
     {
         void TestCaseAdded(TestCase testCase); 
         void SetCurrentTestRun(TestRun testRun);  

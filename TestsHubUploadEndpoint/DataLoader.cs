@@ -5,6 +5,7 @@ using System.Text;
 using TestsHub.Data.DataModel;
 using report = TestsHubUploadEndpoint.ReportModel;
 using AutoMapper;
+using TestsHubUploadEndpoint.CoverageModel;
 
 namespace TestsHubUploadEndpoint
 {
@@ -13,6 +14,7 @@ namespace TestsHubUploadEndpoint
     {
         TestHubDBContext _testHubDBContext;
         IMapper _mapper;
+        private TestRun testRunCache;
 
         public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org)
         {
@@ -36,6 +38,7 @@ namespace TestsHubUploadEndpoint
                 cfg.CreateMap<report.TestCase, TestCase>();
                 cfg.CreateMap<report.TestRun, TestRun>();
                 cfg.CreateMap<report.TestSuite, TestSuite>();
+                cfg.CreateMap<CoverageModel.CoverageSummary, Coverage>();
             });
             
             _mapper = new Mapper(config);     
@@ -74,6 +77,8 @@ namespace TestsHubUploadEndpoint
             {                
                 BatchInsert(testCases, existingTestRun.Id);
             }
+
+            testRunCache = existingTestRun;
         }
 
         private void BatchInsert(ICollection<TestCase> testCases, int testRunId)
@@ -106,6 +111,22 @@ namespace TestsHubUploadEndpoint
             var testRunDto = _mapper.Map<TestRun>(testRun);
             testRunDto.TestCases = _mapper.Map<ICollection<TestCase>>(testCases);
             Add(testRunDto);
+        }
+
+        public void Add(CoverageSummary coverageSummary)
+        {
+            if (testRunCache != null && 
+                coverageSummary.TestRunName.Equals(testRunCache.TestRunName, StringComparison.OrdinalIgnoreCase))
+            {
+                var coverageDto = _mapper.Map<Coverage>(coverageSummary);
+                coverageDto.TestRunId = testRunCache.Id;
+                _testHubDBContext.Add(coverageDto);
+                _testHubDBContext.SaveChanges();
+            }
+            else
+            {
+                throw new NotSupportedException("This branch is not supported");
+            }           
         }
     }
 }

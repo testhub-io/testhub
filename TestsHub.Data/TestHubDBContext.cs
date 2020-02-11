@@ -30,9 +30,10 @@ namespace TestsHub.Data.DataModel
 
         public DbSet<Organisation> Organisations { get; set; }
 
+        public DbSet<Coverage> Coverage { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            
+        {            
             optionsBuilder
                .UseMySQL(_connectionString)
                .UseLazyLoadingProxies();

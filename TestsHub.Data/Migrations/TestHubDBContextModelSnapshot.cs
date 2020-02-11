@@ -16,6 +16,24 @@ namespace TestsHub.Data.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
+            modelBuilder.Entity("TestsHub.Data.DataModel.Coverage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("LinesCovered");
+
+                    b.Property<int>("LinesValid");
+
+                    b.Property<int>("TestRunId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestRunId");
+
+                    b.ToTable("Coverage");
+                });
+
             modelBuilder.Entity("TestsHub.Data.DataModel.Organisation", b =>
                 {
                     b.Property<int>("Id")
@@ -123,6 +141,14 @@ namespace TestsHub.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TestSuite");
+                });
+
+            modelBuilder.Entity("TestsHub.Data.DataModel.Coverage", b =>
+                {
+                    b.HasOne("TestsHub.Data.DataModel.TestRun", "TestRun")
+                        .WithMany()
+                        .HasForeignKey("TestRunId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TestsHub.Data.DataModel.Project", b =>

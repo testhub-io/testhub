@@ -86,15 +86,25 @@ namespace TestsHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubRepository(org);
             var files = Request.Form.Files; 
             var size = files.Sum(f => f.Length);
-
+            var dataLoader = new DataLoader(repository.TestHubDBContext, project, org);
             foreach (var formFile in files)
             {
                 if (formFile.Length > 0)
                 {
-                    var jUnitReader = new JUnitReader(
-                    new DataLoader(repository.TestHubDBContext, project, org));                    
+                    var jUnitReader = new JUnitReader(dataLoader);
+
                     var task = jUnitReader.Read(formFile.OpenReadStream(), testRun);
                     Task.WaitAll(task);
+                }
+
+                if (formFile.Name.Equals("coverage", System.StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (formFile.Length > 0)
+                    {
+                        var coberturaReader = new CoberturaReader(dataLoader);
+                        coberturaReader.Read(formFile.OpenReadStream(), testRun);
+
+                    }
                 }
             }
 
