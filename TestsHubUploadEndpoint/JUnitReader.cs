@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -60,7 +61,7 @@ namespace TestsHubUploadEndpoint
 
                                             case "status":
                                                 // ignore status, it's optional in schema
-                                                testCase.Status = "passed";
+                                                testCase.Status = TestStatus.Passed;
                                                 break;
 
                                             case "time":
@@ -80,11 +81,11 @@ namespace TestsHubUploadEndpoint
                                         && !ReadTestCaseErrorContent("system-err", reader, testCase)
                                         && reader.ReadToDescendant("skipped"))
                                     {
-                                        testCase.Status = "skipped";
+                                        testCase.Status = TestStatus.Skipped;
                                     }
                                     else if (reader.ReadToDescendant("system-out"))
                                     {
-                                        testCase.Status = "passed";
+                                        testCase.Status = TestStatus.Passed;
                                         testCase.TestOutput = reader.ReadContentAsString();
                                     }
                                 }
@@ -123,7 +124,7 @@ namespace TestsHubUploadEndpoint
                                                 break;
 
                                             case "time":
-                                                testSuite.Time = decimal.Parse(reader.Value, System.Globalization.CultureInfo.InvariantCulture);
+                                                testSuite.Time = decimal.Parse(reader.Value, CultureInfo.InvariantCulture);
                                                 break;
 
                                         }                                                                                
@@ -154,6 +155,8 @@ namespace TestsHubUploadEndpoint
       
             testRun.TestRunName = testRunName;
             testRun.TestCasesCount = testRun.TestCasesCount + testCases.Count;
+            testRun.Status = testCases.Any(t => t.Status.Equals(TestStatus.Failed, StringComparison.OrdinalIgnoreCase)) ?
+                TestStatus.Failed : TestStatus.Passed;
             _dataLoader.Add(testRun, testCases);
 
         }

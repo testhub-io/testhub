@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using TestsHub.Data;
 using TestsHubUploadEndpoint;
@@ -15,7 +16,9 @@ namespace TestsHub.Api.Controllers
     [ApiController]
     [Produces("application/json")]
     public class ApiController : ControllerBase
-    {        
+    {
+        private const string CoverageKey = "coverage";
+
         IRepositoryFactory RepositoryFactory { get; }
 
         public ApiController(IRepositoryFactory repositoryFactory)
@@ -87,26 +90,30 @@ namespace TestsHub.Api.Controllers
             var files = Request.Form.Files; 
             var size = files.Sum(f => f.Length);
             var dataLoader = new DataLoader(repository.TestHubDBContext, project, org);
-            foreach (var formFile in files)
+            var branch = "<missing>";
+
+            if (Request.Form.ContainsKey("branch"))
             {
-                if (formFile.Length > 0)
+                branch = Request.Form["branch"].ToString();
+            }
+
+            if (Request.Form.ContainsKey(CoverageKey) && Request.Form.Files[CoverageKey].Length > 0)
+            {
+                var coberturaReader = new CoberturaReader(dataLoader);
+                coberturaReader.Read(Request.Form.Files[CoverageKey].OpenReadStream(), testRun);
+            }
+
+
+            foreach (var formFile in files)
+            {                         
+                if (!formFile.Name.Equals(CoverageKey, System.StringComparison.OrdinalIgnoreCase) && formFile.Length > 0)
                 {
                     var jUnitReader = new JUnitReader(dataLoader);
 
                     var task = jUnitReader.Read(formFile.OpenReadStream(), testRun);
                     Task.WaitAll(task);
                 }
-
-                if (formFile.Name.Equals("coverage", System.StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (formFile.Length > 0)
-                    {
-                        var coberturaReader = new CoberturaReader(dataLoader);
-                        coberturaReader.Read(formFile.OpenReadStream(), testRun);
-
-                    }
-                }
-            }
+            } 
 
             // Process uploaded files
             // Don't rely on or trust the FileName property without validation.
