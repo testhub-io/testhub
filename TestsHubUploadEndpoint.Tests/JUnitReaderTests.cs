@@ -39,7 +39,7 @@ namespace Tests
             var xmlReader = TestData.GetFile("MinimalJUnit.xml");
 
             // Act 
-            Task.WaitAll(reader.Read(xmlReader, "tr1"));
+            Task.WaitAll(reader.Read(xmlReader, "tr1", "develop", ""));
 
             // Assert
             testCasesReported.Count.ShouldBe(2);
@@ -72,7 +72,7 @@ namespace Tests
             var xmlReader = TestData.GetFile("failure.xml");
 
             // Act 
-            Task.WaitAll(reader.Read(xmlReader, "tr1"));
+            Task.WaitAll(reader.Read(xmlReader, "tr1", "develop", ""));
 
             // Assert
             var faileDetstOutput = testCasesReported

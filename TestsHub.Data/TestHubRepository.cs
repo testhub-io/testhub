@@ -35,7 +35,7 @@ namespace TestsHub.Data
             }
         }
 
-        public dynamic GetTestRun(string projectName, string testRunName)
+        public Api.Data.TestRun GetTestRun(string projectName, string testRunName)
         {
             var project = _testHubDBContext.Projects
                 .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase) 
@@ -49,30 +49,35 @@ namespace TestsHub.Data
                 var history = GetTestCaseHistory(project, testRun);
 
                 var testCases = _testHubDBContext.TestCases.Where(t => t.TestRunId == testRun.Id)
-                    .Select(s => new
+                    .Select(s => new Api.Data.TestCase
                     {
-                        s.ClassName,
-                        s.File,
-                        s.Name,
-                        s.Status,
-                        s.TestOutput,
-                        s.Time,
-                        recentResults = history[s.Name]
-                    }).Take(RECORDS_LIMIT);
+                        ClassName = s.ClassName,
+                        File = s.File,
+                        Name = s.Name,
+                        Status = (Api.Data.TestResult)s.Status,
+                        SystemOut = s.TestOutput,
+                        Time = s.Time,
+                        RecentResults = history.ContainsKey(s.Name) ? history[s.Name] : null
+                    });
 
-                return new
+                return new Api.Data.TestRun
                 {
                     Name = testRun.TestRunName,
-                    uri = BuildUri(Organisation, project.Name, testRun.TestRunName),
-                    Summary = new
+                    Uri = BuildUri(Organisation, project.Name, testRun.TestRunName),
+                    Summary = new Api.Data.TestRunSummary
                     {
                         TestsCount = testCases.Count(),
-                        Passed = testCases.Count(t => t.Status == TestResult.Passed),
-                        Failed = testCases.Count(t => t.Status == TestResult.Failed),
-                        Skipped = testCases.Count(t => t.Status == TestResult.Skipped)
+                        Passed = testCases.Count(t => t.Status == Api.Data.TestResult.Passed),
+                        Failed = testCases.Count(t => t.Status == Api.Data.TestResult.Failed),
+                        Skipped = testCases.Count(t => t.Status == Api.Data.TestResult.Skipped)
                     },
-                    TestCases = testCases,
-
+                     Branch = testRun.Branch,
+                     CommitId = testRun.CommitId,
+                     Coverage = testRun.Coverage?.Percent,
+                     Timestamp = testRun.Timestamp,
+                     Time = testRun.Time,
+                     TestCases = testCases
+                    
                 };
             }
             else
@@ -81,21 +86,15 @@ namespace TestsHub.Data
             }
         }
 
-        private Dictionary<string, IEnumerable<TestResult>> GetTestCaseHistory(Project project, TestRun testRun)
+        private Dictionary<string, IEnumerable<Api.Data.TestResult>> GetTestCaseHistory(Project project, TestRun testRun)
         {
-            //@"SELECT name, status  from TestCases c
-            //        inner join(select id from TestRuns WHERE projectid = 1
-            //        order by TimeStamp desc LIMIt 3) tr
-            //        on tr.id = c.TestRunId
-            //        order by c.Name"
-
             var recentTrs = _testHubDBContext.TestRuns.Where(
                     t => t.ProjectId == project.Id && t.Id < testRun.Id).OrderBy(t => t.Timestamp).Take(5).Select(t => t.Id).ToList();
 
             var history = _testHubDBContext.TestCases.Where(c => recentTrs.Contains(c.TestRunId))
                 .GroupBy(c => c.Name,
                  pair => pair, 
-                 (k,c)=> new { Key = k, Statuses = c.Select(c2 => c2.Status) })
+                 (k,c)=> new { Key = k, Statuses = c.Select(c2 => (Api.Data.TestResult)c2.Status) })
                 .ToDictionary(g => g.Key, v=> v.Statuses);
             
             return history;

@@ -11,6 +11,7 @@
   </PackageReference>
   <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.6" />
   <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0" />
+  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.2" />
   <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.17" />
   </ItemGroup>

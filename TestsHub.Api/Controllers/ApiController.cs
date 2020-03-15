@@ -6,8 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TestsHub.Data;
 using TestsHubUploadEndpoint;
-
-
+using Microsoft.AspNetCore.Http;
 
 namespace TestsHub.Api.Controllers
 {
@@ -35,11 +34,14 @@ namespace TestsHub.Api.Controllers
 
         // GET api/values/5
         [HttpGet("{org}/{project}/{testrun}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
         public ActionResult<string> Get(string org, string project, string testRun)
         {
             if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
             {
-
+                return BadRequest();
             }
             var repository = RepositoryFactory.GetTestHubRepository(org);
             var testRunEntity = repository.GetTestRun(project, testRun);
@@ -91,18 +93,17 @@ namespace TestsHub.Api.Controllers
             var size = files.Sum(f => f.Length);
             var dataLoader = new DataLoader(repository.TestHubDBContext, project, org);
             var branch = "<missing>";
+            var commitId = string.Empty;
 
             if (Request.Form.ContainsKey("branch"))
             {
                 branch = Request.Form["branch"].ToString();
             }
 
-            if (Request.Form.ContainsKey(CoverageKey) && Request.Form.Files[CoverageKey].Length > 0)
+            if (Request.Form.ContainsKey("commitId"))
             {
-                var coberturaReader = new CoberturaReader(dataLoader);
-                coberturaReader.Read(Request.Form.Files[CoverageKey].OpenReadStream(), testRun);
+                commitId = Request.Form["commitId"].ToString();
             }
-
 
             foreach (var formFile in files)
             {                         
@@ -110,13 +111,16 @@ namespace TestsHub.Api.Controllers
                 {
                     var jUnitReader = new JUnitReader(dataLoader);
 
-                    var task = jUnitReader.Read(formFile.OpenReadStream(), testRun);
+                    var task = jUnitReader.Read(formFile.OpenReadStream(), testRun, branch, commitId);
                     Task.WaitAll(task);
                 }
-            } 
+            }
 
-            // Process uploaded files
-            // Don't rely on or trust the FileName property without validation.
+            if (Request.Form.Files[CoverageKey] != null && Request.Form.Files[CoverageKey].Length > 0)
+            {
+                var coberturaReader = new CoberturaReader(dataLoader);
+                coberturaReader.Read(Request.Form.Files[CoverageKey].OpenReadStream(), testRun);
+            }          
 
             return Ok(new { count = files.Count, size });
         }

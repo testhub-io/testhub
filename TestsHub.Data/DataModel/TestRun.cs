@@ -31,5 +31,8 @@ namespace TestsHub.Data.DataModel
 
         public int TestCasesCount { get; set; }
 
+        public string Branch { get; set; }
+
+        public string CommitId { get; set; }
     }
 }

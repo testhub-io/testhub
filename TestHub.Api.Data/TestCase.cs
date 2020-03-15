@@ -1,4 +1,6 @@
-﻿namespace TestsHub.Api.Data
+﻿using System.Collections.Generic;
+
+namespace TestsHub.Api.Data
 {
     public class TestCase
     {
@@ -8,10 +10,12 @@
 
         public string SystemOut { get; set; }
 
-        public string Status { get; set; }
+        public TestResult Status { get; set; }
 
-        public float Time { get; set; }
+        public decimal Time { get; set; }
 
         public string File { get; set; }
+ 
+        public IEnumerable<TestResult> RecentResults { get; set; }
     }
 }

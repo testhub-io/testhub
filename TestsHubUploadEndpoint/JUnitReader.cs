@@ -20,7 +20,7 @@ namespace TestsHubUploadEndpoint
             _dataLoader = dataLoader;
         }
 
-        public async Task Read(Stream stream, string testRunName)
+        public async Task Read(Stream stream, string testRunName, string branch, string commitId)
         {
             var settings = new XmlReaderSettings
             {
@@ -28,7 +28,7 @@ namespace TestsHubUploadEndpoint
             };
 
             var testCases = new List<TestCase>();
-            var testRun = new TestRun() { Timestamp = DateTime.UtcNow };
+            var testRun = new TestRun() { Timestamp = DateTime.UtcNow, Branch = branch, CommitId = commitId };
 
             using (var reader = XmlReader.Create(stream, settings))
             {

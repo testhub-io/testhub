@@ -65,7 +65,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             var jUnitReader = new JUnitReader(
                 new DataLoader(new TestHubDBContext(), projectName, _org.Name));
             
-            var task = jUnitReader.Read(stream, (++counter).ToString());
+            var task = jUnitReader.Read(stream, (++counter).ToString(), "develop", "");
 
             Task.WaitAll(task);
             sw.Stop();

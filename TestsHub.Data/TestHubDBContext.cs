@@ -11,6 +11,12 @@ namespace TestsHub.Data.DataModel
         private readonly string _connectionString;
         private readonly ILogger _logger = TestHubLogger.CreateLoger<TestHubDBContext>();
 
+        public static readonly Microsoft.Extensions.Logging.LoggerFactory _myLoggerFactory =
+                new LoggerFactory(new[] {
+                    new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider()
+                });
+
+
         public TestHubDBContext (IConfiguration configuration)
         {            
             _connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -36,7 +42,8 @@ namespace TestsHub.Data.DataModel
         {            
             optionsBuilder
                .UseMySQL(_connectionString)
-               .UseLazyLoadingProxies();
+               .UseLazyLoadingProxies()
+               .UseLoggerFactory(_myLoggerFactory);
         }
     }
 
