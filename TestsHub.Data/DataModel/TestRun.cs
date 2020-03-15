@@ -26,5 +26,10 @@ namespace TestsHub.Data.DataModel
         public string Name { get; set; }
 
         public TestResult Status { get; set; }
+
+        public virtual Coverage Coverage { get; set; }
+
+        public int TestCasesCount { get; set; }
+
     }
 }

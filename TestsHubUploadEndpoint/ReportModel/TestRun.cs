@@ -17,5 +17,6 @@ namespace TestsHubUploadEndpoint.ReportModel
         public string Name { get; set; }
 
         public string Status { get; set; }
+        public int TestCasesCount { get; internal set; }
     }
 }

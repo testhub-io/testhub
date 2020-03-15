@@ -30,7 +30,8 @@ namespace TestsHub.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Coverage_TestRunId",
                 table: "Coverage",
-                column: "TestRunId");
+                column: "TestRunId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -14,12 +14,14 @@ namespace TestsHub.Api.Data
 
         public decimal TestQuantityGrowth { get; set; }
         
-        public decimal CoverageGrowth { get; set; }
+        public decimal? CoverageGrowth { get; set; }
 
         public LatestResults LatestResults { get; set; }
 
         public DateTime RecentTestRuntDate { get; set; }
 
         public int TestRunsCount { get; set; }
+
+        public decimal? TestCoverageGrowth { get; set; }
     }
 }

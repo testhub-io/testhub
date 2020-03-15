@@ -18,5 +18,13 @@ namespace TestsHub.Data.DataModel
         public int LinesCovered { get; private set; }
 
         public int LinesValid { get; private set; }
+
+        public decimal Percent 
+        {
+            get
+            {
+                return (LinesCovered / LinesValid) * 100;
+            } 
+        }
     }
 }

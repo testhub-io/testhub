@@ -108,7 +108,7 @@ namespace TestsHubUploadEndpoint
             {
                 var coverageDto = _mapper.Map<Coverage>(coverageSummary);
                 coverageDto.TestRunId = testRunCache.Id;
-                _testHubDBContext.Add(coverageDto);
+                _testHubDBContext.Add(coverageDto);                
                 _testHubDBContext.SaveChanges();
             }
             else

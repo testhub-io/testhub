@@ -26,7 +26,7 @@ namespace TestsHubUploadEndpoint
                 Async = true
             };
 
-            var result = new List<TestCase>();
+            var testCases = new List<TestCase>();
             var testRun = new TestRun() { Timestamp = DateTime.UtcNow };
 
             using (var reader = XmlReader.Create(stream, settings))
@@ -91,7 +91,7 @@ namespace TestsHubUploadEndpoint
 
 
                                 Visitor?.TestCaseAdded(testCase);
-                                result.Add(testCase);
+                                testCases.Add(testCase);
                             }                     
                             else if (string.Equals(reader.Name, "testsuite", StringComparison.OrdinalIgnoreCase))
                             {
@@ -153,7 +153,8 @@ namespace TestsHubUploadEndpoint
             }
       
             testRun.TestRunName = testRunName;
-            _dataLoader.Add(testRun, result);
+            testRun.TestCasesCount = testRun.TestCasesCount + testCases.Count;
+            _dataLoader.Add(testRun, testCases);
 
         }
 

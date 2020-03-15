@@ -156,12 +156,18 @@ namespace TestsHub.Data
                    {
                        Name = r.Name,                       
                        TestRunsCount = c.Count(),
-                       RecentTestRuntDate = c.OrderBy(s => s.Timestamp).First().Timestamp,                       
+                       RecentTestRuntDate = c.OrderByDescending(s => s.Timestamp).First().Timestamp,                       
                        Uri = BuildUri(org, r.Name),
                        LatestResults = new Api.Data.LatestResults()
                        {
-                           TestResults = c.OrderByDescending(s => s.Timestamp).Take(5).Select(t => (Api.Data.TestResult)t.Status).ToArray()
-                       }
+                           TestResults = c.OrderByDescending(s => s.Timestamp)
+                               .Take(5)
+                               .Select(t => (Api.Data.TestResult)t.Status)
+                               .ToArray()
+                       },
+                       TestsCount = c.OrderByDescending(s => s.Timestamp).First().TestCases.Count,
+                       TestQuantityGrowth = getQuantityGrowth(c),
+                       TestCoverageGrowth = getCoverageGrowth(c.OrderByDescending(s => s.Timestamp).Take(2).Select(t=>t.Coverage))
                    });
 
                 return new Api.Data.Organisation 
@@ -176,6 +182,33 @@ namespace TestsHub.Data
                 return null;
             }
         }
+
+        private decimal getQuantityGrowth(IEnumerable<TestRun> c)
+        {
+            var t = c.OrderByDescending(s => s.Timestamp).Take(2);
+            if (t.Count() == 2)
+            {
+                return t.Last().TestCasesCount - t.First().TestCasesCount;
+            }
+
+            return 0;
+        }
+
+        private decimal? getCoverageGrowth(IEnumerable<Coverage> c)
+        {          
+            if (c.Count() == 2)
+            {                
+                var coverageLast = c.First()?.Percent;
+                var coveragePrev = c.Last()?.Percent;
+                if (coverageLast.HasValue && coveragePrev.HasValue)
+                {
+                    return coverageLast.Value - coveragePrev.Value;
+                }                
+            }
+
+            return null;
+        }
+
 
         private string BuildUri(params string [] uriParts)
         {
