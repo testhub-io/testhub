@@ -1,20 +1,21 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TestsHub.Data.DataModel;
-using report = TestsHubUploadEndpoint.ReportModel;
-using AutoMapper;
 using TestsHubUploadEndpoint.CoverageModel;
+using report = TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint
 {
-    
+
     public class DataLoader : IDataLoader
     {
         TestHubDBContext _testHubDBContext;
         IMapper _mapper;
         private TestRun testRunCache;
+
+   
 
         public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org)
         {
@@ -28,21 +29,8 @@ namespace TestsHubUploadEndpoint
 
             testHubDBContext.Entry<Organisation>(Organisation);
 
-            InitMapper();
-        }
-
-        private void InitMapper()
-        {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<report.TestCase, TestCase>();
-                cfg.CreateMap<report.TestRun, TestRun>();
-                cfg.CreateMap<report.TestSuite, TestSuite>();
-                cfg.CreateMap<CoverageModel.CoverageSummary, Coverage>();
-            });
-            
-            _mapper = new Mapper(config);     
-        }
+            _mapper = MapperFactory.CreateMapper();
+        }     
 
         public string ProjectName { get; }
         public Organisation Organisation { get; private set; }

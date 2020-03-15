@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<testsuites time="0.379" tests="2" failures="0">
+  <testsuite id="0" name="TestsHubUploadEndpoint.Tests.dll" tests="2" failures="0" time="0.379">
+    <testcase classname="Tests.JUnitReaderTests" name="Test_Read" time="0.3595620" />
+    <testcase classname="Tests.JUnitReaderTests" name="Test_ReadFileWithFailure" time="0.0197250" />
+  </testsuite>
+</testsuites>

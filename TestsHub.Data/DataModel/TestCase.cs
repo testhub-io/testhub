@@ -17,7 +17,7 @@ namespace TestsHub.Data.DataModel
         public string SystemOut { get; set; }
 
         [Required]
-        public string Status { get; set; } = "passed";
+        public TestResult Status { get; set; } = TestResult.Passed;
 
         public decimal Time { get; set; }
 

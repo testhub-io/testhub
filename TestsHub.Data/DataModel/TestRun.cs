@@ -23,7 +23,8 @@ namespace TestsHub.Data.DataModel
 
         public decimal Time { get; set; }
         
-        public string Name { get; set; }   
-        
+        public string Name { get; set; }
+
+        public TestResult Status { get; set; }
     }
 }

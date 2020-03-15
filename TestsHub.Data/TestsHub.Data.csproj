@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TestHub.Api.Data\TestHub.Api.Data.csproj" />
     <ProjectReference Include="..\TestsHub.Commons\TestsHub.Commons.csproj" />
   </ItemGroup>
 

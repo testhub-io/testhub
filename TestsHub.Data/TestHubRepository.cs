@@ -22,6 +22,8 @@ namespace TestsHub.Data
         public IDbConnection DbConnection => _testHubDBContext.Database.GetDbConnection();
         public TestHubDBContext TestHubDBContext => _testHubDBContext;
 
+        public int TestRunsCount { get; private set; }
+
         public TestHubRepository(TestHubDBContext testHubDBContext, string organisation)
         {
             _testHubDBContext = testHubDBContext;
@@ -65,9 +67,9 @@ namespace TestsHub.Data
                     Summary = new
                     {
                         TestsCount = testCases.Count(),
-                        Passed = testCases.Count(t => t.Status.Equals(PassedTestValue, StringComparison.OrdinalIgnoreCase)),
-                        Failed = testCases.Count(t => t.Status.Equals(FailedTestValue, StringComparison.OrdinalIgnoreCase)),
-                        Skipped = testCases.Count(t => t.Status.Equals(SkippedTestValue, StringComparison.OrdinalIgnoreCase))
+                        Passed = testCases.Count(t => t.Status == TestResult.Passed),
+                        Failed = testCases.Count(t => t.Status == TestResult.Failed),
+                        Skipped = testCases.Count(t => t.Status == TestResult.Skipped)
                     },
                     TestCases = testCases,
 
@@ -79,7 +81,7 @@ namespace TestsHub.Data
             }
         }
 
-        private Dictionary<string, IEnumerable<string>> GetTestCaseHistory(Project project, TestRun testRun)
+        private Dictionary<string, IEnumerable<TestResult>> GetTestCaseHistory(Project project, TestRun testRun)
         {
             //@"SELECT name, status  from TestCases c
             //        inner join(select id from TestRuns WHERE projectid = 1
@@ -120,9 +122,9 @@ namespace TestsHub.Data
                          uri = BuildUri(Organisation, project.Name, r.TestRunName),
                          Count = new
                          {
-                             Passed = c.Count(ic => ic.Status.Equals(PassedTestValue, StringComparison.OrdinalIgnoreCase)),
-                             Failed = c.Count(ic => ic.Status.Equals(FailedTestValue, StringComparison.OrdinalIgnoreCase)),
-                             Skipped = c.Count(ic => ic.Status.Equals(SkippedTestValue, StringComparison.OrdinalIgnoreCase))
+                             Passed = c.Count(ic => ic.Status == TestResult.Passed),
+                             Failed = c.Count(ic => ic.Status == TestResult.Failed),
+                             Skipped = c.Count(ic => ic.Status == TestResult.Skipped)
                          }
                      }).Take(RECORDS_LIMIT);
 
@@ -138,7 +140,7 @@ namespace TestsHub.Data
             return null;
         }
 
-        public dynamic GetOrgSummary(string org)
+        public Api.Data.Organisation GetOrgSummary(string org)
         {
             var organisation = _testHubDBContext.Organisations 
               .Where(o => o.Name.Equals(org, StringComparison.OrdinalIgnoreCase))
@@ -150,21 +152,22 @@ namespace TestsHub.Data
                   .GroupJoin(_testHubDBContext.TestRuns,
                    r => r.Id,
                    c => c.ProjectId,
-                   (r, c) => new
+                   (r, c) => new Api.Data.ProjectSummary
                    {
-                       r.Name,
-                       Status = new
+                       Name = r.Name,                       
+                       TestRunsCount = c.Count(),
+                       RecentTestRuntDate = c.OrderBy(s => s.Timestamp).First().Timestamp,                       
+                       Uri = BuildUri(org, r.Name),
+                       LatestResults = new Api.Data.LatestResults()
                        {
-                           TestRunsCount = c.Count(),
-                           RecentTestRun = c.OrderBy(s => s.Timestamp).First().Timestamp
-                       },
-                       uri = BuildUri(org, r.Name)
+                           TestResults = c.OrderByDescending(s => s.Timestamp).Take(5).Select(t => (Api.Data.TestResult)t.Status).ToArray()
+                       }
                    });
 
-                return new
+                return new Api.Data.Organisation 
                 {
                     Name = organisation.Name,
-                    uri = BuildUri(org),
+                    Uri = BuildUri(org),
                     Projects = projects.ToList()
                 };
             }
