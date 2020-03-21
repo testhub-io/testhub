@@ -10,7 +10,7 @@ namespace TestHub.Data.DataModel
         private readonly string _connectionString;
         private readonly ILogger _logger = TestHubLogger.CreateLoger<TestHubDBContext>();
 
-        public static readonly Microsoft.Extensions.Logging.LoggerFactory _myLoggerFactory =
+        public static readonly LoggerFactory _myLoggerFactory =
                 new LoggerFactory(new[] {
                     new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider()
                 });

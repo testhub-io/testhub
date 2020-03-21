@@ -16,7 +16,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:44355/api/Test-org/dotNet/7",
+      "launchUrl": "https://localhost:44355/Test-org",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using TestHub.Data;
 using TestsHubUploadEndpoint;
 using Microsoft.AspNetCore.Http;
+using TestHub.Api.ApiDataProvider;
+using TestHub.Commons;
+using Microsoft.Extensions.Logging;
 
 namespace TestHub.Api.Controllers
 {
@@ -16,7 +19,7 @@ namespace TestHub.Api.Controllers
     [Produces("application/json")]
     public class ApiController : TestHubControllerBase
     {        
-        public ApiController(IRepositoryFactory repositoryFactory) : base(repositoryFactory)
+        public ApiController(IDataProviderFactory repositoryFactory) : base(repositoryFactory)
         {
         }
 
@@ -30,17 +33,12 @@ namespace TestHub.Api.Controllers
        
 
         [HttpGet("{org}")]
-        public ActionResult<string> GetOrganisation(string org)
+        public ActionResult<string> Get(string org)
         {
-            var repository = RepositoryFactory.GetTestHubRepository(org);
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var orgSummary = repository.GetOrgSummary(org);
-
+            
             return FormateResult(orgSummary, $"{org}");
-        }
-
-
-
-       
-
+        }       
     }
 }

@@ -1,26 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TestHub.Api.Controllers;
-using TestHub.Data;
+using TestHub.Api.ApiDataProvider;
 
-namespace TestsHub.Api.Controllers
+namespace TestHub.Api.Controllers
 {
     [ApiController]
     [Route("{org}/[controller]")]    
     [Produces("application/json")]
     public class ProjectsController : TestHubControllerBase
     {
-        public ProjectsController(IRepositoryFactory repositoryFactory) : base(repositoryFactory)
+        public ProjectsController(IDataProviderFactory repositoryFactory) : base(repositoryFactory)
         {
         }
         
         [HttpGet("{project}")]
         public ActionResult<string> Get(string org, string project)
         {
-            var repository = RepositoryFactory.GetTestHubRepository(org);
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var projectData = repository.GetProjectSummary(project);
 
             return FormateResult(projectData, $"{org}/{project}");

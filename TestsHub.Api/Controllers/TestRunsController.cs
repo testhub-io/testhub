@@ -2,19 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using TestHub.Api.ApiDataProvider;
 using TestHub.Data;
 using TestsHubUploadEndpoint;
 
 namespace TestHub.Api.Controllers
 {
     [ApiController]
-    [Route("{org}/projects/{project}/testruns")]
+    [Route("{org}/projects/{project}/runs")]
     [Produces("application/json")]
     public class TestRunsController : TestHubControllerBase
     {
         private const string CoverageKey = "coverage";
 
-        public TestRunsController(IRepositoryFactory repositoryFactory) : base(repositoryFactory)
+        public TestRunsController(IDataProviderFactory repositoryFactory) : base(repositoryFactory)
         {
         }
         
@@ -28,7 +29,7 @@ namespace TestHub.Api.Controllers
             {
                 return BadRequest();
             }
-            var repository = RepositoryFactory.GetTestHubRepository(org);
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var testRunEntity = repository.GetTestRun(project, testRun);
 
             return FormateResult(testRunEntity, $"{org}/{project}/{testRun}");
@@ -38,7 +39,7 @@ namespace TestHub.Api.Controllers
         [HttpPut("{testrun}")]
         public ActionResult<string> Put(string org, string project, string testRun)
         {
-            var repository = RepositoryFactory.GetTestHubRepository(org);
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var files = Request.Form.Files;
             var size = files.Sum(f => f.Length);
             var dataLoader = new DataLoader(repository.TestHubDBContext, project, org);

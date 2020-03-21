@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using TestHub.Api.ApiDataProvider;
 using TestHub.Data;
 
 namespace TestHub.Api
@@ -41,7 +42,7 @@ namespace TestHub.Api
                 .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
             services.AddRazorPages();
             services.AddSingleton(Configuration);
-            services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+            services.AddScoped<IDataProviderFactory, DataProviderFactory>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Testhub API", Version = "v1" });
