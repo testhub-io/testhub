@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TestsHub.Data.DataModel;
+using TestHub.Data.DataModel;
 
-namespace TestsHub.Data.Migrations
+namespace TestHub.Data.Migrations
 {
     [DbContext(typeof(TestHubDBContext))]
     [Migration("20200114181031_TestNameIndex")]

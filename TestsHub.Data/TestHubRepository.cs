@@ -1,19 +1,14 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using TestsHub.Data.DataModel;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Extensions;
 using System.Data;
+using System.Linq;
+using TestHub.Data.DataModel;
 
-namespace TestsHub.Data
+namespace TestHub.Data
 {
     public class TestHubRepository : ITestHubRepository
     {
-        private const string PassedTestValue = "Passed";
-        private const string FailedTestValue = "Failed";
-        private const string SkippedTestValue = "Skipped";
         private readonly Organisation _organisation;
         private readonly TestHubDBContext _testHubDBContext;
         private const int RECORDS_LIMIT = 200;
@@ -27,11 +22,11 @@ namespace TestsHub.Data
         public TestHubRepository(TestHubDBContext testHubDBContext, string organisation)
         {
             _testHubDBContext = testHubDBContext;
-            _organisation = _testHubDBContext.Organisations.SingleOrDefault(o => o.Name == organisation);
+            _organisation = TestHubDBContext.Organisations.SingleOrDefault(o => o.Name == organisation);
             if (_organisation == null)
             {
-                _testHubDBContext.Organisations.Add(new DataModel.Organisation() { Name = organisation });
-                _testHubDBContext.SaveChanges();
+                TestHubDBContext.Organisations.Add(new Organisation() { Name = organisation });
+                TestHubDBContext.SaveChanges();
             }
         }
 
@@ -100,7 +95,7 @@ namespace TestsHub.Data
             return history;
         }
 
-        public dynamic GetProjectSummary(string projectName)
+        public Api.Data.Project GetProjectSummary(string projectName)
         {
             var project = _testHubDBContext.Projects
                 .Where(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase))
@@ -112,14 +107,13 @@ namespace TestsHub.Data
                     .GroupJoin(_testHubDBContext.TestCases,
                      r => r.Id,
                      c => c.TestRunId,
-                     (r, c) => new
+                     (r, c) => new Api.Data.TestRunSummary
                      {
-                         r.Name,
-                         r.TestRunName,
-                         r.Time,
-                         r.Timestamp,
-                         uri = BuildUri(Organisation, project.Name, r.TestRunName),
-                         Count = new
+                         Name = r.TestRunName,                         
+                         Time = r.Time,
+                         TimeStemp = r.Timestamp,
+                         Uri = BuildUri(Organisation, project.Name, r.TestRunName),
+                         Count = new Api.Data.TestRunStats
                          {
                              Passed = c.Count(ic => ic.Status == TestResult.Passed),
                              Failed = c.Count(ic => ic.Status == TestResult.Failed),
@@ -128,9 +122,9 @@ namespace TestsHub.Data
                      }).Take(RECORDS_LIMIT);
 
 
-                return new
+                return new Api.Data.Project
                 {
-                    Project = project.Name,
+                    Name = project.Name,
                     TestRunsCount = testRuns.Count(),
                     TestRuns = testRuns.ToList()
                 };

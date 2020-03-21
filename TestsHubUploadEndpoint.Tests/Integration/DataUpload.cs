@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using TestsHub.Data.DataModel;
+using TestHub.Data.DataModel;
 
 namespace TestsHubUploadEndpoint.Tests.Integration
 {

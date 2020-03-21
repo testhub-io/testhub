@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TestsHub.Data.DataModel;
+using TestHub.Data.DataModel;
 using TestsHubUploadEndpoint.CoverageModel;
 using report = TestsHubUploadEndpoint.ReportModel;
 

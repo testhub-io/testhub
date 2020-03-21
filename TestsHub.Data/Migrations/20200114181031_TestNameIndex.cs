@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TestsHub.Data.Migrations
+namespace TestHub.Data.Migrations
 {
     public partial class TestNameIndex : Migration
     {

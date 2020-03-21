@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace TestsHub.Commons
+namespace TestHub.Commons
 {
     public static class TestHubLogger
     {

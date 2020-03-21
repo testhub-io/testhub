@@ -1,6 +1,6 @@
-﻿using TestsHub.Data.DataModel;
+﻿using TestHub.Data.DataModel;
 
-namespace TestsHub.Data
+namespace TestHub.Data
 {
     public interface IRepositoryFactory
     {

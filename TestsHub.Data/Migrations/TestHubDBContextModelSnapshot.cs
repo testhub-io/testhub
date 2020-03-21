@@ -3,9 +3,9 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TestsHub.Data.DataModel;
+using TestHub.Data.DataModel;
 
-namespace TestsHub.Data.Migrations
+namespace TestHub.Data.Migrations
 {
     [DbContext(typeof(TestHubDBContext))]
     partial class TestHubDBContextModelSnapshot : ModelSnapshot
@@ -43,6 +43,8 @@ namespace TestsHub.Data.Migrations
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
+                    
+                    b.HasIndex("Name").IsUnique();
 
                     b.ToTable("Organisations");
                 });

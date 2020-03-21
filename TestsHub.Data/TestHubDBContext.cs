@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using TestsHub.Commons;
+using TestHub.Commons;
 
-namespace TestsHub.Data.DataModel
+namespace TestHub.Data.DataModel
 {
     public class TestHubDBContext : DbContext
     {

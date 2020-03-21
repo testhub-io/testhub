@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
-using TestsHub.Data;
+using TestHub.Data;
 
-namespace TestsHub.Api
+namespace TestHub.Api
 {
     public class Startup
     {
@@ -18,7 +19,7 @@ namespace TestsHub.Api
         {
             Configuration = configuration;            
 
-            var context = new TestsHub.Data.DataModel.TestHubDBContext(configuration);           
+            var context = new TestHub.Data.DataModel.TestHubDBContext(configuration);           
             context.Database.Migrate();
         }
 
@@ -43,8 +44,7 @@ namespace TestsHub.Api
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", 
-                    new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Values Api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Testhub API", Version = "v1" });
             });
 
         }
@@ -66,7 +66,12 @@ namespace TestsHub.Api
             app.UseRouting();
             app.UseAuthorization();
             app.UseHttpsRedirection();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/swagger.json", "Swagger"); });
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TestsHub.Data.DataModel
+namespace TestHub.Data.DataModel
 {
     public class TestCase
     {

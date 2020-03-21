@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace TestsHub.Data.DataModel
+namespace TestHub.Data.DataModel
 {
     public class Coverage
     {

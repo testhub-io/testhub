@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TestsHub.Api.Data
+namespace TestHub.Api.Data
 {
     public class TestCase
     {

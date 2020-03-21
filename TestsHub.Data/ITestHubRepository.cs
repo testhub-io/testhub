@@ -1,12 +1,12 @@
-﻿using TestsHub.Data.DataModel;
+﻿using TestHub.Data.DataModel;
 
-namespace TestsHub.Data
+namespace TestHub.Data
 {
     public interface ITestHubRepository
     {
         string Organisation { get; }
         Api.Data.TestRun GetTestRun(string project, string testRunId);
-        dynamic GetProjectSummary(string project);
+        Api.Data.Project GetProjectSummary(string project);
         Api.Data.Organisation GetOrgSummary(string org);
 
         TestHubDBContext TestHubDBContext { get; }

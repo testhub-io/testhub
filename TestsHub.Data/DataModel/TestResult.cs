@@ -1,4 +1,4 @@
-﻿namespace TestsHub.Data.DataModel
+﻿namespace TestHub.Data.DataModel
 {
     public enum TestResult : short
     {

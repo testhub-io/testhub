@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TestsHub.Data.DataModel;
+using TestHub.Data.DataModel;
 using report = TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint

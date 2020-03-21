@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TestsHub.Api.Data
+namespace TestHub.Api.Data
 {
     public class TestRun : DataObjectBase
     {
@@ -21,7 +21,9 @@ namespace TestsHub.Api.Data
         public decimal? Coverage { get; set; }
         
         public  TestRunSummary Summary { get; set; }
+
         public decimal Time { get; set; }
-        public IQueryable<TestCase> TestCases { get; set; }
+
+        public IEnumerable<TestCase> TestCases { get; set; }
     }
 }

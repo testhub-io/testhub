@@ -1,4 +1,4 @@
-﻿namespace TestsHub.Api.Data
+﻿namespace TestHub.Api.Data
 {
     public enum TestResult : short
     {

@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TestsHub.Data.DataModel;
+using TestHub.Data.DataModel;
 
-namespace TestsHub.Data
+namespace TestHub.Data
 {
     public class RepositoryFactory : IRepositoryFactory
     {
