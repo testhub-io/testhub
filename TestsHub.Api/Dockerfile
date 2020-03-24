@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0.101-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.201-buster AS build
 WORKDIR /src
 COPY ["TestsHub.Api/TestsHub.Api.csproj", "TestsHub.Api/"]
 RUN dotnet restore "TestsHub.Api/TestsHub.Api.csproj"
