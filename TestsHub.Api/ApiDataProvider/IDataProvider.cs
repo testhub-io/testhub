@@ -1,4 +1,5 @@
-﻿using TestHub.Data.DataModel;
+﻿using System.Collections.Generic;
+using TestHub.Data.DataModel;
 
 namespace TestHub.Api.ApiDataProvider
 {
@@ -10,5 +11,7 @@ namespace TestHub.Api.ApiDataProvider
         Data.Organisation GetOrgSummary(string org);
 
         TestHubDBContext TestHubDBContext { get; }
+
+        IEnumerable<Data.ProjectSummary> GetProjects(string org);
     }
 }

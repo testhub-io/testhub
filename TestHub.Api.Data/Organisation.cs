@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace TestHub.Api.Data
+﻿namespace TestHub.Api.Data
 {
     public class Organisation : DataObjectBase
     {
         public string Name { get; set; }
 
-
-        public List<ProjectSummary> Projects { get; set; } = new List<ProjectSummary>();
+        public string Projects { get; set; }
+        public OrgSummary Summary { get; set; }
     }
 }

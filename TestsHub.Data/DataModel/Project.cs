@@ -16,5 +16,6 @@ namespace TestHub.Data.DataModel
         public virtual ICollection<TestRun> TestRuns { get; set; }
 
         public virtual Organisation Organisation { get; set; }
+        
     }
 }

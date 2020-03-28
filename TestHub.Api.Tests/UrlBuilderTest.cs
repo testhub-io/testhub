@@ -7,8 +7,12 @@ using System.Text;
 namespace TestHub.Api.Tests
 {
     [TestFixture]
-    public class DataProviderTest
+    public class UrlBulderTest
     {
      
+        [Test]
+        public void TestAction()
+        {            
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 using TestHub.Commons;
 
 namespace TestHub.Data.DataModel
@@ -37,10 +38,37 @@ namespace TestHub.Data.DataModel
 
         public DbSet<Coverage> Coverage { get; set; }
 
+        public IQueryable<TestCase> OrganisationTestCases(string org)
+        {
+            return from t in this.TestCases
+                   join r in this.TestRuns on t.TestRunId equals r.Id
+                   join p in this.Projects on r.ProjectId equals p.Id
+                   join o in this.Organisations on p.OrganisationId equals o.Id
+                   where o.Name == org
+                   select t;
+        }
+
+        public IQueryable<TestRun> OrganisationTestRun(string org)
+        {
+            return from t in this.TestRuns 
+                   join p in this.Projects on t.ProjectId equals p.Id
+                   join o in this.Organisations on p.OrganisationId equals o.Id
+                   where o.Name == org
+                   select t;
+        }
+
+        public IQueryable<Project> OrganisationProjects(string org)
+        {
+            return from p in this.Projects 
+                   join o in this.Organisations on p.OrganisationId equals o.Id
+                   where o.Name == org
+                   select p;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {            
             optionsBuilder
-               .UseMySQL(_connectionString)
+               .UseMySql(_connectionString)
                .UseLazyLoadingProxies()
                .UseLoggerFactory(_myLoggerFactory);
         }

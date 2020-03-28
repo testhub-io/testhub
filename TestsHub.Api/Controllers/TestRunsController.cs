@@ -9,7 +9,7 @@ using TestsHubUploadEndpoint;
 namespace TestHub.Api.Controllers
 {
     [ApiController]
-    [Route("{org}/projects/{project}/runs")]
+    [Route("api/{org}/projects/{project}/runs")]
     [Produces("application/json")]
     public class TestRunsController : TestHubControllerBase
     {

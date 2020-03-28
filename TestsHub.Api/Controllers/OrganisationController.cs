@@ -13,24 +13,22 @@ using Microsoft.Extensions.Logging;
 
 namespace TestHub.Api.Controllers
 {
-    [Route("")]
-    //[Route("[controller]")]
+    //[Route("")]
+    [Route("api")]
     [ApiController]
     [Produces("application/json")]
-    public class OrganisatioController : TestHubControllerBase
+    public class OrganisationController : TestHubControllerBase
     {        
-        public OrganisatioController(IDataProviderFactory repositoryFactory) : base(repositoryFactory)
+        public OrganisationController(IDataProviderFactory repositoryFactory) : base(repositoryFactory)
         {
         }
-
 
         // GET api/values
         [HttpGet]
         public ActionResult<string> Get()
         {
             return $"I'm ok. {Assembly.GetExecutingAssembly().GetName().FullName}";
-        }
-       
+        }       
 
         [HttpGet("{org}")]
         public ActionResult<string> Get(string org)
@@ -39,6 +37,7 @@ namespace TestHub.Api.Controllers
             var orgSummary = repository.GetOrgSummary(org);
             
             return FormateResult(orgSummary, $"{org}");
-        }       
+        }
+
     }
 }
