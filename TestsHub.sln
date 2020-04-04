@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHub.Api.Tests", "TestHu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsHub.Commons", "TestsHub.Commons\TestsHub.Commons.csproj", "{6184ABD7-39AA-40AE-9FED-5E7D93D9B140}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHub.Api.Data", "TestHub.Api.Data\TestHub.Api.Data.csproj", "{6EB77C0D-59AC-4E41-8AF1-C599CE078030}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHub.Api.Data", "TestHub.Api.Data\TestHub.Api.Data.csproj", "{6EB77C0D-59AC-4E41-8AF1-C599CE078030}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

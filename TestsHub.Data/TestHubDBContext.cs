@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using TestHub.Commons;
 
@@ -37,6 +39,15 @@ namespace TestHub.Data.DataModel
         public DbSet<Organisation> Organisations { get; set; }
 
         public DbSet<Coverage> Coverage { get; set; }
+
+        // ReadOnly query
+        public IEnumerable<T> Query<T> (string sql, object param)
+        {
+            return this.Database.GetDbConnection().Query<T>(sql, param);
+        }
+        
+
+
 
         public IQueryable<TestCase> OrganisationTestCases(string org)
         {

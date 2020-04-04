@@ -186,30 +186,89 @@ namespace TestHub.Api.ApiDataProvider
             }            
         }
 
-        private IQueryable<ProjectSummary> getProjectsSummary(TestHub.Data.DataModel.Organisation org)
+        private IEnumerable<ProjectSummary> getProjectsSummary(TestHub.Data.DataModel.Organisation org)
         {
-            int id = org.Id;
+            var id = org.Id;
 
-            var groups = from t in _testHubDBContext.TestRuns
-                         group t by t.ProjectId into c
-                         select new ProjectSummary
-                         {
-                             Name = $"Peoject ID {c.Key}",
-                             TestRunsCount = c.Count(),
-                             RecentTestRuntDate = c.OrderByDescending(s => s.Timestamp).First().Timestamp,
-                             Uri = _urlBuilder.Action("Get", "Projects", new { org = org.Name, project = $"Peoject ID {c.Key}" }),
-                             LatestResults = new Data.LatestResults()
-                             {
-                                 TestResults = c.OrderByDescending(s => s.Timestamp)
-                                     .Take(5)
-                                     .Select(t => (Data.TestResult)t.Status)
-                                     .ToArray()
-                             },
-                             TestsCount = c.OrderByDescending(s => s.Timestamp).First().TestCases.Count,
-                             TestQuantityGrowth = getQuantityGrowth(c),
-                             TestCoverageGrowth = getCoverageGrowth(c.OrderByDescending(s => s.Timestamp).Take(2).Select(t => t.Coverage))
-                         };
-            return groups;
+            var tr = _testHubDBContext.Query<TestRunExtended>(@"WITH tc
+                                                        AS(
+                                                          SELECT
+                                                               Timestamp,
+                                                               Status,
+                                                               TestRunName,
+                                                               ProjectId,
+                                                               TestCasesCount,
+                                                               id,
+                                                                Branch, Time, CommitId,
+                                                               ROW_NUMBER() OVER(
+                                                                  PARTITION BY ProjectId
+                                                                  ) row_num
+                                                            FROM
+                                                               TestRuns
+                                                            order by Timestamp DESC
+                                                         )
+
+                                                        SELECT
+                                                            Timestamp,
+                                                            Status,
+                                                            TestRunName,
+                                                            ProjectId,
+                                                            row_num,
+                                                            TestCasesCount,
+                                                            p.Name,
+                                                            r.id ,
+                                                            Branch, Time, CommitId                                                            
+                                                        FROM
+                                                           tc r
+                                                        inner join Projects p on p.Id = r.ProjectId
+                                                        left join Coverage c on c.Id = r.Id
+                                                        WHERE
+                                                           p.OrganisationId = @orgId and  row_num <= 5", new { orgId = org.Id });
+
+
+            var projects = _testHubDBContext.Query<ProjectExtended>(@"select p.Name, p.Id, count(t.Id) as TestRunsCount
+                        from Projects p 
+                      inner join TestRuns t on t.ProjectId = p.id
+                      where OrganisationId = @orgId
+                    group by p.Id", new { orgId = org.Id }).ToDictionary(k=>k.Id);
+
+            //var result = projects.GroupJoin (  
+            //             join  t in tr on p.Id equals t.ProjectId
+            //             select new ProjectSummary
+            //             {d
+            //                 Name = p.ProjectName,
+            //                 TestRunsCount =p.TestRunsCount,
+            //                 RecentTestRuntDate =  .First().Timestamp,
+            //                 Uri = _urlBuilder.Action("Get", "Projects", new { org = org.Name, project = r.Name }),
+            //                 LatestResults = new Data.LatestResults()
+            //                 {
+            //                     TestResults = c.Select(t => (Data.TestResult)t.Status)
+            //                                         .ToArray()
+            //                 },
+            //                 TestsCount = c.First().TestCasesCount,
+            //                 TestQuantityGrowth = getQuantityGrowth(c),
+            //                 TestCoverageGrowth = getCoverageGrowth(c.OrderByDescending(s => s.Timestamp).Take(2).Select(t => t.Coverage))
+            //             });
+
+            var groups = tr.GroupBy(t=>t.ProjectId)
+                .Select(
+                       g => new ProjectSummary
+                                    {                         
+                                             Name = projects[g.Key].Name,
+                                             TestRunsCount =  projects[g.Key].TestRunsCount,
+                                             RecentTestRuntDate = g.First().Timestamp,
+                                             Uri = _urlBuilder.Action("Get", "Projects", new { org = org.Name, project = projects[g.Key].Name }),
+                                             LatestResults = new LatestResults()
+                                             {
+                                                 TestResults = g.Select(t => (Data.TestResult)t.Status) .ToArray()
+                                             },
+                                             TestsCount = g.First().TestCasesCount,
+                                             TestQuantityGrowth = getQuantityGrowth(g),
+                                             TestCoverageGrowth = getCoverageGrowth(g)
+                                         });
+            return groups.AsEnumerable();
+
+
 
 
             //return _testHubDBContext.Projects
@@ -222,7 +281,7 @@ namespace TestHub.Api.ApiDataProvider
             //            Name = r.Name,
             //            TestRunsCount = c.Count(),
             //            //RecentTestRuntDate = c.OrderByDescending(s => s.Timestamp).First().Timestamp,
-            //            //Uri = _urlBuilder.Action("Get", "Projects", new { org = org.Name, project = r.Name }),
+            //            Uri = _urlBuilder.Action("Get", "Projects", new { org = org.Name, project = r.Name }),
             //            //LatestResults = new Data.LatestResults()
             //            //{
             //            //    TestResults = c.OrderByDescending(s => s.Timestamp)
@@ -233,10 +292,10 @@ namespace TestHub.Api.ApiDataProvider
             //            //TestsCount = c.OrderByDescending(s => s.Timestamp).First().TestCases.Count,
             //            //TestQuantityGrowth = getQuantityGrowth(c),
             //            //TestCoverageGrowth = getCoverageGrowth(c.OrderByDescending(s => s.Timestamp).Take(2).Select(t => t.Coverage))
-            //        });           
+            //        });
         }
 
-        private decimal getQuantityGrowth(IEnumerable<TestHub.Data.DataModel.TestRun> c)
+        private decimal getQuantityGrowth(IEnumerable<TestRunExtended> c)
         {
             var t = c.OrderByDescending(s => s.Timestamp).Take(2);
             if (t.Count() == 2)
@@ -247,12 +306,12 @@ namespace TestHub.Api.ApiDataProvider
             return 0;
         }
 
-        private decimal? getCoverageGrowth(IEnumerable<Coverage> c)
+        private decimal? getCoverageGrowth(IEnumerable<TestRunExtended> c)
         {
             if (c.Count() == 2)
             {
-                var coverageLast = c.First()?.Percent;
-                var coveragePrev = c.Last()?.Percent;
+                var coverageLast = c.First()?.CoveragePercent;
+                var coveragePrev = c.Last()?.CoveragePercent;
                 if (coverageLast.HasValue && coveragePrev.HasValue)
                 {
                     return coverageLast.Value - coveragePrev.Value;
