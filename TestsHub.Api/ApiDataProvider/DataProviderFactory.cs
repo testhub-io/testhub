@@ -20,5 +20,11 @@ namespace TestHub.Api.ApiDataProvider
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             return new DataProvider(context, organisation, new UrlBuilder(url));
         }
+
+        public IDataProvider GetTestHubWritableDataProvider(string organisation, IUrlHelper url)
+        {
+            var context = new TestHubDBContext(_configuration);            
+            return new DataProvider(context, organisation, new UrlBuilder(url));
+        }
     }
 }

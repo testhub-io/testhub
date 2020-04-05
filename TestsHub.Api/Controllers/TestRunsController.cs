@@ -49,7 +49,7 @@ namespace TestHub.Api.Controllers
         [HttpPut("{testrun}")]
         public ActionResult<string> Put(string org, string project, string testRun)
         {
-            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            var repository = RepositoryFactory.GetTestHubWritableDataProvider(org, Url);
             var files = Request.Form.Files;
             var size = files.Sum(f => f.Length);
             var dataLoader = new DataLoader(repository.TestHubDBContext, project, org);
