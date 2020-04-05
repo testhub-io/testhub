@@ -38,9 +38,12 @@ for root, dirs, files in os.walk("."):
                         files=dict(file=content),
                         verify=False)
                         
-            print(response.text)
+            print("Response:" + response.text)
             if response.status_code != 200:
-                exit(1)
+                #exit(1)
+                print("Failed to upload file")
+            else:
+                print("File uploaded successufully.")
 
 
             
