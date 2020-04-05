@@ -1,7 +1,6 @@
 import Vue from 'vue'
 Vue.config.debug = true
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
-import VueGoogleCharts from 'vue-google-charts'
 import moment from 'moment'
 import VueBus from 'vue-bus'
 import store from './store'
@@ -32,7 +31,6 @@ Vue.use(VueBus)
 Vue.use(VueI18n)
 Vue.use(VueResource)
 Vue.use(VueRouter)
-Vue.use(VueGoogleCharts)
 
 Vue.http.options.root = '/api/v1'
 
