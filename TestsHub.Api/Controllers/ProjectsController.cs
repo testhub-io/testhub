@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using TestHub.Api.ApiDataProvider;
 
@@ -20,6 +21,18 @@ namespace TestHub.Api.Controllers
             var projectData = repository.GetProjectSummary(project);
 
             return FormateResult(projectData, $"{org}/{project}");
+        }
+
+        [HttpGet("testresults")]
+        public ActionResult<string> GetTestResults()
+        {
+            throw new NotImplementedException();            
+        }
+
+        [HttpGet("coverage")]
+        public ActionResult<string> GetCoverage()
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet]

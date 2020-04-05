@@ -1,15 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using TestHub.Data;
-using TestsHubUploadEndpoint;
-using Microsoft.AspNetCore.Http;
 using TestHub.Api.ApiDataProvider;
-using TestHub.Commons;
-using Microsoft.Extensions.Logging;
 
 namespace TestHub.Api.Controllers
 {
@@ -37,6 +29,12 @@ namespace TestHub.Api.Controllers
             var orgSummary = repository.GetOrgSummary(org);
             
             return FormateResult(orgSummary, $"{org}");
+        }
+
+        [HttpGet("{org}/coverage")]
+        public ActionResult<string> GetCoverage()
+        {
+            throw new NotImplementedException();
         }
 
     }
