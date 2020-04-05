@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TestHub.Api.ApiDataProvider;
@@ -33,6 +34,15 @@ namespace TestHub.Api.Controllers
             var testRunEntity = repository.GetTestRun(project, testRun);
 
             return FormateResult(testRunEntity, $"{org}/{project}/{testRun}");
+        }
+
+        [HttpGet("{testrun}/coverage")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public ActionResult<string> GetCoverage(string org, string project, string testRun)
+        {
+            throw new NotImplementedException();
         }
 
         // PUT api/values/5

@@ -149,7 +149,7 @@ namespace TestHub.Api.ApiDataProvider
                 {
                     Name = organisation.Name,
                     Uri = _urlBuilder.Action("Get", "Organisation", new { org = Organisation }),
-                    Projects = _urlBuilder.Action("GetProjects", "Organisation", new { org = Organisation }),
+                    Projects = _urlBuilder.Action("GetProjects", "Projects", new { org = Organisation }),
 
                     Summary = new OrgSummary()
                     {
