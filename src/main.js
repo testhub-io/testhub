@@ -18,7 +18,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 window.moment = require('moment-timezone')
 window.authService = authService
-window.$ = window.jQuery = require('jquery');
+window.$ = window.jQuery = require('jquery')
+require('./assets/js/main.min.js')
+require('./assets/js/plugins.min.js')
 
 import './registerServiceWorker'
 

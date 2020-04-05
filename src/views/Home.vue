@@ -505,7 +505,7 @@ export default {
         }]
       },
 
-      chartOptions: {
+      coverageGrowthChartOptions: {
         responsive: true,
         aspectRatio: 1,
         legend: {
@@ -573,7 +573,7 @@ export default {
   methods: {
     bootFailingProjectsChart() {
       this.$nextTick(() => {
-        window.$('#failing_projects_pie').circleProgress({
+        $('#failing_projects_pie').circleProgress({
           size: 160,
           startAngle: -Math.PI / 2,
           lineCap: 'round',
