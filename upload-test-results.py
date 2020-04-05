@@ -24,13 +24,17 @@ for root, dirs, files in os.walk("."):
             print(root.split("/")[1])
             testRunId = root.split("/")[1]
             
-            url = "https://test-hub-api.azurewebsites.net/{}/{}/{}".format(args.org, args.project, args.build)
+            url = "https://test-hub-api.azurewebsites.net/api/{}/projects/{}/runs/{}".format(args.org, args.project, args.build)
             print("Uploading to:" + url)
             content = Path(os.path.join(root, file)).read_text()             
             response = requests.put(url,
                         files=dict(file=content),
                         verify=False)
-            
+                        
             print(response.text)
+            if response.status_code != 200:
+                exit(1)
+
+            
 
         
