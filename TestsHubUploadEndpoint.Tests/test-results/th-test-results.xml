@@ -1,7 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<testsuites time="0.379" tests="2" failures="0">
-  <testsuite id="0" name="TestsHubUploadEndpoint.Tests.dll" tests="2" failures="0" time="0.379">
-    <testcase classname="Tests.JUnitReaderTests" name="Test_Read" time="0.3595620" />
-    <testcase classname="Tests.JUnitReaderTests" name="Test_ReadFileWithFailure" time="0.0197250" />
+<testsuites time="1.110" tests="12" failures="0">
+  <testsuite id="0" name="TestsHubUploadEndpoint.Tests.dll" tests="12" failures="0" time="1.110">
+    <testcase classname="Tests.JUnitReaderTests" name="Test_Read" time="0.4336060" />
+    <testcase classname="Tests.JUnitReaderTests" name="Test_ReadFileWithFailure" time="0.0207560" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestCaseStatusMapping(&quot;Passes&quot;,Passed)" time="0.4307170" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestCaseStatusMapping(&quot;PASS&quot;,Passed)" time="0.0356800" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestCaseStatusMapping(&quot;passed&quot;,Passed)" time="0.0319790" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestCaseStatusMapping(&quot;Failed&quot;,Failed)" time="0.0298610" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestCaseStatusMapping(&quot;skipped&quot;,Skipped)" time="0.0367130" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestRunStatusMapping(&quot;Passes&quot;,Passed)" time="0.0173630" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestRunStatusMapping(&quot;PASS&quot;,Passed)" time="0.0174900" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestRunStatusMapping(&quot;passed&quot;,Passed)" time="0.0154220" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestRunStatusMapping(&quot;Failed&quot;,Failed)" time="0.0181279" />
+    <testcase classname="TestsHubUploadEndpoint.Tests.MapperTest" name="TestRunStatusMapping(&quot;skipped&quot;,Skipped)" time="0.0225859" />
   </testsuite>
 </testsuites>

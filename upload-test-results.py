@@ -1,6 +1,7 @@
 import requests
 import glob
 import argparse
+import json
 from pathlib import Path
 
 
@@ -19,9 +20,7 @@ args = parser.parse_args()
 print(args.file)
 
 for root, dirs, files in os.walk("."):
-    print ("Walk 0:" + root)
-    for file in files:
-        print ("Walk 1:" + file)
+    for file in files:        
         if file.find(args.file) != -1:           
             print(os.path.join(root, file))
             print(root.split("/")[1])
@@ -38,7 +37,7 @@ for root, dirs, files in os.walk("."):
                         files=dict(file=content),
                         verify=False)
                         
-            print("Response:" + response.text)
+            print("Response:" + json.dumps(response.json()))
             if response.status_code != 200:
                 #exit(1)
                 print("Failed to upload file")
