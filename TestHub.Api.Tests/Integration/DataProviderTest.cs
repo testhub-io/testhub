@@ -24,7 +24,7 @@ namespace TestHub.Api.Tests.Integration
         public void GetTestRuns()
         {
             var dataProvider = new DataProvider(new TestHubDBContext(), "Test-org", new UrlBuilder(Mock.Of<IUrlHelper>()));
-            var results = dataProvider.GetTestRuns("dotNet","12");
+            var results = dataProvider.GetTestRuns("dotNet");
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
         }
     }

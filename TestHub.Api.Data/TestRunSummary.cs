@@ -6,12 +6,20 @@ namespace TestHub.Api.Data
     {
         public string Name;
 
-        public int TestsCount { get; set; }
-        public int Passed { get; set; }
-        public int Failed { get; set; }
-        public int Skipped { get; set; }
         public DateTime TimeStemp { get; set; }
+
         public decimal Time { get; set; }
-        public TestRunStats Count { get; set; }
+
+        public string Branch { get; set; }
+
+        public TestResult Result { get; set; }
+        
+        public decimal Coverage { get; set; }
+
+        public decimal TestCountGrowth { get; set; }
+
+        public decimal CoverageGrowth { get; set; }
+
+        public TestRunStats Stats { get; set; }
     }
 }

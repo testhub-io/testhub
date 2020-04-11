@@ -35,7 +35,7 @@ namespace TestHub.Api.ApiDataProvider
             _urlBuilder = url;
         }
 
-        public object GetTestRuns(string project, string testRunName)
+        public IEnumerable<TestRunSummary> GetTestRuns(string project)
         {
             throw new NotImplementedException();
         }
@@ -69,13 +69,7 @@ namespace TestHub.Api.ApiDataProvider
                 {
                     Name = testRun.TestRunName,
                     Uri = _urlBuilder.Action("Get", "TestRuns", new { org = Organisation, project = project.Name, testRun = testRun.TestRunName }),
-                    Summary = new Data.TestRunSummary
-                    {
-                        TestsCount = testCases.Count(),
-                        Passed = testCases.Count(t => t.Status == Data.TestResult.Passed),
-                        Failed = testCases.Count(t => t.Status == Data.TestResult.Failed),
-                        Skipped = testCases.Count(t => t.Status == Data.TestResult.Skipped)
-                    },
+                 
                     Branch = testRun.Branch,
                     CommitId = testRun.CommitId,
                     Coverage = testRun.Coverage?.Percent,
@@ -155,7 +149,38 @@ namespace TestHub.Api.ApiDataProvider
         {
             var id = org.Id;
 
-            var tr = _testHubDBContext.Query<TestRunExtended>(@"WITH tc
+            var tr = getLast5TestRuns(org);
+
+            var projects = _testHubDBContext.Query<ProjectExtended>(
+                @"select p.Name, p.Id, count(t.Id) as TestRunsCount
+                        from Projects p 
+                      inner join TestRuns t on t.ProjectId = p.id
+                      where OrganisationId = @orgId
+                    group by p.Id"
+                    , new { orgId = org.Id }).ToDictionary(k => k.Id);
+
+            var groups = tr.GroupBy(t => t.ProjectId)
+                .Select(
+                       g => new ProjectSummary
+                       {
+                           Name = projects[g.Key].Name,
+                           TestRunsCount = projects[g.Key].TestRunsCount,
+                           RecentTestRuntDate = g.First().Timestamp,
+                           Uri = _urlBuilder.Action("Get", "Projects", new { org = org.Name, project = projects[g.Key].Name }),
+                           LatestResults = new LatestResults()
+                           {
+                               TestResults = g.Select(t => (Data.TestResult)t.Status).ToArray()
+                           },
+                           TestsCount = g.First().TestCasesCount,
+                           TestQuantityGrowth = getQuantityGrowth(g),
+                           TestCoverageGrowth = getCoverageGrowth(g)
+                       });
+            return groups.AsEnumerable();
+        }
+
+        private IEnumerable<TestRunExtended> getLast5TestRuns(TestHub.Data.DataModel.Organisation org)
+        {
+            return _testHubDBContext.Query<TestRunExtended>(@"WITH tc
                                                         AS(
                                                           SELECT
                                                                Timestamp,
@@ -189,33 +214,6 @@ namespace TestHub.Api.ApiDataProvider
                                                         WHERE
                                                            p.OrganisationId = @orgId and  row_num <= 5",
                                                         new { orgId = org.Id });
-
-
-            var projects = _testHubDBContext.Query<ProjectExtended>(
-                @"select p.Name, p.Id, count(t.Id) as TestRunsCount
-                        from Projects p 
-                      inner join TestRuns t on t.ProjectId = p.id
-                      where OrganisationId = @orgId
-                    group by p.Id"
-                    , new { orgId = org.Id }).ToDictionary(k => k.Id);
-
-            var groups = tr.GroupBy(t => t.ProjectId)
-                .Select(
-                       g => new ProjectSummary
-                       {
-                           Name = projects[g.Key].Name,
-                           TestRunsCount = projects[g.Key].TestRunsCount,
-                           RecentTestRuntDate = g.First().Timestamp,
-                           Uri = _urlBuilder.Action("Get", "Projects", new { org = org.Name, project = projects[g.Key].Name }),
-                           LatestResults = new LatestResults()
-                           {
-                               TestResults = g.Select(t => (Data.TestResult)t.Status).ToArray()
-                           },
-                           TestsCount = g.First().TestCasesCount,
-                           TestQuantityGrowth = getQuantityGrowth(g),
-                           TestCoverageGrowth = getCoverageGrowth(g)
-                       });
-            return groups.AsEnumerable();
         }
 
         private decimal getQuantityGrowth(IEnumerable<TestRunExtended> c)

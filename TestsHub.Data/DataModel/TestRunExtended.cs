@@ -6,5 +6,9 @@
 
         public decimal CoveragePercent { get; set; }
 
+        public decimal CoverageGrowth { get; set; }
+
+        public decimal TestsCountGrowth { get; set; }
+
     }
 }
