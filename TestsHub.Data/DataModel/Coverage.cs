@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TestHub.Data.DataModel
 {
@@ -19,12 +16,12 @@ namespace TestHub.Data.DataModel
 
         public int LinesValid { get; private set; }
 
-        public decimal Percent 
+        public decimal Percent
         {
             get
             {
                 return (LinesCovered / LinesValid) * 100;
-            } 
+            }
         }
     }
 }

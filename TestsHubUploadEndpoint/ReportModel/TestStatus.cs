@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TestsHubUploadEndpoint.ReportModel
+﻿namespace TestsHubUploadEndpoint.ReportModel
 {
     internal class TestStatus
     {

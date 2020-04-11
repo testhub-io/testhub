@@ -15,7 +15,7 @@ namespace TestsHubUploadEndpoint
         IDataLoader _dataLoader;
         public IVisitor Visitor { get; set; }
 
-        public JUnitReader  (IDataLoader dataLoader)
+        public JUnitReader(IDataLoader dataLoader)
         {
             _dataLoader = dataLoader;
         }
@@ -37,7 +37,7 @@ namespace TestsHubUploadEndpoint
                 {
                     switch (reader.NodeType)
                     {
-                        case XmlNodeType.Element:                            
+                        case XmlNodeType.Element:
                             if (string.Equals(reader.Name, "testcase", StringComparison.OrdinalIgnoreCase))
                             {
                                 var testCase = new TestCase
@@ -46,7 +46,7 @@ namespace TestsHubUploadEndpoint
                                 };
 
                                 if (reader.HasAttributes)
-                                {                                       
+                                {
                                     while (reader.MoveToNextAttribute())
                                     {
                                         switch (reader.Name)
@@ -72,11 +72,11 @@ namespace TestsHubUploadEndpoint
                                         }
                                     }
 
-                                                                        
+
                                     // Move the reader back to the element node.
                                     reader.MoveToElement();
-                   
-                                    if (!ReadTestCaseErrorContent("failure", reader, testCase) 
+
+                                    if (!ReadTestCaseErrorContent("failure", reader, testCase)
                                         && !ReadTestCaseErrorContent("error", reader, testCase)
                                         && !ReadTestCaseErrorContent("system-err", reader, testCase)
                                         && reader.ReadToDescendant("skipped"))
@@ -93,14 +93,14 @@ namespace TestsHubUploadEndpoint
 
                                 Visitor?.TestCaseAdded(testCase);
                                 testCases.Add(testCase);
-                            }                     
+                            }
                             else if (string.Equals(reader.Name, "testsuite", StringComparison.OrdinalIgnoreCase))
                             {
                                 testSuite = new TestSuite();
                                 if (reader.HasAttributes)
                                 {
                                     while (reader.MoveToNextAttribute())
-                                    {                                        
+                                    {
                                         switch (reader.Name)
                                         {
                                             case "name":
@@ -127,9 +127,9 @@ namespace TestsHubUploadEndpoint
                                                 testSuite.Time = decimal.Parse(reader.Value, CultureInfo.InvariantCulture);
                                                 break;
 
-                                        }                                                                                
+                                        }
                                     }
-                                                                                                            
+
                                     // Move the reader back to the element node.
                                     reader.MoveToElement();
                                 }
@@ -152,7 +152,7 @@ namespace TestsHubUploadEndpoint
                     }
                 }
             }
-      
+
             testRun.TestRunName = testRunName;
             testRun.TestCasesCount = testRun.TestCasesCount + testCases.Count;
             testRun.Status = testCases.Any(t => t.Status.Equals(TestStatus.Failed, StringComparison.OrdinalIgnoreCase)) ?
@@ -163,8 +163,8 @@ namespace TestsHubUploadEndpoint
 
         private static decimal ParseFloatWithDefault(string value)
         {
-            if (decimal.TryParse(value,System.Globalization.NumberStyles.Float,
-                    CultureInfo.InvariantCulture,  out var decimalTime))
+            if (decimal.TryParse(value, System.Globalization.NumberStyles.Float,
+                    CultureInfo.InvariantCulture, out var decimalTime))
             {
                 return decimalTime;
             }
@@ -179,7 +179,7 @@ namespace TestsHubUploadEndpoint
         }
 
         bool ReadTestCaseErrorContent(string elementName, XmlReader reader, TestCase testCase)
-        {            
+        {
             if (reader.ReadToDescendant(elementName))
             {
                 testCase.Status = "failed";
@@ -187,7 +187,7 @@ namespace TestsHubUploadEndpoint
                 do
                 {
                     errorText.AppendLine(reader.ReadElementContentAsString());
-                    
+
                 } while (reader.ReadToNextSibling(elementName));
                 testCase.TestOutput = errorText.ToString();
                 return true;

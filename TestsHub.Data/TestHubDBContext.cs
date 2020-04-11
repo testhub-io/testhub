@@ -19,8 +19,8 @@ namespace TestHub.Data.DataModel
                 });
 
 
-        public TestHubDBContext (IConfiguration configuration)
-        {            
+        public TestHubDBContext(IConfiguration configuration)
+        {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _logger.LogInformation("Using connection string:" + _connectionString);
         }
@@ -41,11 +41,11 @@ namespace TestHub.Data.DataModel
         public DbSet<Coverage> Coverage { get; set; }
 
         // ReadOnly query
-        public IEnumerable<T> Query<T> (string sql, object param)
+        public IEnumerable<T> Query<T>(string sql, object param)
         {
             return this.Database.GetDbConnection().Query<T>(sql, param);
         }
-        
+
 
 
 
@@ -61,7 +61,7 @@ namespace TestHub.Data.DataModel
 
         public IQueryable<TestRun> OrganisationTestRun(string org)
         {
-            return from t in this.TestRuns 
+            return from t in this.TestRuns
                    join p in this.Projects on t.ProjectId equals p.Id
                    join o in this.Organisations on p.OrganisationId equals o.Id
                    where o.Name == org
@@ -70,14 +70,14 @@ namespace TestHub.Data.DataModel
 
         public IQueryable<Project> OrganisationProjects(string org)
         {
-            return from p in this.Projects 
+            return from p in this.Projects
                    join o in this.Organisations on p.OrganisationId equals o.Id
                    where o.Name == org
                    select p;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {            
+        {
             optionsBuilder
                .UseMySql(_connectionString)
                .UseLazyLoadingProxies()

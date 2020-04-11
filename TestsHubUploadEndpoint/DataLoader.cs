@@ -15,7 +15,7 @@ namespace TestsHubUploadEndpoint
         IMapper _mapper;
         private TestRun testRunCache;
 
-   
+
 
         public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org)
         {
@@ -30,7 +30,7 @@ namespace TestsHubUploadEndpoint
             testHubDBContext.Entry<Organisation>(Organisation);
 
             _mapper = MapperFactory.CreateMapper();
-        }     
+        }
 
         public string ProjectName { get; }
         public Organisation Organisation { get; private set; }
@@ -46,7 +46,7 @@ namespace TestsHubUploadEndpoint
                 };
                 _testHubDBContext.Projects.Add(project);
             }
-            
+
             testRun.Project = project;
             testRun.Project.Organisation = Organisation;
             testRun.Time = testRun.TestCases.Sum(t => t.Time);
@@ -62,7 +62,7 @@ namespace TestsHubUploadEndpoint
                 BatchInsert(testCases, testRun.Id);
             }
             else
-            {                
+            {
                 BatchInsert(testCases, existingTestRun.Id);
             }
 
@@ -103,18 +103,18 @@ namespace TestsHubUploadEndpoint
 
         public void Add(CoverageSummary coverageSummary)
         {
-            if (testRunCache != null && 
+            if (testRunCache != null &&
                 coverageSummary.TestRunName.Equals(testRunCache.TestRunName, StringComparison.OrdinalIgnoreCase))
             {
                 var coverageDto = _mapper.Map<Coverage>(coverageSummary);
                 coverageDto.TestRunId = testRunCache.Id;
-                _testHubDBContext.Add(coverageDto);                
+                _testHubDBContext.Add(coverageDto);
                 _testHubDBContext.SaveChanges();
             }
             else
             {
                 throw new NotSupportedException("This branch is not supported");
-            }           
+            }
         }
     }
 }

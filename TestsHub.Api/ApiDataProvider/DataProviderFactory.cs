@@ -23,7 +23,7 @@ namespace TestHub.Api.ApiDataProvider
 
         public IDataProvider GetTestHubWritableDataProvider(string organisation, IUrlHelper url)
         {
-            var context = new TestHubDBContext(_configuration);            
+            var context = new TestHubDBContext(_configuration);
             return new DataProvider(context, organisation, new UrlBuilder(url));
         }
     }

@@ -5,10 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
 using TestHub.Api.ApiDataProvider;
-using TestHub.Data;
 
 namespace TestHub.Api
 {
@@ -18,9 +16,9 @@ namespace TestHub.Api
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;            
+            Configuration = configuration;
 
-            var context = new TestHub.Data.DataModel.TestHubDBContext(configuration);           
+            var context = new TestHub.Data.DataModel.TestHubDBContext(configuration);
             context.Database.Migrate();
         }
 
@@ -32,8 +30,8 @@ namespace TestHub.Api
             services.AddControllers();
 
             services.AddCors(options => options.AddPolicy(AllowTestsHubOrigins,
-                builder=>
-                       builder.WithOrigins("http://testshub.com", "https://testshub.com", 
+                builder =>
+                       builder.WithOrigins("http://testshub.com", "https://testshub.com",
                         "https://test-hub.io", "http://test-hub.io", "https://test-hub-frontend.azurewebsites.net")
                            .AllowAnyHeader()
                            .AllowAnyMethod()));
@@ -62,15 +60,15 @@ namespace TestHub.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseCors(AllowTestsHubOrigins);
             app.UseRouting();
             app.UseAuthorization();
             app.UseHttpsRedirection();
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
-            {                
+            {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 

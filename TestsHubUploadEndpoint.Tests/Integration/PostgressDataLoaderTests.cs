@@ -1,12 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using Moq;
-using NUnit.Framework;
-using System;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 using TestHub.Data.DataModel;
 
 namespace TestsHubUploadEndpoint.Tests.Integration
@@ -35,6 +28,6 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             Assert.Pass();
         }
 
-      
+
     }
 }

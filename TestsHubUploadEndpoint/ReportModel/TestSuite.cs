@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TestsHubUploadEndpoint.ReportModel
 {
     public class TestSuite
-    { 
+    {
         public string Name { get; set; }
 
         public string Hostname { get; set; }

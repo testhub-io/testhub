@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace TestHub.Data.DataModel
 {
@@ -13,7 +12,7 @@ namespace TestHub.Data.DataModel
         [Required]
         public string TestRunName { get; set; }
 
-        public virtual ICollection<TestCase> TestCases { get; set; }        
+        public virtual ICollection<TestCase> TestCases { get; set; }
 
         public virtual Project Project { get; set; }
 
@@ -21,9 +20,7 @@ namespace TestHub.Data.DataModel
 
         public DateTime Timestamp { get; set; }
 
-        public decimal Time { get; set; }
-        
-        public string Name { get; set; }
+        public decimal Time { get; set; }        
 
         public TestResult Status { get; set; }
 

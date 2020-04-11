@@ -10,7 +10,7 @@ namespace TestHub.Api.ApiDataProvider
         {
             _url = url;
         }
-        
+
         public string Action(string action, string controller, object values)
         {
             // TODO: add verification for action and controller

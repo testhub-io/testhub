@@ -5,7 +5,7 @@ using TestHub.Api.ApiDataProvider;
 
 namespace TestHub.Api.Controllers
 {
-    [ApiController]    
+    [ApiController]
     [Produces("application/json")]
     [Route("api/{org}/[controller]")]
     public class ProjectsController : TestHubControllerBase
@@ -13,7 +13,7 @@ namespace TestHub.Api.Controllers
         public ProjectsController(IDataProviderFactory repositoryFactory) : base(repositoryFactory)
         {
         }
-        
+
         [HttpGet("{project}")]
         public ActionResult<string> Get(string org, string project)
         {
@@ -26,7 +26,7 @@ namespace TestHub.Api.Controllers
         [HttpGet("testresults")]
         public ActionResult<string> GetTestResults()
         {
-            throw new NotImplementedException();            
+            throw new NotImplementedException();
         }
 
         [HttpGet("coverage")]
@@ -39,7 +39,7 @@ namespace TestHub.Api.Controllers
         public ActionResult<string> GetProjects(string org)
         {
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var orgSummary = repository.GetProjects(org);
+            var orgSummary = repository.GetProjects();
 
             return FormateResult(orgSummary.ToList(), $"{org}");
         }

@@ -6,12 +6,15 @@ namespace TestHub.Api.ApiDataProvider
     public interface IDataProvider
     {
         string Organisation { get; }
+        
         Data.TestRun GetTestRun(string project, string testRunId);
-        Data.Project GetProjectSummary(string project);
-        Data.Organisation GetOrgSummary(string org);
+                        
+        Data.Organisation GetOrgSummary();
 
         TestHubDBContext TestHubDBContext { get; }
 
-        IEnumerable<Data.ProjectSummary> GetProjects(string org);
+        IEnumerable<Data.ProjectSummary> GetProjects();
+
+        Data.ProjectSummary GetProjectSummary(string project);
     }
 }

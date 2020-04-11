@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Text.Json;
 using TestHub.Api.ApiDataProvider;
 using TestHub.Data.DataModel;
 
 namespace TestHub.Api.Tests.Integration
 {
-    
+
     [TestFixture, Explicit]
     public class DataProviderTests
     {
@@ -18,8 +15,17 @@ namespace TestHub.Api.Tests.Integration
         public void GetProjectsTest()
         {
             var dataProvider = new DataProvider(new TestHubDBContext(), "Test-org", new UrlBuilder(Mock.Of<IUrlHelper>()));
-            var projects = dataProvider.GetProjects("Test-org");
-            
+            var results = dataProvider.GetProjects();
+            System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
+            Assert.Pass();
+        }
+
+        [Test]
+        public void GetTestRuns()
+        {
+            var dataProvider = new DataProvider(new TestHubDBContext(), "Test-org", new UrlBuilder(Mock.Of<IUrlHelper>()));
+            var results = dataProvider.GetTestRuns("dotNet","12");
+            System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
         }
     }
 }

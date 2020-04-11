@@ -20,7 +20,7 @@ namespace Tests
         }
 
         [Test]
-        public void Test_Read ()
+        public void Test_Read()
         {
             // Arrange 
             var dataLoaderMock = new Mock<IDataLoader>();
@@ -46,7 +46,7 @@ namespace Tests
 
             var case1 = testCasesReported.First();
             case1.Name.ShouldBe("PassedTest");
-            case1.ClassName .ShouldBe("aspnetappDependency.Tests.UnitTest1");
+            case1.ClassName.ShouldBe("aspnetappDependency.Tests.UnitTest1");
             case1.Status.ShouldBe("passed");
             case1.Time.ShouldBe(0.0000749m);
             case1.TestSuite.Name.ShouldBe("aspnetappDependency.Tests.UnitTest1");
@@ -80,15 +80,15 @@ namespace Tests
                     .TestOutput;
 
             testCasesReported.ShouldSatisfyAllConditions(
-                ()=> testCasesReported.Count.ShouldBe(7),
+                () => testCasesReported.Count.ShouldBe(7),
                 () => testCasesReported
-                    .Count(t=>t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
+                    .Count(t => t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
                     .ShouldBe(1),
                  () => faileDetstOutput.ShouldContain("error creating cluster"),
                  () => faileDetstOutput.ShouldContain("\nSecond string")
                 );
-                     
-            
+
+
         }
     }
 }

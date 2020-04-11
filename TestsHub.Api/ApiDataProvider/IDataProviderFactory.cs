@@ -1,6 +1,4 @@
-﻿using TestHub.Data.DataModel;
-
-namespace TestHub.Api.ApiDataProvider
+﻿namespace TestHub.Api.ApiDataProvider
 {
     public interface IDataProviderFactory
     {

@@ -5,7 +5,7 @@ namespace TestHub.Api.Data
     public class TestRunSummary : DataObjectBase
     {
         public string Name;
-        
+
         public int TestsCount { get; set; }
         public int Passed { get; set; }
         public int Failed { get; set; }

@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using TestHub.Data.DataModel;
 
@@ -18,7 +15,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
 
         [SetUp]
         public void Inti()
-        {            
+        {
             _testHubDBContext = new TestHubDBContext();
             _testHubDBContext.Add(_org);
         }
@@ -28,7 +25,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
         {
             LoadJunitFile(TestData.GetFile("Kiln\\HugeNumberOfTests.xml"), "TestDataUpload-HugeReport");
 
-            for (var i=0;i< 20; i++)
+            for (var i = 0; i < 20; i++)
             {
                 LoadJunitFile(TestData.GetFile("Kiln\\Frontend-JUnit.xml"), "TestDataUpload-Regular");
             }
@@ -64,7 +61,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             sw.Start();
             var jUnitReader = new JUnitReader(
                 new DataLoader(new TestHubDBContext(), projectName, _org.Name));
-            
+
             var task = jUnitReader.Read(stream, (++counter).ToString(), "develop", "");
 
             Task.WaitAll(task);

@@ -15,7 +15,7 @@ namespace TestHub.Api.Data
         public decimal Time { get; set; }
 
         public string File { get; set; }
- 
+
         public IEnumerable<TestResult> RecentResults { get; set; }
     }
 }

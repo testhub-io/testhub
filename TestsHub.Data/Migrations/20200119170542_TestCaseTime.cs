@@ -9,7 +9,7 @@ namespace TestHub.Data.Migrations
             migrationBuilder.AlterColumn<decimal>(
                 name: "Time",
                 table: "TestCases",
-                nullable: false,    
+                nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
         }

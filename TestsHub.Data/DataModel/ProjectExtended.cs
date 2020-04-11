@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TestHub.Data.DataModel
+﻿namespace TestHub.Data.DataModel
 {
     public class ProjectExtended
     {

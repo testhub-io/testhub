@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using System.Xml.XPath;
-using Palmmedia.ReportGenerator.Core;
-using Palmmedia.ReportGenerator.Core.Parser;
 
 namespace TestsHubUploadEndpoint
 {
@@ -23,7 +18,7 @@ namespace TestsHubUploadEndpoint
 
             // .net coverage xml
             var linesCovered = 0;
-            var linesValid = 0;          
+            var linesValid = 0;
 
             foreach (var element in report.XPathSelectElements("/results/modules/module"))
             {

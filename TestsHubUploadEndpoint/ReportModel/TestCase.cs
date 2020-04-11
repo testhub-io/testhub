@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TestsHubUploadEndpoint.ReportModel
+﻿namespace TestsHubUploadEndpoint.ReportModel
 {
     public class TestCase
-    {   
+    {
         public int TestRunId { get; set; }
 
         public string Name { get; set; }

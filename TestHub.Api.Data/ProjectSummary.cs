@@ -2,7 +2,7 @@
 
 namespace TestHub.Api.Data
 {
-    public class ProjectSummary: DataObjectBase
+    public class ProjectSummary : DataObjectBase
     {
         public string Name { get; set; }
 
@@ -13,7 +13,7 @@ namespace TestHub.Api.Data
         public string TestRunFrequenct { get; set; }
 
         public decimal TestQuantityGrowth { get; set; }
-        
+
         public decimal? CoverageGrowth { get; set; }
 
         public LatestResults LatestResults { get; set; }

@@ -1,9 +1,5 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TestHub.Data.DataModel;
-using TestsHubUploadEndpoint.CoverageModel;
 using report = TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint.Tests
@@ -19,7 +15,7 @@ namespace TestsHubUploadEndpoint.Tests
         [TestCase("Failed", TestResult.Failed)]
         [TestCase("skipped", TestResult.Skipped)]
         public void TestCaseStatusMapping(
-            string  status,
+            string status,
             TestResult result)
         {
             var mapper = MapperFactory.CreateMapper();

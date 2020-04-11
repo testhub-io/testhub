@@ -10,7 +10,7 @@ namespace TestHub.Api.Controllers
     [ApiController]
     [Produces("application/json")]
     public class OrganisationController : TestHubControllerBase
-    {        
+    {
         public OrganisationController(IDataProviderFactory repositoryFactory) : base(repositoryFactory)
         {
         }
@@ -20,14 +20,14 @@ namespace TestHub.Api.Controllers
         public ActionResult<string> Get()
         {
             return $"I'm ok. {Assembly.GetExecutingAssembly().GetName().FullName}";
-        }       
+        }
 
         [HttpGet("{org}")]
         public ActionResult<string> Get(string org)
         {
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var orgSummary = repository.GetOrgSummary(org);
-            
+            var orgSummary = repository.GetOrgSummary();
+
             return FormateResult(orgSummary, $"{org}");
         }
 

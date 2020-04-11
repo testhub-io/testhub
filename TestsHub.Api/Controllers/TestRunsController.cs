@@ -4,7 +4,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TestHub.Api.ApiDataProvider;
-using TestHub.Data;
 using TestsHubUploadEndpoint;
 
 namespace TestHub.Api.Controllers
@@ -19,7 +18,7 @@ namespace TestHub.Api.Controllers
         public TestRunsController(IDataProviderFactory repositoryFactory) : base(repositoryFactory)
         {
         }
-        
+
         [HttpGet("{testrun}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
