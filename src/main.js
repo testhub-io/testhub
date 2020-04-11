@@ -11,9 +11,9 @@ import { routes } from './routes'
 import authService from './services/auth'
 import App from './App.vue'
 
-import './assets/css/main.module.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import './assets/css/main.css'
 
 window.moment = require('moment-timezone')
 window.authService = authService
@@ -83,7 +83,6 @@ Vue.http.interceptors.push((request, next) => {
     if (!response.ok) {
       switch (response.status) {
         case 401:
-          console.log('You\'re not allowed to access this feature.')
           authService.logout()
           store.commit('SET_SELECTED', 'dashboard')
           router.push({ name: 'login' })
@@ -103,7 +102,6 @@ Vue.http.interceptors.push((request, next) => {
           break
 
         case 403:
-          console.log('You\'re not allowed to access this feature.')
           break
 
         case 404:
