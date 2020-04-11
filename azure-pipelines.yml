@@ -53,6 +53,7 @@ stages:
           
     - task: PythonScript@0
       displayName: Upload test results to testhub
+      continueOnError: true
       inputs:
         scriptSource: 'filePath'
         scriptPath: 'upload-test-results.py'
