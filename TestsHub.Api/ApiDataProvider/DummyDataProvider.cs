@@ -15,7 +15,7 @@ namespace TestHub.Api.ApiDataProvider
             var r = new Random();
             for (var i = 0; i < 50; i++)
             {
-                items.Add(new Data.DataItem() { DateTime = DateTime.Now.AddDays(i * (-1)), Coverage = Convert.ToDecimal(r.Next(30, 45 + i) / 100M ) });
+                items.Add(new Data.DataItem() { DateTime = DateTime.Now.AddDays((50 - i) * (-1)), Coverage = Convert.ToDecimal(r.Next(30, 45 + i) / 100M ) });
             }
 
             return new Data.CoverageHistoricalData()
