@@ -22,6 +22,5 @@ namespace TestHub.Api.Data
 
         public int TestRunsCount { get; set; }
 
-        public decimal? TestCoverageGrowth { get; set; }
     }
 }

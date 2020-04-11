@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using TestHub.Api.ApiDataProvider;
 
@@ -23,7 +24,7 @@ namespace TestHub.Api.Controllers
         }
 
         [HttpGet("{org}")]
-        public ActionResult<string> Get(string org)
+        public ActionResult<Data.Organisation> Get(string org)
         {
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var orgSummary = repository.GetOrgSummary();
@@ -32,10 +33,11 @@ namespace TestHub.Api.Controllers
         }
 
         [HttpGet("{org}/coverage")]
-        public ActionResult<string> GetCoverage()
+        public ActionResult<Data.CoverageHistoricalData> GetCoverage()
         {
-            throw new NotImplementedException();
+            return  DummyDataProvider.GetDummyCoverage();
         }
 
+        
     }
 }

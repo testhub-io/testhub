@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TestHub.Api.ApiDataProvider;
+using TestHub.Data.DataModel;
 
 namespace TestHub.Api.Controllers
 {
@@ -30,18 +32,20 @@ namespace TestHub.Api.Controllers
         }
 
         [HttpGet("coverage")]
-        public ActionResult<string> GetCoverage()
+        public ActionResult<Data.CoverageHistoricalData> GetCoverage()
         {
-            throw new NotImplementedException();
+            return DummyDataProvider.GetDummyCoverage();  
         }
 
         [HttpGet]
-        public ActionResult<string> GetProjects(string org)
+        public ActionResult<IEnumerable<Data.ProjectSummary>> GetProjects(string org)
         {
-            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var orgSummary = repository.GetProjects();
+            var urlBuilder = new UrlBuilder(this.Url);
+            return DummyDataProvider.GetProjects(org, urlBuilder);
 
-            return FormateResult(orgSummary.ToList(), $"{org}");
-        }
+            //var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            //var orgSummary = repository.GetProjects();
+            //return FormateResult(orgSummary.ToList(), $"{org}");
+        }    
     }
 }

@@ -108,13 +108,16 @@ namespace TestHub.Api.ApiDataProvider
                     Name = organisation.Name,
                     Uri = _urlBuilder.Action("Get", "Organisation", new { org = Organisation }),
                     Projects = _urlBuilder.Action("GetProjects", "Projects", new { org = Organisation }),
+                    Coverage = _urlBuilder.Action("GetCoverage", "Organisation", new { org = Organisation }),
 
                     Summary = new OrgSummary()
                     {
                         ProjectsCount = _testHubDBContext.OrganisationProjects(Organisation).Count(),
                         // there is a bug in MYsql provider that does not allow to use avg
                         AvgTestsCount = _testHubDBContext.OrganisationTestRun(Organisation).Sum(t => t.TestCasesCount) / _testHubDBContext.OrganisationTestRun(Organisation).Count(),
-                        AvgCoverage = 65 // TODO: WTF
+                        AvgCoverage = 65,  // TODO: WTF
+                        ProjectsInGreen = 40,
+                        ProjectsInRed = 60
                     }
                 };
             }
@@ -173,7 +176,7 @@ namespace TestHub.Api.ApiDataProvider
                            },
                            TestsCount = g.First().TestCasesCount,
                            TestQuantityGrowth = getQuantityGrowth(g),
-                           TestCoverageGrowth = getCoverageGrowth(g)
+                           CoverageGrowth = getCoverageGrowth(g)
                        });
             return groups.AsEnumerable();
         }

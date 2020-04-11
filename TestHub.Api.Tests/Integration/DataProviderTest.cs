@@ -16,8 +16,7 @@ namespace TestHub.Api.Tests.Integration
         {
             var dataProvider = new DataProvider(new TestHubDBContext(), "Test-org", new UrlBuilder(Mock.Of<IUrlHelper>()));
             var results = dataProvider.GetProjects();
-            System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
-            Assert.Pass();
+            System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));            
         }
 
         [Test]
