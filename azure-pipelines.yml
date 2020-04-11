@@ -1,0 +1,50 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+  
+variables:	
+  imageRepository: 'testhub-frontend'	
+  containerRegistry: 'testhubio.azurecr.io'	
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'	
+  tag: '$(Build.BuildId)'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install -g @angular/cli
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- task: Docker@2	
+  displayName: Build and push an image to container registry	
+  inputs:	
+    command: buildAndPush	
+    repository: $(imageRepository)	
+    dockerfile: $(dockerfilePath)	
+    containerRegistry: 'testhub-registry-connection'
+    tags: |	
+      $(tag)
+      latest
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Pay-As-You-Go(1e321cad-92ae-4632-a2f1-f596e0a060a9)'
+    appType: 'webAppContainer'
+    WebAppName: 'test-hub-frontend'
+    DockerNamespace: '$(containerRegistry)'
+    DockerRepository: '$(imageRepository)'
+    DockerImageTag: '$(tag)'
