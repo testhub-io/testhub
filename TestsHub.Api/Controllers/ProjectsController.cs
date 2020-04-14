@@ -40,12 +40,9 @@ namespace TestHub.Api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Data.ProjectSummary>> GetProjects(string org)
         {
-            var urlBuilder = new UrlBuilder(this.Url);
-            return DummyDataProvider.GetProjects(org, urlBuilder);
-
-            //var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            //var orgSummary = repository.GetProjects();
-            //return FormateResult(orgSummary.ToList(), $"{org}");
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            var orgSummary = repository.GetProjects();
+            return FormateResult(orgSummary.ToList(), $"{org}");
         }    
     }
 }

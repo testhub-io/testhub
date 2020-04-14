@@ -10,6 +10,8 @@ namespace TestHub.Api.ApiDataProvider
 {
     public class DataProvider : IDataProvider
     {
+
+        private const string DEFAULT_BRANCH = "develop";
         private readonly TestHub.Data.DataModel.Organisation _organisation;
         private readonly TestHubDBContext _testHubDBContext;
         private readonly UrlBuilder _urlBuilder;
@@ -31,6 +33,7 @@ namespace TestHub.Api.ApiDataProvider
                 TestHubDBContext.Organisations.Add(new TestHub.Data.DataModel.Organisation() { Name = organisation });
                 TestHubDBContext.SaveChanges();
             }
+            _organisation = getOrganisation(organisation);
 
             _urlBuilder = url;
         }
@@ -100,9 +103,38 @@ namespace TestHub.Api.ApiDataProvider
 
         public Data.Organisation GetOrgSummary()
         {
-            var organisation = getOrganisation(Organisation);
+            var organisation = getOrganisation(Organisation);    
+
             if (organisation != null)
             {
+                var result = _testHubDBContext.Query<(decimal cov, int casesCount, int status, int pId)>(@"WITH tc
+    AS(
+      SELECT
+           Timestamp,
+           Status,
+           TestRunName,
+           ProjectId,
+           TestCasesCount,
+           id,
+           Branch, Time, CommitId,
+           ROW_NUMBER() OVER(PARTITION BY ProjectId) row_num
+        FROM
+           TestRuns
+        where Branch = @branch or Branch is NULL
+        order by Timestamp DESC
+     )
+    SELECT
+      c.LinesCovered / c.LinesValid,
+      r.TestCasesCount,
+      r.Status,
+      ProjectId
+    FROM
+       tc r
+    inner join Projects p on p.Id = r.ProjectId
+    left join Coverage c on c.Id = r.Id
+    WHERE
+       p.OrganisationId = @orgId and row_num <= 1;", new { branch = DEFAULT_BRANCH, orgId = organisation.Id }).ToList();
+                
                 return new Data.Organisation
                 {
                     Name = organisation.Name,
@@ -112,12 +144,11 @@ namespace TestHub.Api.ApiDataProvider
 
                     Summary = new OrgSummary()
                     {
-                        ProjectsCount = _testHubDBContext.OrganisationProjects(Organisation).Count(),
-                        // there is a bug in MYsql provider that does not allow to use avg
-                        AvgTestsCount = _testHubDBContext.OrganisationTestRun(Organisation).Sum(t => t.TestCasesCount) / _testHubDBContext.OrganisationTestRun(Organisation).Count(),
-                        AvgCoverage = 65,  // TODO: WTF
-                        ProjectsInGreen = 40,
-                        ProjectsInRed = 60
+                        ProjectsCount = _testHubDBContext.OrganisationProjects(Organisation).Count(),                        
+                        AvgTestsCount = result.Average(c=>c.casesCount),
+                        AvgCoverage = result.Average(c => c.cov), 
+                        ProjectsInGreen = result.Where(c=>c.status == 1).Count(),
+                        ProjectsInRed = result.Where(c => c.status == 0).Count()
                     }
                 };
             }
