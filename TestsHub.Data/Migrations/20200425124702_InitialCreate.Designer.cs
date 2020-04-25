@@ -9,8 +9,8 @@ using TestHub.Data.DataModel;
 namespace TestHub.Data.Migrations
 {
     [DbContext(typeof(TestHubDBContext))]
-    [Migration("20200411093224_RemoveTestName")]
-    partial class RemoveTestName
+    [Migration("20200425124702_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

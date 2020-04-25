@@ -28,5 +28,9 @@
     <ProjectReference Include="..\TestsHub.Commons\TestsHub.Commons.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
  
 </Project>
