@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestHub.Api.Data;
 
 namespace TestHub.Api.ApiDataProvider
 {
@@ -52,6 +53,24 @@ namespace TestHub.Api.ApiDataProvider
                     TestQuantityGrowth = -5, TestRunFrequenct = "Daily", TestRunsCount = 10, TestsCount = 15,
                     Uri = urlBuilder.Action("Get", "Projects", new { org = org, project = "Data-processing" })
                 }
+
+            };
+        }
+
+        internal static ProjectSummary GetDummyProjectSummary(string org, string project, UrlBuilder urlBuilder)
+        {
+            return new ProjectSummary()
+            {
+                Coverage = 80,
+                CoverageGrowth = 5,
+                LatestResults = new LatestResults { TestResults = new Data.TestResult[] { Data.TestResult.Failed, Data.TestResult.Passed, Data.TestResult.Passed, Data.TestResult.Skipped } },
+                Name = "DummyData" + project,
+                RecentTestRuntDate = DateTime.Now.AddDays(-1),
+                TestQuantityGrowth = 15,
+                TestRunFrequenct = "daily",
+                TestRunsCount = 10,
+                TestsCount = 150,
+                Uri = urlBuilder.Action("Get", "Projects", new { org = org, project = "Project1" })
 
             };
         }

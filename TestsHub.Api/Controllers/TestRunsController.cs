@@ -37,11 +37,11 @@ namespace TestHub.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Data.TestRunSummary>> GetTestRuns(string org, string projectName)
+        public ActionResult<IEnumerable<Data.TestRunSummary>> GetTestRuns(string org, string project)
         {
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var res = dataProvider.GetTestRuns("dotNet");
-            return FormateResult(res, $"{org}/{projectName}");
+            var res = dataProvider.GetTestRuns(project);
+            return FormateResult(res, $"{org}/{project}");
         }
 
 

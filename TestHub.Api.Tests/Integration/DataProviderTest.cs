@@ -51,5 +51,16 @@ namespace TestHub.Api.Tests.Integration
             Assert.AreEqual(11, results.Count());
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
         }
+
+
+        [Test]
+        public void GetTestRun()
+        {        
+            var dataProvider = new DataProvider(_db, org, new UrlBuilder(Mock.Of<IUrlHelper>()));
+            var results = dataProvider.GetTestRun("testhub-api", "local_run");
+            Assert.AreEqual(11, results.TestCases.Count());
+            Assert.AreEqual(11, results.TestCasesCount);
+            System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
+        }
     }
 }

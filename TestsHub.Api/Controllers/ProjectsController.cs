@@ -19,10 +19,10 @@ namespace TestHub.Api.Controllers
         [HttpGet("{project}")]
         public ActionResult<string> Get(string org, string project)
         {
-            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var projectData = repository.GetProjectSummary(project);
+            //var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            //var projectData = repository.GetProjectSummary(project);
 
-            return FormateResult(projectData, $"{org}/{project}");
+            return FormateResult(DummyDataProvider.GetDummyProjectSummary(org, project, new UrlBuilder(Url)), $"{org}/{project}");
         }
 
         [HttpGet("testresults")]

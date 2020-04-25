@@ -40,7 +40,12 @@ namespace TestHub.Api.ApiDataProvider
 
         public IEnumerable<TestRunSummary> GetTestRuns(string projectName)
         {
-            var project = _testHubDBContext.Projects.First(p => p.Name.Equals(projectName, StringComparison.CurrentCultureIgnoreCase));
+            var project = _testHubDBContext.Projects.FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.CurrentCultureIgnoreCase));
+            if (project == null)
+            {
+                throw new TesthubApiException("Project does not exist");
+            }
+
             var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id).OrderByDescending(t => t.Timestamp).Include(c => c.Coverage);
             TestHub.Data.DataModel.TestRun previousTestRun = null;
             decimal previousCoverage = 0;
@@ -90,43 +95,41 @@ namespace TestHub.Api.ApiDataProvider
             var project = _testHubDBContext.Projects
                 .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase)
                 && p.Organisation.Id == _organisation.Id);
-
-            if (project != null)
+            
+            if (project == null)
             {
-                var testRun = _testHubDBContext.TestRuns
-                    .FirstOrDefault(t => t.ProjectId == project.Id && t.TestRunName == testRunName);
+                throw new TesthubApiException("Project does not exist");
+            }
+          
+            var testRun = _testHubDBContext.TestRuns
+                .FirstOrDefault(t => t.ProjectId == project.Id && t.TestRunName == testRunName);
 
-                var history = GetTestCaseHistory(project, testRun.Id);
+            var history = GetTestCaseHistory(project, testRun.Id);
 
-                var testCases = _testHubDBContext.TestCases.Where(t => t.TestRunId == testRun.Id)
-                    .Select(s => new Data.TestCase
-                    {
-                        ClassName = s.ClassName,
-                        File = s.File,
-                        Name = s.Name,
-                        Status = (Data.TestResult)s.Status,
-                        SystemOut = s.TestOutput,
-                        Time = s.Time,
-                        RecentResults = history.ContainsKey(s.Name) ? history[s.Name] : null
-                    });
-
-                return new Data.TestRun
+            var testCases = _testHubDBContext.TestCases.Where(t => t.TestRunId == testRun.Id)
+                .Select(s => new Data.TestCase
                 {
-                    Name = testRun.TestRunName,
-                    Uri = _urlBuilder.Action("Get", "TestRuns", new { org = Organisation, project = project.Name, testRun = testRun.TestRunName }),
-                 
-                    Branch = testRun.Branch,
-                    CommitId = testRun.CommitId,
-                    Coverage = testRun.Coverage?.Percent,
-                    Timestamp = testRun.Timestamp,
-                    Time = testRun.Time,
-                    TestCases = testCases
-                };
-            }
-            else
+                    ClassName = s.ClassName,
+                    File = s.File,
+                    Name = s.Name,
+                    Status = (Data.TestResult)s.Status,
+                    SystemOut = s.TestOutput,
+                    Time = s.Time,
+                    RecentResults = history.ContainsKey(s.Name) ? history[s.Name] : null
+                });
+
+            return new Data.TestRun
             {
-                return null;
-            }
+                Name = testRun.TestRunName,
+                Uri = _urlBuilder.Action("Get", "TestRuns", new { org = Organisation, project = project.Name, testRun = testRun.TestRunName }),
+                 
+                Branch = testRun.Branch,
+                CommitId = testRun.CommitId,
+                Coverage = testRun.Coverage?.Percent,
+                Timestamp = testRun.Timestamp,
+                Time = testRun.Time,
+                TestCases = testCases
+            };          
         }
 
         private Dictionary<string, IEnumerable<Data.TestResult>> GetTestCaseHistory(TestHub.Data.DataModel.Project project, int testrunId)
