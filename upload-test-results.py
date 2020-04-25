@@ -22,12 +22,12 @@ print(args.file)
 for root, dirs, files in os.walk("."):
     for file in files:        
         if file.find(args.file) != -1:           
-            print(os.path.join(root, file))
+            print("Uploading file:" +  os.path.join(root, file))
             print(root.split("/")[1])
             testRunId = root.split("/")[1]
             
             url = "https://test-hub-api.azurewebsites.net/api/{}/projects/{}/runs/{}".format(args.org, args.project, args.build)
-            print("Uploading to:" + url)
+            print("Uploading to: " + url)
             
             f=open(os.path.join(root, file))
             content=f.read()
@@ -36,11 +36,11 @@ for root, dirs, files in os.walk("."):
             response = requests.put(url,
                         files=dict(file=content),
                         verify=False)
-                        
-            print("Response:" + json.dumps(response.json()))
+                                    
             if response.status_code != 200:
                 #exit(1)
                 print("Failed to upload file")
+                print(response.text)
             else:
                 print("File uploaded successufully.")
 

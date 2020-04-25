@@ -27,10 +27,10 @@ namespace TestHub.Api.ApiDataProvider
         public DataProvider(TestHubDBContext testHubDBContext, string organisation, UrlBuilder url)
         {
             _testHubDBContext = testHubDBContext;
-            _organisation = TestHubDBContext.Organisations.SingleOrDefault(o => o.Name == organisation);
+            _organisation = TestHubDBContext.Organisations.SingleOrDefault(o => o.Name.Equals(organisation, StringComparison.OrdinalIgnoreCase));
             if (_organisation == null)
             {
-                TestHubDBContext.Organisations.Add(new TestHub.Data.DataModel.Organisation() { Name = organisation });
+                TestHubDBContext.Organisations.Add(new TestHub.Data.DataModel.Organisation() { Name = organisation.ToLower() });
                 TestHubDBContext.SaveChanges();
             }
             _organisation = getOrganisation(organisation);
