@@ -4,7 +4,7 @@ namespace TestHub.Api.Data
 {
     public class TestRunSummary : DataObjectBase
     {
-        public string Name;
+        public string Name { get; set; }
 
         public DateTime TimeStemp { get; set; }
 

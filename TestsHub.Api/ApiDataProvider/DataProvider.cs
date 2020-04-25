@@ -38,9 +38,51 @@ namespace TestHub.Api.ApiDataProvider
             _urlBuilder = url;
         }
 
-        public IEnumerable<TestRunSummary> GetTestRuns(string project)
+        public IEnumerable<TestRunSummary> GetTestRuns(string projectName)
         {
-            throw new NotImplementedException();
+            var project = _testHubDBContext.Projects.First(p => p.Name.Equals(projectName, StringComparison.CurrentCultureIgnoreCase));
+            var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id).OrderByDescending(t => t.Timestamp).Include(c => c.Coverage);
+            TestHub.Data.DataModel.TestRun previousTestRun = null;
+            decimal previousCoverage = 0;
+            foreach (var t in testRuns)
+            {
+                var currentCoverage = t.Coverage?.Percent ?? 0;
+
+                // we returning previous test run because we go descending and want to calc difference ! 
+                if (previousTestRun != null)
+                {
+                    yield return PrepareTestSummary(project, previousTestRun, currentCoverage, t, previousCoverage);                    
+                }
+
+                previousTestRun = t;
+                previousCoverage = currentCoverage;
+            }
+
+            if (previousTestRun != null)
+            {
+                yield return PrepareTestSummary(project, null, 0, previousTestRun, 0);
+            }
+        }
+
+        private TestRunSummary PrepareTestSummary(Project project, TestHub.Data.DataModel.TestRun t, decimal currentCoverage, TestHub.Data.DataModel.TestRun previousTestRun, decimal previousCoverage)
+        {
+            return new TestRunSummary()
+            {
+                Name = previousTestRun.TestRunName,
+                Branch = previousTestRun.Branch,
+                Coverage = currentCoverage,
+                Result = (Data.TestResult)previousTestRun.Status,
+                Stats = new TestRunStats()
+                {
+                    TotalCount = previousTestRun.TestCasesCount,
+
+                },
+                CoverageGrowth = currentCoverage - previousCoverage,
+                TestCountGrowth = previousTestRun.TestCasesCount - (t?.TestCasesCount ?? 0),
+                Time = previousTestRun.Time,
+                TimeStemp = previousTestRun.Timestamp,
+                Uri = _urlBuilder.Action("Get", "TestRuns", new { org = Organisation, project = project.Name, testRun = previousTestRun.TestRunName })
+            };
         }
 
         public Data.TestRun GetTestRun(string projectName, string testRunName)
@@ -145,8 +187,8 @@ namespace TestHub.Api.ApiDataProvider
                     Summary = new OrgSummary()
                     {
                         ProjectsCount = _testHubDBContext.OrganisationProjects(Organisation).Count(),                        
-                        AvgTestsCount = result.Average(c=>c.casesCount),
-                        AvgCoverage = result.Average(c => c.cov), 
+                        AvgTestsCount = result.DefaultIfEmpty().Average(c=>c.casesCount),
+                        AvgCoverage = result.DefaultIfEmpty().Average(c => c.cov), 
                         ProjectsInGreen = result.Where(c=>c.status == 1).Count(),
                         ProjectsInRed = result.Where(c => c.status == 0).Count()
                     }

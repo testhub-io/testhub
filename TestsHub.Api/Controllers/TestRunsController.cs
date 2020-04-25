@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TestHub.Api.ApiDataProvider;
@@ -29,11 +30,20 @@ namespace TestHub.Api.Controllers
             {
                 return BadRequest();
             }
-            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var testRunEntity = repository.GetTestRun(project, testRun);
+            var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            var testRunEntity = dataProvider.GetTestRun(project, testRun);
 
             return FormateResult(testRunEntity, $"{org}/{project}/{testRun}");
         }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Data.TestRunSummary>> GetTestRuns(string org, string projectName)
+        {
+            var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            var res = dataProvider.GetTestRuns("dotNet");
+            return FormateResult(res, $"{org}/{projectName}");
+        }
+
 
         [HttpGet("{testrun}/coverage")]
         [ProducesResponseType(StatusCodes.Status200OK)]

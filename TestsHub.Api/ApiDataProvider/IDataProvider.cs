@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TestHub.Api.Data;
 using TestHub.Data.DataModel;
 
 namespace TestHub.Api.ApiDataProvider
@@ -13,8 +14,10 @@ namespace TestHub.Api.ApiDataProvider
 
         TestHubDBContext TestHubDBContext { get; }
 
-        IEnumerable<Data.ProjectSummary> GetProjects();
+        IEnumerable<ProjectSummary> GetProjects();
 
-        Data.ProjectSummary GetProjectSummary(string project);
+        ProjectSummary GetProjectSummary(string project);
+
+        IEnumerable<TestRunSummary> GetTestRuns(string projectName);
     }
 }
