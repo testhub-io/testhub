@@ -10,7 +10,7 @@ namespace TestHub.Api.Data
 
         public decimal Coverage { get; set; }
 
-        public string TestRunFrequenct { get; set; }
+        public string TestRunFrequency { get; set; }
 
         public decimal TestQuantityGrowth { get; set; }
 
