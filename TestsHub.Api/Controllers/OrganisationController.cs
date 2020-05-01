@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TestHub.Api.ApiDataProvider;
+using TestHub.Api.Controllers.Helpers;
 
 namespace TestHub.Api.Controllers
 {
@@ -33,11 +35,11 @@ namespace TestHub.Api.Controllers
         }
 
         [HttpGet("{org}/coverage")]
-        public ActionResult<Data.CoverageHistoricalData> GetCoverage()
+        public ActionResult<IEnumerable<Data.DataItem>> GetCoverage(string org, [FromQuery]int? page, [FromQuery]int? pageSize)
         {
-            return  DummyDataProvider.GetDummyCoverage();
+            // retrieve list from database/whereverand
+            return Ok(DummyDataProvider.GetDummyCoverage());
         }
-
         
     }
 }

@@ -9,7 +9,7 @@ namespace TestHub.Api.ApiDataProvider
 {
     public class DummyDataProvider
     {
-        public static Data.CoverageHistoricalData GetDummyCoverage()
+        public static IEnumerable<DataItem> GetDummyCoverage()
         {
             var items = new List<Data.DataItem>();
 
@@ -19,10 +19,7 @@ namespace TestHub.Api.ApiDataProvider
                 items.Add(new Data.DataItem() { DateTime = DateTime.Now.AddDays((50 - i) * (-1)), Coverage = Convert.ToDecimal(r.Next(30, 45 + i) / 100M ) });
             }
 
-            return new Data.CoverageHistoricalData()
-            {
-                Items = items
-            };
+            return items;
         }
 
         public  static ActionResult<IEnumerable<Data.ProjectSummary>> GetProjects(string org, UrlBuilder urlBuilder)

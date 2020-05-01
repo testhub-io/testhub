@@ -21,7 +21,6 @@ namespace TestHub.Api.Controllers
         {
             if (data == null)
             {
-
                 return new NotFoundObjectResult(request);
             }
             return new JsonResult(data);

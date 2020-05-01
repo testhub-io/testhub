@@ -210,9 +210,8 @@ namespace TestHub.Api.ApiDataProvider
               .FirstOrDefault(o => o.Name.Equals(org, StringComparison.OrdinalIgnoreCase));
         }
 
-        public IEnumerable<ProjectSummary> GetProjects()
+        public IQueryable<ProjectSummary> GetProjects()
         {
-
             var org = getOrganisation(Organisation);
             if (org != null)
             {
@@ -220,11 +219,11 @@ namespace TestHub.Api.ApiDataProvider
             }
             else
             {
-                return new List<ProjectSummary>();
+                return new List<ProjectSummary>().AsQueryable();
             }
         }
 
-        private IEnumerable<ProjectSummary> getProjectsSummary(TestHub.Data.DataModel.Organisation org)
+        private IQueryable<ProjectSummary> getProjectsSummary(TestHub.Data.DataModel.Organisation org)
         {
             var id = org.Id;
 
@@ -254,7 +253,7 @@ namespace TestHub.Api.ApiDataProvider
                            TestQuantityGrowth = getQuantityGrowth(g),
                            CoverageGrowth = getCoverageGrowth(g)
                        });
-            return groups.AsEnumerable();
+            return groups.AsQueryable();
         }
 
         private IEnumerable<TestRunExtended> getLast5TestRuns(TestHub.Data.DataModel.Organisation org)
