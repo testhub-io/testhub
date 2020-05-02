@@ -20,12 +20,12 @@ namespace TestsHubUploadEndpoint
             var linesCovered = 0;
             var linesValid = 0;
 
-            foreach (var element in report.XPathSelectElements("/results/modules/module"))
+            foreach (var element in report.XPathSelectElements("/coverage"))
             {
-                var covered = int.Parse(element.Attribute("lines_covered").Value);
+                var covered = int.Parse(element.Attribute("lines-covered").Value);
                 linesCovered += covered;
 
-                linesValid += int.Parse(element.Attribute("lines_not_covered").Value) + linesCovered;
+                linesValid += int.Parse(element.Attribute("lines-valid").Value);
             }
 
             _dataLoader.Add(new CoverageModel.CoverageSummary(linesCovered, linesValid, testRunName));

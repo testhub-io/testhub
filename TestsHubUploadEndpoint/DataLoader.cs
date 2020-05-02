@@ -60,6 +60,7 @@ namespace TestsHubUploadEndpoint
                 _testHubDBContext.TestRuns.Add(testRun);
                 _testHubDBContext.SaveChanges();
                 BatchInsert(testCases, testRun.Id);
+                existingTestRun = testRun;
             }
             else
             {
@@ -108,8 +109,19 @@ namespace TestsHubUploadEndpoint
             {
                 var coverageDto = _mapper.Map<Coverage>(coverageSummary);
                 coverageDto.TestRunId = testRunCache.Id;
-                _testHubDBContext.Add(coverageDto);
-                _testHubDBContext.SaveChanges();
+
+                var existingCoverage = _testHubDBContext.Coverage.FirstOrDefault(c => c.TestRunId == testRunCache.Id);
+                if (existingCoverage == null) 
+                {
+                    _testHubDBContext.Add(coverageDto);
+                    _testHubDBContext.SaveChanges();
+                }
+                else
+                {
+                    existingCoverage.LinesCovered += coverageDto.LinesCovered;
+                    existingCoverage.LinesValid += coverageDto.LinesValid;
+                    _testHubDBContext.SaveChanges();
+                }
             }
             else
             {

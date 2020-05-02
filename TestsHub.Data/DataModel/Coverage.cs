@@ -12,9 +12,9 @@ namespace TestHub.Data.DataModel
 
         public virtual TestRun TestRun { get; set; }
 
-        public int LinesCovered { get; private set; }
+        public int LinesCovered { get; set; }
 
-        public int LinesValid { get; private set; }
+        public int LinesValid { get; set; }
 
         public decimal Percent
         {
