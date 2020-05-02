@@ -21,7 +21,7 @@ namespace TestsHubUploadEndpoint
         {
             _testHubDBContext = testHubDBContext;
             ProjectName = projectName;
-            Organisation = testHubDBContext.Organisations.SingleOrDefault(s => s.Name == org);
+            Organisation = testHubDBContext.Organisations.SingleOrDefault(s => s.Name.Equals(org, StringComparison.OrdinalIgnoreCase));
             if (Organisation == null)
             {
                 Organisation = new Organisation() { Name = org };

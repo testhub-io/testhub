@@ -10,15 +10,14 @@ namespace TestsHubUploadEndpoint.Tests.Integration
     public class DataUpload
     {
         TestHubDBContext _testHubDBContext;
-        Organisation _org = new Organisation() { Name = "Test-org" };
+        Organisation _org = new Organisation() { Name = "test-org" };
         static int counter = 1;
 
         [SetUp]
         public void Inti()
         {
             //_testHubDBContext = new TestHubDBContext();            
-            _testHubDBContext = new TestHubDBContext("Host=test-hub.chhksx9i82ny.us-east-2.rds.amazonaws.com;Database=testHub;Username=root;Password=test_pass");
-            _testHubDBContext.Add(_org);
+            _testHubDBContext = new TestHubDBContext("Host=test-hub.chhksx9i82ny.us-east-2.rds.amazonaws.com;Database=testHub;Username=root;Password=test_pass");            
         }
 
         [Test]
@@ -61,7 +60,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             var sw = new Stopwatch();
             sw.Start();
             var jUnitReader = new JUnitReader(
-                new DataLoader(new TestHubDBContext(), projectName, _org.Name));
+                new DataLoader(_testHubDBContext, projectName, _org.Name));
 
             var task = jUnitReader.Read(stream, (++counter).ToString(), "develop", "");
 
