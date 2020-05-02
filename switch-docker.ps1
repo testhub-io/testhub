@@ -1,3 +1,3 @@
 dir C:\"Program Files"\Docker\
-dir C:\"Program Files"\Docker\Docker
-C:\"Program Files"\Docker\Docker\DockerCli.exe -SwitchLinuxEngine
+dir C:\"Program Files"\Docker\cli-plugins
+C:\"Program Files"\Docker\cli-plugins\DockerCli.exe -SwitchLinuxEngine
