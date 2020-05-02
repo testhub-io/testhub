@@ -47,8 +47,12 @@ namespace TestHub.Api
                 
             });
             services.ConfigureSwaggerGen(options =>
-            {                
+            {
+#if DEBUG
                 options.IncludeXmlComments("TestsHub.Api.xml");
+#elif RELEASE
+                options.IncludeXmlComments("TestsHub.Api.xml");
+#endif
             });
 
         }
