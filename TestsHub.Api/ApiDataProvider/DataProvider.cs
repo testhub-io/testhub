@@ -46,7 +46,8 @@ namespace TestHub.Api.ApiDataProvider
                 throw new TesthubApiException("Project does not exist");
             }
 
-            var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id).OrderByDescending(t => t.Timestamp).Include(c => c.Coverage);
+            var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id)
+                .OrderByDescending(t => t.Timestamp).Include(c => c.Coverage);
             TestHub.Data.DataModel.TestRun previousTestRun = null;
             decimal previousCoverage = 0;
             foreach (var t in testRuns)

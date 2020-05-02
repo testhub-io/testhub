@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TestHub.Api.Data;
 using TestHub.Data.DataModel;
-using System.Linq;
 
 namespace TestHub.Api.ApiDataProvider
 {

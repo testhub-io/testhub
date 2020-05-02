@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TestHub.Api.ApiDataProvider;
+using TestHub.Api.Controllers.Helpers;
 using TestsHubUploadEndpoint;
 
 namespace TestHub.Api.Controllers
@@ -37,11 +38,11 @@ namespace TestHub.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Data.TestRunSummary>> GetTestRuns(string org, string project)
-        {
+        public ActionResult<PaginatedList<Data.TestRunSummary>> GetTestRuns(string org, string project, [FromQuery]int? page, [FromQuery]int? pageSize)
+        {            
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var res = dataProvider.GetTestRuns(project);
-            return FormateResult(res, $"{org}/{project}");
+            var res = dataProvider.GetTestRuns(project).AsQueryable();
+            return PaginatedListBuilder.CreatePaginatedList(res, page, pageSize, this.Request.Path); 
         }
 
 
