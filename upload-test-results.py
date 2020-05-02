@@ -59,6 +59,7 @@ for root, dirs, files in os.walk("."):
             print("Uploading to: " + url)
                                     
             toUpload = dict(file=readFileContent(os.path.join(root, file)))
+            toUpload["branch"]="master"
 
             #coverPath = getCoverage(root, args.coverage) 
             coverPath = coverageFiles[covCount] 
