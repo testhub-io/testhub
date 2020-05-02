@@ -30,9 +30,16 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'test'
-        arguments: '--logger "junit;LogFilePath=TestResults/th-test-results.xml" --filter  TestCategory!=Integration --collect:"XPlat Code Coverage" --results-directory TestResults'  
-        projects: 'TestsHub.sln'
+        arguments: '--logger "junit;LogFilePath=TestResults/th-test-results.xml" --filter TestCategory!=Integration --collect:"XPlat Code Coverage" --results-directory:TestResults'  
+        projects: 'TestsHubUploadEndpoint.Tests/TestsHubUploadEndpoint.Tests.csproj'
         workingDirectory: '$(Build.SourcesDirectory)'
+    
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'test'
+        arguments: '--logger "junit;LogFilePath=TestResults/th-test-results.xml" --filter TestCategory!=Integration --collect:"XPlat Code Coverage" --results-directory:TestResults'  
+        projects: 'TestHub.Api.Tests/TestsHub.Api.csproj'
+        workingDirectory: '$(Build.SourcesDirectory)'        
 
     - task: PublishTestResults@2
       inputs:
