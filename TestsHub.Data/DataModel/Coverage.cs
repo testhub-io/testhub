@@ -20,7 +20,7 @@ namespace TestHub.Data.DataModel
         {
             get
             {
-                return (LinesCovered / LinesValid) * 100;
+                return ((decimal)LinesCovered / LinesValid) * 100;
             }
         }
     }
