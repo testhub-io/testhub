@@ -16,7 +16,7 @@ variables:
   
   # Agent VM image name
   # vmImageName: 'ubuntu-latest'
-  vmImageName: 'windows-2019'
+  vmImageName: 'windows-latest'
 
 stages:
 - stage: Build
