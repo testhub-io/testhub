@@ -43,7 +43,12 @@ namespace TestHub.Api
             services.AddScoped<IDataProviderFactory, DataProviderFactory>();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Testhub API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Testhub API", Version = "v1" });                                
+                
+            });
+            services.ConfigureSwaggerGen(options =>
+            {                
+                options.IncludeXmlComments("TestsHub.Api.xml");
             });
 
         }

@@ -30,6 +30,11 @@ namespace TestHub.Data.DataModel
             _connectionString = "Host=localhost;Database=testHub;Username=root;Password=test_pass";
         }
 
+        public TestHubDBContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         public DbSet<TestCase> TestCases { get; set; }
 
         public DbSet<TestRun> TestRuns { get; set; }

@@ -16,7 +16,8 @@ namespace TestsHubUploadEndpoint.Tests.Integration
         [SetUp]
         public void Inti()
         {
-            _testHubDBContext = new TestHubDBContext();
+            //_testHubDBContext = new TestHubDBContext();            
+            _testHubDBContext = new TestHubDBContext("Host=test-hub.chhksx9i82ny.us-east-2.rds.amazonaws.com;Database=testHub;Username=root;Password=test_pass");
             _testHubDBContext.Add(_org);
         }
 

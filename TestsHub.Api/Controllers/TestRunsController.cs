@@ -23,8 +23,8 @@ namespace TestHub.Api.Controllers
         [HttpGet("{testrun}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
-        public ActionResult<string> Get(string org, string project, string testRun)
+        [ProducesDefaultResponseType]        
+        public ActionResult<Data.TestRun> Get(string org, string project, string testRun)
         {
             if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
             {
@@ -45,10 +45,13 @@ namespace TestHub.Api.Controllers
         }
 
 
+        /// <summary>
+        /// Not implemented 
+        /// </summary>      
         [HttpGet("{testrun}/coverage")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
+        [ProducesDefaultResponseType]  
         public ActionResult<string> GetCoverage(string org, string project, string testRun)
         {
             throw new NotImplementedException();

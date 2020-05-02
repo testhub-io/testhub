@@ -17,6 +17,9 @@ namespace TestHub.Api.Controllers
         {
         }
 
+        /// <summary>
+        /// Dummy data. Not implemented.
+        /// </summary>    
         [HttpGet("{project}")]
         public ActionResult<string> Get(string org, string project)
         {
@@ -26,19 +29,25 @@ namespace TestHub.Api.Controllers
             return FormateResult(DummyDataProvider.GetDummyProjectSummary(org, project, new UrlBuilder(Url)), $"{org}/{project}");
         }
 
-        [HttpGet("testresults")]
+        /// <summary>
+        /// Not implemented 
+        /// </summary>        
+        [HttpGet("testresults")]        
         public ActionResult<string> GetTestResults()
         {
             throw new NotImplementedException();
         }
 
-        [HttpGet("coverage")]
+        /// <summary>
+        /// Dummy data. Not implemented.
+        /// </summary>     
+        [HttpGet("coverage")]   
         public ActionResult<IEnumerable<Data.DataItem>> GetCoverage()
         {
             return Ok(DummyDataProvider.GetDummyCoverage());
         }
 
-        [HttpGet]        
+        [HttpGet]
         public ActionResult<PaginatedList<Data.ProjectSummary>> GetProjects(string org, [FromQuery]int? page, [FromQuery]int? pageSize)
         {
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
