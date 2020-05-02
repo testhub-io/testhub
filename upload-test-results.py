@@ -8,14 +8,24 @@ from pathlib import Path
 import os
 import os.path
 
-def getCoverage (dir, coveragePatter):
+def getCoverage (dir, coveragePattern):
     for root, dirs, files in os.walk(dir):
         for file in files:        
-            if file.find(coveragePatter) != -1:        
+            if file.find(coveragePattern) != -1:        
                 print("--- Coverage: " + os.path.join(root, file))
                 return os.path.join(root, file)
     return ""
     
+
+def findAllCoverage (coveragePattern):
+    res = []
+    for root, dirs, files in os.walk("."):
+        for file in files:                    
+            if file.find(coveragePattern) != -1:
+                res.append(os.path.join(root, file))
+    return res
+
+
 def readFileContent (filePath):
     f=open(filePath)
     content=f.read()
@@ -32,7 +42,11 @@ parser.add_argument("--build", "-b", help="Build id")
 
 
 args = parser.parse_args()
-print(args.file)
+
+print("Find all coverage files")
+coverageFiles = findAllCoverage(args.coverage)
+print("Found {} coverage files".format(len(coverageFiles)))
+covCount = 0
 
 for root, dirs, files in os.walk("."):
     for file in files:        
@@ -46,7 +60,9 @@ for root, dirs, files in os.walk("."):
                                     
             toUpload = dict(file=readFileContent(os.path.join(root, file)))
 
-            coverPath = getCoverage(root, args.coverage) 
+            #coverPath = getCoverage(root, args.coverage) 
+            coverPath = coverageFiles[covCount] 
+            covCount = covCount+1
             if coverPath != "":
                 print("Uploading coverage from : " +coverPath)
                 toUpload["coverage"]= readFileContent(coverPath)
