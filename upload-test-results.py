@@ -19,7 +19,7 @@ def getCoverage (dir, coveragePattern):
 
 def findAllCoverage (coveragePattern):
     res = []
-    for root, dirs, files in os.walk("."):
+    for root, dirs, files in os.walk("/home/vsts/work/_temp/"):
         for file in files:                    
             if file.find(coveragePattern) != -1:
                 res.append(os.path.join(root, file))
