@@ -37,7 +37,7 @@
     <AssemblyVersion>0.0.$([System.DateTime]::UtcNow.ToString("MMdd")).$([System.DateTime]::UtcNow.ToString("HHmm"))</AssemblyVersion>   
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup>
     <DocumentationFile>TestsHub.Api.xml</DocumentationFile>
   </PropertyGroup>
   
