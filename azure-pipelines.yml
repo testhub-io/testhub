@@ -32,6 +32,7 @@ stages:
         command: 'test'
         arguments: '--logger "junit;LogFilePath=TestResults/th-test-results.xml" --filter  TestCategory!=Integration --collect:"XPlat Code Coverage" --results-directory TestResults'  
         projects: 'TestsHub.sln'
+        workingDirectory: '$(Build.SourcesDirectory)'
 
     - task: PublishTestResults@2
       inputs:
