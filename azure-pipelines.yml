@@ -57,7 +57,7 @@ stages:
       inputs:
         scriptSource: 'filePath'
         scriptPath: 'upload-test-results.py'
-        arguments: '--file th-test-results.xml --org test-hub --project testhub-api --build $(Build.BuildNumber)'
+        arguments: '--file th-test-results.xml --org test-hub --project testhub-api --build $(Build.BuildNumber) --coverage coverage.cobertura.xml'
 
     - task: Docker@2
       displayName: Build and push an image to container registry
