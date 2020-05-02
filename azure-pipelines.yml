@@ -15,8 +15,7 @@ variables:
   tag: '$(Build.BuildId)'
   
   # Agent VM image name
-  # vmImageName: 'ubuntu-latest'
-  vmImageName: 'windows-latest'
+  vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Build
@@ -45,7 +44,7 @@ stages:
         versionSpec: '3.x'
         addToPath: true
         architecture: 'x64'
-    - task: PowerShell@2
+    - task: Bash@3
       inputs:
         targetType: 'inline'
         script: |
@@ -60,10 +59,6 @@ stages:
         scriptPath: 'upload-test-results.py'
         arguments: '--file th-test-results.xml --org test-hub --project testhub-api --build $(Build.BuildNumber)'
 
-    - task: PowerShell@2
-      inputs:
-        filePath: 'switch-docker.ps1'
-          
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
@@ -75,8 +70,6 @@ stages:
         tags: |
           $(tag)
           latest
-
-      
 
     - task: AzureRmWebAppDeployment@4
       inputs:
