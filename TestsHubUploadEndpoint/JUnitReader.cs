@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint
@@ -14,6 +16,8 @@ namespace TestsHubUploadEndpoint
     {
         IDataLoader _dataLoader;
         public IVisitor Visitor { get; set; }
+
+
 
         public JUnitReader(IDataLoader dataLoader)
         {
@@ -33,62 +37,18 @@ namespace TestsHubUploadEndpoint
             using (var reader = XmlReader.Create(stream, settings))
             {
                 TestSuite testSuite = null;
-                while (await reader.ReadAsync())
+                while (reader.Read())
                 {
                     switch (reader.NodeType)
                     {
                         case XmlNodeType.Element:
+                          
                             if (string.Equals(reader.Name, "testcase", StringComparison.OrdinalIgnoreCase))
                             {
-                                var testCase = new TestCase
-                                {
-                                    TestSuite = testSuite
-                                };
+                                var subTree = reader.ReadSubtree();
 
-                                if (reader.HasAttributes)
-                                {
-                                    while (reader.MoveToNextAttribute())
-                                    {
-                                        switch (reader.Name)
-                                        {
-                                            case "name":
-                                                testCase.Name = reader.Value;
-                                                break;
-
-                                            case "classname":
-                                                testCase.ClassName = reader.Value;
-                                                break;
-
-                                            case "status":
-                                                // ignore status, it's optional in schema
-                                                testCase.Status = TestStatus.Passed;
-                                                break;
-
-                                            case "time":
-                                                testCase.Time = ParseFloatWithDefault(reader.Value);
-
-                                                break;
-
-                                        }
-                                    }
-
-                                    // Move the reader back to the element node.
-                                    reader.MoveToElement();
-
-                                    if (!ReadTestCaseErrorContent("failure", reader, testCase)
-                                           && !ReadTestCaseErrorContent("error", reader, testCase)
-                                           && !ReadTestCaseErrorContent("system-err", reader, testCase)
-                                           && reader.ReadToDescendant("skipped"))
-                                    {
-                                        testCase.Status = TestStatus.Skipped;
-                                    }
-                                    else if (reader.ReadToDescendant("system-out"))
-                                    {
-                                        testCase.Status = TestStatus.Passed;
-                                        testCase.TestOutput = reader.ReadContentAsString();
-                                    }
-                                }
-
+                                var testCase = ReadTestCase(subTree);
+                                testCase.TestSuite = testSuite;
 
                                 Visitor?.TestCaseAdded(testCase);
                                 testCases.Add(testCase);
@@ -133,6 +93,7 @@ namespace TestsHubUploadEndpoint
                                     reader.MoveToElement();
                                 }
                             }
+                            
                             break;
 
                         case XmlNodeType.Text:
@@ -160,6 +121,45 @@ namespace TestsHubUploadEndpoint
 
         }
 
+        private TestCase ReadTestCase(XmlReader subTree)
+        {
+            if (subTree.Read())
+            {
+                var testCase = new TestCase();
+                var el = XNode.ReadFrom(subTree) as XElement;
+
+                testCase.Name = el.Attribute("name").Value;
+                testCase.ClassName = el.Attribute("classname")?.Value;
+                testCase.Time = ParseFloatWithDefault(el.Attribute("time")?.Value);
+
+
+                var firstElement = el.Elements().FirstOrDefault();
+                if (firstElement != null)
+                {
+                    if (firstElement.Name == "error" || firstElement.Name == "system-err")
+                    {
+                        testCase.Status = TestStatus.Failed;
+                        testCase.TestOutput = firstElement.Value;
+                    }
+                    else if (firstElement.Name == "skipped")
+                    {
+                        testCase.Status = TestStatus.Skipped;
+                    }
+                    else if (firstElement.Name == "system-out")
+                    {
+                        testCase.Status = TestStatus.Passed;
+                        testCase.TestOutput = firstElement.Value;
+                    }
+
+                }
+                return testCase;
+            }
+            else
+            {
+                throw new ReportReaderException("Malformed test case element");
+            }                                  
+        }
+
         private static decimal ParseFloatWithDefault(string value)
         {
             if (decimal.TryParse(value, System.Globalization.NumberStyles.Float,
@@ -175,23 +175,6 @@ namespace TestsHubUploadEndpoint
             {
                 return 0;
             }
-        }
-
-        bool ReadTestCaseErrorContent(string elementName, XmlReader reader, TestCase testCase)
-        {
-            if (reader.ReadToDescendant(elementName))
-            {
-                testCase.Status = "failed";
-                var errorText = new StringBuilder();
-                do
-                {
-                    errorText.AppendLine(reader.ReadElementContentAsString());
-
-                } while (reader.ReadToNextSibling(elementName));
-                testCase.TestOutput = errorText.ToString();
-                return true;
-            }
-            return false;
         }
     }
 }

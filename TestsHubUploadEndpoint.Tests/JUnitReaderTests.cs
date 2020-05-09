@@ -91,13 +91,13 @@ namespace Tests
                     .TestOutput;
 
             testCasesReported.ShouldSatisfyAllConditions(
-                () => testCasesReported.Count.ShouldBe(7),
+                () => testCasesReported.Count.ShouldBe(3),
                 () => testCasesReported
                     .Count(t => t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
                     .ShouldBe(1),
                 () => testCasesReported
-                    .Count(t => t.Status.Equals("skipped", System.StringComparison.OrdinalIgnoreCase))
-                    .ShouldBe(1)
+                    .Count(t => t.Status.Equals("passed", System.StringComparison.OrdinalIgnoreCase))
+                    .ShouldBe(2)
                 );
         }
     }
