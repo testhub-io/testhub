@@ -14,11 +14,12 @@ namespace TestHub.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true, maxLength: 256)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Organisations", x => x.Id);
+                    table.UniqueConstraint("UX_Org_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,7 +46,7 @@ namespace TestHub.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false, maxLength: 256),
                     OrganisationId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -57,6 +58,8 @@ namespace TestHub.Data.Migrations
                         principalTable: "Organisations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    
+                    table.UniqueConstraint("UX_Project_Unique_Index", x => new { x.OrganisationId, x.Name });
                 });
 
             migrationBuilder.CreateTable(
@@ -65,7 +68,7 @@ namespace TestHub.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    TestRunName = table.Column<string>(nullable: false),
+                    TestRunName = table.Column<string>(nullable: false, maxLength: 256),
                     ProjectId = table.Column<int>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: false),
                     Time = table.Column<decimal>(nullable: false),
@@ -83,6 +86,7 @@ namespace TestHub.Data.Migrations
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.UniqueConstraint("UX_TestRun_Unique_Index", x => new { x.ProjectId , x.TestRunName });
                 });
 
             migrationBuilder.CreateTable(
@@ -136,7 +140,7 @@ namespace TestHub.Data.Migrations
                         column: x => x.TestSuiteId,
                         principalTable: "TestSuite",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Restrict);                    
                 });
 
             migrationBuilder.CreateIndex(
