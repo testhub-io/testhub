@@ -35,7 +35,7 @@ namespace TestHub.Api.Controllers
         }
 
         [HttpGet("{org}/coverage")]
-        public ActionResult<IEnumerable<Data.DataItem>> GetCoverage(string org, [FromQuery]int? page, [FromQuery]int? pageSize)
+        public ActionResult<IEnumerable<Data.CoverageDataItem>> GetCoverage(string org, [FromQuery]int? page, [FromQuery]int? pageSize)
         {
             // retrieve list from database/whereverand
             return Ok(DummyDataProvider.GetDummyCoverage());

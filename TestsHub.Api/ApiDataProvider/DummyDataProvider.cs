@@ -9,14 +9,14 @@ namespace TestHub.Api.ApiDataProvider
 {
     public class DummyDataProvider
     {
-        public static IEnumerable<DataItem> GetDummyCoverage()
+        public static IEnumerable<CoverageDataItem> GetDummyCoverage()
         {
-            var items = new List<Data.DataItem>();
+            var items = new List<Data.CoverageDataItem>();
 
             var r = new Random();
             for (var i = 0; i < 50; i++)
             {
-                items.Add(new Data.DataItem() { DateTime = DateTime.Now.AddDays((50 - i) * (-1)), Coverage = Convert.ToDecimal(r.Next(30, 45 + i) / 100M ) });
+                items.Add(new Data.CoverageDataItem() { DateTime = DateTime.Now.AddDays((50 - i) * (-1)), Coverage = Convert.ToDecimal(r.Next(30, 45 + i) / 100M ) });
             }
 
             return items;

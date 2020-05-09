@@ -30,19 +30,22 @@ namespace TestHub.Api.Controllers
         }
 
         /// <summary>
-        /// Not implemented 
+        /// Get historical test results series
         /// </summary>        
-        [HttpGet("testresults")]        
-        public ActionResult<string> GetTestResults()
+        [HttpGet("{project}/testresults")]        
+        public ActionResult<Data.TestResultsHistoricalData> GetTestResults(string org, string project)
         {
-            throw new NotImplementedException();
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            var testResultsSeries = repository.GetTestResultsForProject(project);
+
+            return Ok(testResultsSeries);
         }
 
         /// <summary>
         /// Dummy data. Not implemented.
         /// </summary>     
         [HttpGet("coverage")]   
-        public ActionResult<IEnumerable<Data.DataItem>> GetCoverage()
+        public ActionResult<IEnumerable<Data.CoverageDataItem>> GetCoverage()
         {
             return Ok(DummyDataProvider.GetDummyCoverage());
         }

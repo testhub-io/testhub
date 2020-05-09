@@ -6,10 +6,10 @@ namespace TestHub.Api.Data
 {
     public class CoverageHistoricalData
     {
-        public IEnumerable<DataItem> Items { get; set; }
+        public IEnumerable<CoverageDataItem> Items { get; set; }
     }
 
-    public class DataItem
+    public class CoverageDataItem
     {
         public DateTime DateTime { get; set; }
         public decimal Coverage { get; set; }

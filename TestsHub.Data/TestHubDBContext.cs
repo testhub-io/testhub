@@ -51,9 +51,6 @@ namespace TestHub.Data.DataModel
             return this.Database.GetDbConnection().Query<T>(sql, param);
         }
 
-
-
-
         public IQueryable<TestCase> OrganisationTestCases(string org)
         {
             return from t in this.TestCases

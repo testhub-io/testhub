@@ -93,15 +93,8 @@ namespace TestHub.Api.ApiDataProvider
 
         public Data.TestRun GetTestRun(string projectName, string testRunName)
         {
-            var project = _testHubDBContext.Projects
-                .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase)
-                && p.Organisation.Id == _organisation.Id);
-            
-            if (project == null)
-            {
-                throw new TesthubApiException("Project does not exist");
-            }
-          
+            var project = getProjectIntity(projectName);
+
             var testRun = _testHubDBContext.TestRuns
                 .FirstOrDefault(t => t.ProjectId == project.Id && t.TestRunName == testRunName);
 
@@ -123,14 +116,28 @@ namespace TestHub.Api.ApiDataProvider
             {
                 Name = testRun.TestRunName,
                 Uri = _urlBuilder.Action("Get", "TestRuns", new { org = Organisation, project = project.Name, testRun = testRun.TestRunName }),
-                 
+
                 Branch = testRun.Branch,
                 CommitId = testRun.CommitId,
                 Coverage = testRun.Coverage?.Percent,
                 Timestamp = testRun.Timestamp,
                 Time = testRun.Time,
                 TestCases = testCases
-            };          
+            };
+        }
+
+        private Project getProjectIntity(string projectName)
+        {
+            var project = _testHubDBContext.Projects
+                .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase)
+                && p.Organisation.Id == _organisation.Id);
+
+            if (project == null)
+            {
+                throw new TesthubApiException("Project does not exist");
+            }
+
+            return project;
         }
 
         private Dictionary<string, IEnumerable<Data.TestResult>> GetTestCaseHistory(TestHub.Data.DataModel.Project project, int testrunId)
@@ -324,6 +331,37 @@ namespace TestHub.Api.ApiDataProvider
         public ProjectSummary GetProjectSummary(string project)
         {
             throw new NotImplementedException();
+        }
+
+        public TestResultsHistoricalData GetTestResultsForProject(string projectName)
+        {
+            var project = getProjectIntity(projectName);
+            
+            var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"SELECT r.id,  r.TestRunName, r.Timestamp, tc.Status, COUNT(tc.Id) as count
+                                                              from TestRuns r
+                                                              left JOIN TestCases tc on tc.TestRunId = r.Id
+                                                              WHERE ProjectId = @projId
+                                                              GROUP by r.Id, tc.Status", 
+                                                              new { projId = project.Id });
+
+            var dataConverted = data.GroupBy(g => g.Id).Select(g => new TestResultsDataItem
+            {
+                DateTime = g.First().Timestamp,
+                Name = g.First().TestRunName,
+                Passed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Passed)?.Count ?? 0,
+                Failed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Failed)?.Count ?? 0,
+                Skipped = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Skipped)?.Count ?? 0
+            });
+
+            return new TestResultsHistoricalData
+            {
+                Data = dataConverted,
+                Uri = _urlBuilder.Action("Get", "GetTestResults", new
+                {
+                    org = _organisation.Name,
+                    project = project.Id
+                })
+            };
         }
     }
 
