@@ -35,17 +35,21 @@ stages:
         workingDirectory: '$(Build.SourcesDirectory)'
 
     - task: PublishTestResults@2
+      condition: succeededOrFailed()
       inputs:
         testResultsFormat: 'JUnit'
         testResultsFiles: '**/th-test-results.xml'
         mergeTestResults: true
 
     - task: UsePythonVersion@0
+      condition: succeededOrFailed()
       inputs:
         versionSpec: '3.x'
         addToPath: true
         architecture: 'x64'
+    
     - task: Bash@3
+      condition: succeededOrFailed()
       inputs:
         targetType: 'inline'
         script: |
@@ -55,6 +59,7 @@ stages:
     - task: PythonScript@0
       displayName: Upload test results to testhub
       continueOnError: true
+      condition: succeededOrFailed()
       inputs:
         scriptSource: 'filePath'
         scriptPath: 'upload-test-results.py'
