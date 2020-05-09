@@ -6,17 +6,23 @@ namespace TestHub.Api.Tests
     public class UrlBulderTest
     {
 
-        [Test]
-        public void TestAction()
-        {
-            
-        }
+        //[Test]
+        //public void TestActionFailed()
+        //{
+        //    Assert.Fail();        
+        //}
 
-        [Test]
-        [Ignore("Just for test")] 
-        public void TestActionSkipped()
-        {
+        //[Test]
+        //public void TestActionPassed()
+        //{
+        //    Assert.Pass();
+        //}
 
-        }
+        //[Test]
+        //[Ignore("Just for test")] 
+        //public void TestActionSkipped()
+        //{
+
+        //}
     }
 }
