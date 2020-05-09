@@ -9,6 +9,14 @@ namespace TestHub.Api.Tests
         [Test]
         public void TestAction()
         {
+            Assert.Fail();
+        }
+
+        [Test]
+        [Ignore("Just for test")] 
+        public void TestActionSkipped()
+        {
+
         }
     }
 }
