@@ -72,14 +72,13 @@ namespace TestsHubUploadEndpoint
                                         }
                                     }
 
-
                                     // Move the reader back to the element node.
                                     reader.MoveToElement();
 
                                     if (!ReadTestCaseErrorContent("failure", reader, testCase)
-                                        && !ReadTestCaseErrorContent("error", reader, testCase)
-                                        && !ReadTestCaseErrorContent("system-err", reader, testCase)
-                                        && reader.ReadToDescendant("skipped"))
+                                           && !ReadTestCaseErrorContent("error", reader, testCase)
+                                           && !ReadTestCaseErrorContent("system-err", reader, testCase)
+                                           && reader.ReadToDescendant("skipped"))
                                     {
                                         testCase.Status = TestStatus.Skipped;
                                     }

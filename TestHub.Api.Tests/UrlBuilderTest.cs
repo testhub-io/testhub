@@ -7,7 +7,13 @@ namespace TestHub.Api.Tests
     {
 
         [Test]
-        public void TestAction()
+        public void TestActionFailed()
+        {
+            Assert.Fail();        
+        }
+
+        [Test]
+        public void TestActionPassed()
         {
             Assert.Fail();
         }

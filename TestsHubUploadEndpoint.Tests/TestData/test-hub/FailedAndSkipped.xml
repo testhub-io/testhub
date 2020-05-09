@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<testsuites time="0.041" tests="2" failures="1">
+  <testsuite id="0" name="TestHub.Api.Tests.dll" tests="2" failures="1" time="0.041">
+    <testcase classname="TestHub.Api.Tests.UrlBulderTest" name="TestAction" time="0.0403120">
+      <error>
+        at TestHub.Api.Tests.UrlBulderTest.TestAction() in D:\test-hub\testhub-api\TestHub.Api.Tests\UrlBuilderTest.cs:line 12
+      </error>
+    </testcase>
+    <testcase classname="TestHub.Api.Tests.UrlBulderTest" name="TestActionSkipped" time="0.0003310" />
+  </testsuite>
+</testsuites>

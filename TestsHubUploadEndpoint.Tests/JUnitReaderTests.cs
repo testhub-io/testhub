@@ -12,20 +12,15 @@ namespace Tests
 {
     public class JUnitReaderTests
     {
-
+        JUnitReader _reader;
+        List<TestCase> testCasesReported;
 
         [SetUp]
         public void Setup()
         {
-        }
-
-        [Test]
-        public void Test_Read()
-        {
-            // Arrange 
             var dataLoaderMock = new Mock<IDataLoader>();
             var testRunReported = new TestRun();
-            var testCasesReported = new List<TestCase>();
+            testCasesReported = new List<TestCase>();
             dataLoaderMock.Setup(s => s.Add(It.IsAny<TestRun>(), It.IsAny<IEnumerable<TestCase>>()))
                 .Callback<TestRun, IEnumerable<TestCase>>((t, c) =>
                 {
@@ -34,12 +29,17 @@ namespace Tests
                 });
 
 
-            var reader = new JUnitReader(dataLoaderMock.Object);
+            _reader = new JUnitReader(dataLoaderMock.Object);
+        }
 
+        [Test]
+        public void Test_Read()
+        {
+            // Arrange             
             var xmlReader = TestData.GetFile("MinimalJUnit.xml");
 
             // Act 
-            Task.WaitAll(reader.Read(xmlReader, "tr1", "develop", ""));
+            Task.WaitAll(_reader.Read(xmlReader, "tr1", "develop", ""));
 
             // Assert
             testCasesReported.Count.ShouldBe(2);
@@ -56,23 +56,10 @@ namespace Tests
         public void Test_ReadFileWithFailure()
         {
             // Arrange 
-            var dataLoaderMock = new Mock<IDataLoader>();
-            var testRunReported = new TestRun();
-            var testCasesReported = new List<TestCase>();
-            dataLoaderMock.Setup(s => s.Add(It.IsAny<TestRun>(), It.IsAny<IEnumerable<TestCase>>()))
-                .Callback<TestRun, IEnumerable<TestCase>>((t, c) =>
-                {
-                    testRunReported = t;
-                    testCasesReported = c.ToList();
-                });
-
-
-            var reader = new JUnitReader(dataLoaderMock.Object);
-
             var xmlReader = TestData.GetFile("failure.xml");
 
             // Act 
-            Task.WaitAll(reader.Read(xmlReader, "tr1", "develop", ""));
+            Task.WaitAll(_reader.Read(xmlReader, "tr1", "develop", ""));
 
             // Assert
             var faileDetstOutput = testCasesReported
@@ -87,8 +74,31 @@ namespace Tests
                  () => faileDetstOutput.ShouldContain("error creating cluster"),
                  () => faileDetstOutput.ShouldContain("\nSecond string")
                 );
+        }
 
+        [Test]
+        public void Test_ReadFileWithFailureAndSkip()
+        {
+            // Arrange 
+            var xmlReader = TestData.GetFile("test-hub\\FailedAndSkipped.xml");
 
+            // Act 
+            Task.WaitAll(_reader.Read(xmlReader, "tr1", "develop", ""));
+
+            // Assert
+            var faileDetstOutput = testCasesReported
+                    .Single(t => t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
+                    .TestOutput;
+
+            testCasesReported.ShouldSatisfyAllConditions(
+                () => testCasesReported.Count.ShouldBe(7),
+                () => testCasesReported
+                    .Count(t => t.Status.Equals("failed", System.StringComparison.OrdinalIgnoreCase))
+                    .ShouldBe(1),
+                () => testCasesReported
+                    .Count(t => t.Status.Equals("skipped", System.StringComparison.OrdinalIgnoreCase))
+                    .ShouldBe(1)
+                );
         }
     }
 }
