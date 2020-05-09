@@ -80,7 +80,7 @@ namespace Tests
         public void Test_ReadFileWithFailureAndSkip()
         {
             // Arrange 
-            var xmlReader = TestData.GetFile("test-hub\\FailedAndSkipped.xml");
+            var xmlReader = TestData.GetFile("FailedAndSkipped.xml");
 
             // Act 
             Task.WaitAll(_reader.Read(xmlReader, "tr1", "develop", ""));
