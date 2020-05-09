@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using TestHub.Api.Controllers;
 using TestHub.Api.Data;
 using TestHub.Data.DataModel;
 
@@ -87,7 +88,7 @@ namespace TestHub.Api.ApiDataProvider
                 TestCountGrowth = previousTestRun.TestCasesCount - (t?.TestCasesCount ?? 0),
                 Time = previousTestRun.Time,
                 TimeStemp = previousTestRun.Timestamp,
-                Uri = _urlBuilder.Action("Get", "TestRuns", new { org = Organisation, project = project.Name, testRun = previousTestRun.TestRunName })
+                Uri = _urlBuilder.Action("Get", typeof(Controllers.TestRunsController), new { org = Organisation, project = project.Name, testRun = previousTestRun.TestRunName })
             };
         }
 
@@ -115,7 +116,7 @@ namespace TestHub.Api.ApiDataProvider
             return new Data.TestRun
             {
                 Name = testRun.TestRunName,
-                Uri = _urlBuilder.Action("Get", "TestRuns", new { org = Organisation, project = project.Name, testRun = testRun.TestRunName }),
+                Uri = _urlBuilder.Action("Get", typeof(Controllers.TestRunsController), new { org = Organisation, project = project.Name, testRun = testRun.TestRunName }),
 
                 Branch = testRun.Branch,
                 CommitId = testRun.CommitId,
@@ -191,9 +192,9 @@ namespace TestHub.Api.ApiDataProvider
                 return new Data.Organisation
                 {
                     Name = organisation.Name,
-                    Uri = _urlBuilder.Action("Get", "Organisation", new { org = Organisation }),
-                    Projects = _urlBuilder.Action("GetProjects", "Projects", new { org = Organisation }),
-                    Coverage = _urlBuilder.Action("GetCoverage", "Organisation", new { org = Organisation }),
+                    Uri = _urlBuilder.Action("Get", typeof(Controllers.OrganisationController), new { org = Organisation }),
+                    Projects = _urlBuilder.Action("GetProjects", typeof(Controllers.ProjectsController), new { org = Organisation }),
+                    Coverage = _urlBuilder.Action("GetCoverage", typeof(Controllers.OrganisationController), new { org = Organisation }),
 
                     Summary = new OrgSummary()
                     {
@@ -252,7 +253,7 @@ namespace TestHub.Api.ApiDataProvider
                            Name = projects[g.Key].Name,
                            TestRunsCount = projects[g.Key].TestRunsCount,
                            RecentTestRuntDate = g.First().Timestamp,
-                           Uri = _urlBuilder.Action("Get", "Projects", new { org = org.Name, project = projects[g.Key].Name }),
+                           Uri = _urlBuilder.Action("Get", typeof(Controllers.ProjectsController), new { org = org.Name, project = projects[g.Key].Name }),
                            LatestResults = new LatestResults()
                            {
                                TestResults = g.Select(t => (Data.TestResult)t.Status).ToArray()
@@ -336,13 +337,13 @@ namespace TestHub.Api.ApiDataProvider
         public TestResultsHistoricalData GetTestResultsForProject(string projectName)
         {
             var project = getProjectIntity(projectName);
-            
+
             var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"SELECT r.id,  r.TestRunName, r.Timestamp, tc.Status, COUNT(tc.Id) as count
                                                               from TestRuns r
                                                               left JOIN TestCases tc on tc.TestRunId = r.Id
                                                               WHERE ProjectId = @projId
                                                               GROUP by r.Id, tc.Status 
-                                                              ORDER BY r.Timestamp DESC", 
+                                                              ORDER BY r.Timestamp DESC",
                                                               new { projId = project.Id });
 
             var dataConverted = data.GroupBy(g => g.Id).Select(g => new TestResultsDataItem
@@ -357,13 +358,18 @@ namespace TestHub.Api.ApiDataProvider
             return new TestResultsHistoricalData
             {
                 Data = dataConverted,
-                Uri = _urlBuilder.Action("Get", "GetTestResults", new
-                {
-                    org = _organisation.Name,
-                    project = project.Id
-                })
+                Uri = _urlBuilder.Action(
+                    "GetTestResults",
+                    typeof(ProjectsController),
+                    new
+                    {
+                        org = _organisation.Name,
+                        project = project.Name
+                    })
             };
         }
+
+    
     }
 
 }

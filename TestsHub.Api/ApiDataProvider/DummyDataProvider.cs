@@ -31,7 +31,7 @@ namespace TestHub.Api.ApiDataProvider
                     TestResults = new [] { Data.TestResult.Failed, Data.TestResult.Failed, Data.TestResult.Passed, Data.TestResult.Passed  }},
                     RecentTestRuntDate = DateTime.Now.AddDays(-1),
                     TestQuantityGrowth = 5, TestRunFrequency = "Daily", TestRunsCount = 65, TestsCount = 120,
-                    Uri = urlBuilder.Action("Get", "Projects", new { org = org, project = "Project1" })
+                    Uri = urlBuilder.Action("Get", typeof(Controllers.ProjectsController), new { org = org, project = "Project1" })
                 },
 
                  new Data.ProjectSummary(){ Name = "Backend", Coverage = 15, CoverageGrowth = 1,
@@ -39,7 +39,7 @@ namespace TestHub.Api.ApiDataProvider
                     TestResults = new [] { Data.TestResult.Passed, Data.TestResult.Failed, Data.TestResult.Passed, Data.TestResult.Passed  }},
                     RecentTestRuntDate = DateTime.Now.AddDays(-5),
                     TestQuantityGrowth = 5, TestRunFrequency = "Daily", TestRunsCount = 65, TestsCount = 120,
-                    Uri = urlBuilder.Action("Get", "Projects", new { org = org, project = "Backend" })
+                    Uri = urlBuilder.Action("Get", typeof(Controllers.ProjectsController), new { org = org, project = "Backend" })
                 },
 
                  new Data.ProjectSummary(){ Name = "Data-processing",
@@ -48,7 +48,7 @@ namespace TestHub.Api.ApiDataProvider
                     TestResults = new [] { Data.TestResult.Passed, Data.TestResult.Skipped, Data.TestResult.Passed, Data.TestResult.Passed  }},
                     RecentTestRuntDate = DateTime.Now.AddDays(-10).AddHours(5),
                     TestQuantityGrowth = -5, TestRunFrequency = "Daily", TestRunsCount = 10, TestsCount = 15,
-                    Uri = urlBuilder.Action("Get", "Projects", new { org = org, project = "Data-processing" })
+                    Uri = urlBuilder.Action("Get", typeof(Controllers.ProjectsController), new { org = org, project = "Data-processing" })
                 }
 
             };
@@ -67,7 +67,7 @@ namespace TestHub.Api.ApiDataProvider
                 TestRunFrequency = "daily",
                 TestRunsCount = 10,
                 TestsCount = 150,
-                Uri = urlBuilder.Action("Get", "Projects", new { org = org, project = "Project1" })
+                Uri = urlBuilder.Action("Get", typeof(Controllers.ProjectsController), new { org = org, project = "Project1" })
 
             };
         }

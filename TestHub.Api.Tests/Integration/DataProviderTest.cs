@@ -72,6 +72,7 @@ namespace TestHub.Api.Tests.Integration
             Assert.AreEqual(18476, results.Data.First().Passed  );
             Assert.AreEqual(3, results.Data.First().Failed);
             Assert.AreEqual(0, results.Data.First().Skipped);
+            Assert.NotNull(results.Uri);
 
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
         }             

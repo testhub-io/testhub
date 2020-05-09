@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace TestHub.Api.ApiDataProvider
 {
@@ -11,10 +12,10 @@ namespace TestHub.Api.ApiDataProvider
             _url = url;
         }
 
-        public string Action(string action, string controller, object values)
+        public string Action(string action, System.Type controller, object values)
         {
-            // TODO: add verification for action and controller
-            return _url.Action(action, controller, values);
+            // TODO: add verification for action
+            return _url.Action(action, controller.Name.Replace("Controller", "", StringComparison.Ordinal), values);
         }
     }
 }
