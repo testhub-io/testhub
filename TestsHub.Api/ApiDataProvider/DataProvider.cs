@@ -341,7 +341,8 @@ namespace TestHub.Api.ApiDataProvider
                                                               from TestRuns r
                                                               left JOIN TestCases tc on tc.TestRunId = r.Id
                                                               WHERE ProjectId = @projId
-                                                              GROUP by r.Id, tc.Status", 
+                                                              GROUP by r.Id, tc.Status 
+                                                              ORDER BY r.Timestamp DESC", 
                                                               new { projId = project.Id });
 
             var dataConverted = data.GroupBy(g => g.Id).Select(g => new TestResultsDataItem
