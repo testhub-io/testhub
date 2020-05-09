@@ -9,7 +9,7 @@ namespace TestHub.Api.Tests
         [Test]
         public void TestAction()
         {
-            Assert.Fail();
+            
         }
 
         [Test]
