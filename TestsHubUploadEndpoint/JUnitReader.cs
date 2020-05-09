@@ -136,10 +136,11 @@ namespace TestsHubUploadEndpoint
                 var firstElement = el.Elements().FirstOrDefault();
                 if (firstElement != null)
                 {
-                    if (firstElement.Name == "error" || firstElement.Name == "system-err")
+                    if (firstElement.Name == "error" || 
+                        firstElement.Name == "system-err" ||
+                        firstElement.Name == "failure")
                     {
-                        testCase.Status = TestStatus.Failed;
-                        testCase.TestOutput = firstElement.Value;
+                        testCase.Status = TestStatus.Failed;                        
                     }
                     else if (firstElement.Name == "skipped")
                     {
@@ -147,10 +148,9 @@ namespace TestsHubUploadEndpoint
                     }
                     else if (firstElement.Name == "system-out")
                     {
-                        testCase.Status = TestStatus.Passed;
-                        testCase.TestOutput = firstElement.Value;
+                        testCase.Status = TestStatus.Passed;                        
                     }
-
+                    testCase.TestOutput = string.Join('\n', el.Elements().Select(e => e.Value));
                 }
                 return testCase;
             }
