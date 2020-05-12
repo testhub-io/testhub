@@ -356,3 +356,7 @@ mySql/database
 
 
 /TestsHub/TestsHubUploadEndpoint.Tests/TestData/Google
+.idea/misc.xml
+.idea/modules.xml
+.idea/testhub-api.iml
+.idea/vcs.xml
