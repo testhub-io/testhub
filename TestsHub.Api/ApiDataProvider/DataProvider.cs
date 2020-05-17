@@ -89,41 +89,60 @@ namespace TestHub.Api.ApiDataProvider
                 Time = previousTestRun.Time,
                 TimeStemp = previousTestRun.Timestamp,
                 Uri = _urlBuilder.Action("Get", typeof(Controllers.TestRunsController), new { org = Organisation, project = project.Name, testRun = previousTestRun.TestRunName })
+            };        
+        }
+
+        public TestRunTests GetTests(string projectName, string testRunName)
+        {
+            var testRun = (from tr in _testHubDBContext.TestRuns
+                           join p in _testHubDBContext.Projects on tr.ProjectId equals p.Id
+                           where p.Name == projectName && tr.TestRunName == testRunName
+                           select new { tr.Id, ProjectId = p.Id, tr.Branch }).FirstOrDefault();
+
+            if (testRun == null)
+            {
+                throw new TesthubApiException("Test run does not exist");
+            }
+
+            var history = GetTestCaseHistory(testRun.ProjectId, testRun.Id, testRun.Branch);
+
+            var testCases = _testHubDBContext.TestCases.Where(t => t.TestRunId == testRun.Id)
+              .Select(s => new Data.TestCase
+              {
+                  ClassName = s.ClassName,
+                  File = s.File,
+                  Name = s.Name,
+                  Status = (Data.TestResult)s.Status,
+                  SystemOut = s.TestOutput,
+                  Time = s.Time,
+                  RecentResults = history.ContainsKey(s.Name) ? history[s.Name] : null
+              });
+
+            return new TestRunTests
+            {
+                Tests = testCases,
+                Uri = _urlBuilder.Action("GetTests", typeof(TestRunsController), new { org = Organisation, project = projectName, testRun = testRunName })
             };
         }
 
-        public Data.TestRun GetTestRun(string projectName, string testRunName)
+        public Data.TestRun GetTestRunSummary(string projectName, string testRunName)
         {
             var project = getProjectIntity(projectName);
 
             var testRun = _testHubDBContext.TestRuns
                 .FirstOrDefault(t => t.ProjectId == project.Id && t.TestRunName == testRunName);
-
-            var history = GetTestCaseHistory(project, testRun.Id);
-
-            var testCases = _testHubDBContext.TestCases.Where(t => t.TestRunId == testRun.Id)
-                .Select(s => new Data.TestCase
-                {
-                    ClassName = s.ClassName,
-                    File = s.File,
-                    Name = s.Name,
-                    Status = (Data.TestResult)s.Status,
-                    SystemOut = s.TestOutput,
-                    Time = s.Time,
-                    RecentResults = history.ContainsKey(s.Name) ? history[s.Name] : null
-                });
+                      
 
             return new Data.TestRun
             {
                 Name = testRun.TestRunName,
-                Uri = _urlBuilder.Action("Get", typeof(Controllers.TestRunsController), new { org = Organisation, project = project.Name, testRun = testRun.TestRunName }),
+                Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = project.Name, testRun = testRun.TestRunName }),
 
                 Branch = testRun.Branch,
                 CommitId = testRun.CommitId,
                 Coverage = testRun.Coverage?.Percent,
                 Timestamp = testRun.Timestamp,
-                Time = testRun.Time,
-                TestCases = testCases
+                Time = testRun.Time                
             };
         }
 
@@ -141,18 +160,23 @@ namespace TestHub.Api.ApiDataProvider
             return project;
         }
 
-        private Dictionary<string, IEnumerable<Data.TestResult>> GetTestCaseHistory(TestHub.Data.DataModel.Project project, int testrunId)
+        private Dictionary<string, IEnumerable<Data.TestResultItem>> GetTestCaseHistory(int projectId, int testrunId, string branch)
         {
-            var recentTrs = _testHubDBContext.TestRuns.Where(
-                    t => t.ProjectId == project.Id && t.Id < testrunId).OrderBy(t => t.Timestamp).Take(5).Select(t => t.Id).ToList();
+            var recentTrs = from tr in _testHubDBContext.TestRuns
+                            join t in _testHubDBContext.TestCases on tr.Id equals t.TestRunId
+                            where tr.ProjectId == projectId && tr.Id < testrunId && tr.Branch == branch
+                            select new { t.Name, t.Status, tr.Timestamp, tr.TestRunName };
+            
+            var res = recentTrs.Take(5).AsEnumerable().GroupBy(
+                    p => p.TestRunName,                    
+                    (key, g) => new { Id = key, Results = g })
+                .ToDictionary(s => s.Id, s=> s.Results.Select(rs=> new TestResultItem {
+                 Status = (Data.TestResult)rs.Status, 
+                 TestRunName = rs.TestRunName,
+                 Timestemp = rs.Timestamp
+                }));
 
-            var history = _testHubDBContext.TestCases.Where(c => recentTrs.Contains(c.TestRunId))
-                .GroupBy(c => c.Name,
-                 pair => pair,
-                 (k, c) => new { Key = k, Statuses = c.Select(c2 => (Data.TestResult)c2.Status) })
-                .ToDictionary(g => g.Key, v => v.Statuses);
-
-            return history;
+            return res;
         }
 
         public Data.Organisation GetOrgSummary()

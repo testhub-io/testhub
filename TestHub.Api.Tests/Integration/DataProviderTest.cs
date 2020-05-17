@@ -48,34 +48,53 @@ namespace TestHub.Api.Tests.Integration
         {
             var dataProvider = new DataProvider(_db, org, new UrlBuilder(Mock.Of<IUrlHelper>()));
             var results = dataProvider.GetTestRuns("dotNet");
-            Assert.AreEqual(11, results.Count());
+            Assert.AreEqual(2, results.Count());
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
         }
 
 
         [Test]
-        public void GetTestRun()
+        public void GetTestRunSummary()
         {        
             var dataProvider = new DataProvider(_db, org, new UrlBuilder(Mock.Of<IUrlHelper>()));
-            var results = dataProvider.GetTestRun("testhub-api", "local_run");
-            Assert.AreEqual(11, results.TestCases.Count());
-            Assert.AreEqual(11, results.TestCasesCount);
+            var results = dataProvider.GetTestRunSummary("TestDataUpload-Regular", "22");            
+            Assert.AreEqual(1907, results.TestCasesCount);            
+
+            System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
+        }
+
+        [Test]
+        public void GetTests()
+        {
+            var dataProvider = new DataProvider(_db, org, new UrlBuilder(Mock.Of<IUrlHelper>()));
+            var results = dataProvider.GetTests("TestDataUpload-Regular", "22");
+            Assert.AreEqual(1907, results.Tests.Count());            
+            Assert.AreEqual(5, results.Tests.First().RecentResults.Count());
+
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
         }
 
         [Test]
         public void GetTestResults()
         {
-            var dataProvider = new DataProvider(_db, org, new UrlBuilder(Mock.Of<IUrlHelper>()));
+            var urlBuilder = getUrlBuilder();
+
+            var dataProvider = new DataProvider(_db, org, urlBuilder);
             var results = dataProvider.GetTestResultsForProject("TestDataUpload-HugeReport");
             Assert.AreEqual(2, results.Data.Count());
-            Assert.AreEqual(18476, results.Data.First().Passed  );
+            Assert.AreEqual(18476, results.Data.First().Passed);
             Assert.AreEqual(3, results.Data.First().Failed);
             Assert.AreEqual(0, results.Data.First().Skipped);
-            Assert.NotNull(results.Uri);
+            //Assert.NotNull(results.Uri);
 
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
-        }             
+        }
 
+        private static UrlBuilder getUrlBuilder()
+        {
+            var url = new Mock<IUrlHelper>();
+            var urlBuilder = new UrlBuilder(url.Object);
+            return urlBuilder;
+        }
     }
 }

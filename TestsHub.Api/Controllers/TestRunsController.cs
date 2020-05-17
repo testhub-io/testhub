@@ -32,7 +32,20 @@ namespace TestHub.Api.Controllers
                 return BadRequest();
             }
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var testRunEntity = dataProvider.GetTestRun(project, testRun);
+            var testRunEntity = dataProvider.GetTestRunSummary(project, testRun);
+
+            return FormateResult(testRunEntity, $"{org}/{project}/{testRun}");
+        }
+
+        [HttpGet("{testrun}/tests")]        
+        public ActionResult<Data.TestRun> GetTests(string org, string project, string testRun)
+        {
+            if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
+            {
+                return BadRequest();
+            }
+            var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            var testRunEntity = dataProvider.GetTests(project, testRun);
 
             return FormateResult(testRunEntity, $"{org}/{project}/{testRun}");
         }

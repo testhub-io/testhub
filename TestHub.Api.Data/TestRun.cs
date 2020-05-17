@@ -23,6 +23,6 @@ namespace TestHub.Api.Data
 
         public decimal Time { get; set; }
 
-        public IEnumerable<TestCase> TestCases { get; set; }
+        
     }
 }

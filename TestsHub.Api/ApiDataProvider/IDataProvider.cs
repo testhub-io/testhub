@@ -9,7 +9,7 @@ namespace TestHub.Api.ApiDataProvider
     {
         string Organisation { get; }
         
-        Data.TestRun GetTestRun(string project, string testRunId);
+        Data.TestRun GetTestRunSummary(string project, string testRunId);
                         
         Data.Organisation GetOrgSummary();
 
@@ -22,5 +22,7 @@ namespace TestHub.Api.ApiDataProvider
         IEnumerable<TestRunSummary> GetTestRuns(string projectName);
         
         TestResultsHistoricalData GetTestResultsForProject(string project);
+
+        TestRunTests GetTests(string projectName, string testRunName);
     }
 }

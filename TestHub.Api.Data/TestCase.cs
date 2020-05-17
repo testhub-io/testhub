@@ -16,6 +16,6 @@ namespace TestHub.Api.Data
 
         public string File { get; set; }
 
-        public IEnumerable<TestResult> RecentResults { get; set; }
+        public IEnumerable<TestResultItem> RecentResults { get; set; }
     }
 }
