@@ -32,8 +32,7 @@ Vue.use(VueI18n)
 Vue.use(VueResource)
 Vue.use(VueRouter)
 
-Vue.http.options.root = '/api/v1'
-
+Vue.http.options.root = 'https://test-hub-api.azurewebsites.net/API/'
 let lang = window.Sitedata !== undefined ? window.SiteData.lang : 'en'
 const i18n = new VueI18n({
   locale: lang, // set locale
@@ -73,7 +72,6 @@ router.beforeEach((to, from, next) => {
  * Interceptors
  */
 var requests = []
-
 Vue.http.interceptors.push((request, next) => {
   request.headers.set('Accept', 'application/json')
   request.headers.set('Authorization', 'Bearer ' + authService.getToken())

@@ -9,7 +9,8 @@ const state = {
     photo_thumb: '',
     roles: {
       data: []
-    }
+    },
+    org: "test-hub"
   }
 }
 
