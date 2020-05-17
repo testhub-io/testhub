@@ -34,7 +34,7 @@ namespace TestHub.Api
                        builder.WithOrigins("http://testshub.com", "https://testshub.com",
                         "https://test-hub.io", "http://test-hub.io", "https://test-hub-frontend.azurewebsites.net",
                         // TODO: remove when on prod
-                        "http://localhost:8080/")
+                        "http://localhost:8080")
 
                            .AllowAnyHeader()
                            .AllowAnyMethod()));
