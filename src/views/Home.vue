@@ -118,7 +118,7 @@
                     </thead>
 
                     <tbody>
-                    <tr v-for="(project,index) in projects" :key="index">
+                    <tr v-for="(project,index) in projects" :key="index" @click.prevent="gotoRuns(project)">
                         <td>
                             <div class="mobile-label">Project Name</div>
                             <div class="val"><b>{{ project.name }}</b></div>
@@ -242,6 +242,9 @@
             },
             loadProjectsPage(page) {
                 return this.getOrgProjects(page)
+            },
+            gotoRuns(project) {
+                this.$router.push({ name: 'project-test-runs', params: { org: this.org.name, project: project.name } })
             },
             bootFailingProjectsChart() {
                 this.$nextTick(() => {

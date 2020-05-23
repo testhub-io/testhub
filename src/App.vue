@@ -3,7 +3,7 @@
     <header class="page-header">
       <div class="container">
         <div class="page-header__main-row">
-          <a href="#" class="page-header__logo"><img src="./assets/img/main_logo.png" alt=""></a>
+          <a @click.prevent="goHome()" class="page-header__logo"><img src="./assets/img/main_logo.png" alt=""></a>
 
           <div class="page-header__user-block">
             <a href="javascript:;" class="page-header__user-toggle">
@@ -98,6 +98,9 @@ export default {
     }
   },
   methods: {
+    goHome() {
+      this.$router.push({ name: 'dashboard' })
+    }
   },
   mounted () {
     document.title = this.meta.title

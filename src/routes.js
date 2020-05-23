@@ -1,5 +1,5 @@
 import Home from './views/Home.vue'
-import Project from './views/Project.vue'
+import ProjectRuns from './views/ProjectRuns.vue'
 import TestRun from './views/TestRun.vue'
 
 export const routes = [
@@ -18,9 +18,9 @@ export const routes = [
   },
 
   {
-    path: '/projects',
-    name: 'projects',
-    component: Project,
+    path: '/:org/projects/:project/runs',
+    name: 'project-test-runs',
+    component: ProjectRuns,
     meta: { requiresAuth: false }
   },
 
