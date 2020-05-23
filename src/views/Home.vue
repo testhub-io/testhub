@@ -118,45 +118,41 @@
                     </thead>
 
                     <tbody>
-                    <tr>
+                    <tr v-for="(project,index) in projects" :key="index">
                         <td>
                             <div class="mobile-label">Project Name</div>
-                            <div class="val"><b>Capsule</b></div>
+                            <div class="val"><b>{{ project.name }}</b></div>
                         </td>
 
                         <td>
                             <div class="mobile-label">Last results</div>
                             <div class="val">
                                 <div class="dashboard-block__results-cells">
-                                    <div class="result-cell good"></div>
-                                    <div class="result-cell bad"></div>
-                                    <div class="result-cell bad"></div>
-                                    <div class="result-cell good"></div>
-                                    <div class="result-cell good"></div>
+                                    <div v-for="(testResult, projectIndex) in project.latestResults.testResults" :key="projectIndex" :class="getTestResultStatus(testResult)"></div>
                                 </div>
                             </div>
                         </td>
 
                         <td>
                             <div class="mobile-label">Tests</div>
-                            <div class="val">52</div>
+                            <div class="val">{{ project.testsCount }}</div>
                         </td>
 
                         <td>
                             <div class="mobile-label">Coverage</div>
-                            <div class="val">70%</div>
+                            <div class="val">{{ project.coverage }}%</div>
                         </td>
 
                         <td>
                             <div class="mobile-label">Frequency</div>
-                            <div class="val">Every 1h</div>
+                            <div class="val">Every {{ project.testRunFrequency }}</div>
                         </td>
 
                         <td>
                             <div class="mobile-label">Tests qty growth</div>
                             <div class="val">
                                 <div class="dashboard-block__percent-num plus">
-                                    <span>+18%</span>
+                                    <span>{{ parseInt(project.testQuantityGrowth) >= 0 ? "+" : "-" }} {{ project.testQuantityGrowth }}%</span>
                                     <i class="icon-arrow"></i>
                                 </div>
                             </div>
@@ -166,7 +162,7 @@
                             <div class="mobile-label">Coverage growth</div>
                             <div class="val">
                                 <div class="dashboard-block__percent-num plus">
-                                    <span>+26%</span>
+                                    <span>{{ parseInt(project.coverageGrowth) >= 0 ? "+" : "-" }} {{ project.coverageGrowth }}%</span>
                                     <i class="icon-arrow"></i>
                                 </div>
                             </div>
@@ -177,23 +173,11 @@
                 </table>
             </div>
 
-            <div class="pagination-block">
-                <ul>
-                    <li class="arrow"><a href="#"><i class="icon-union"></i></a></li>
-                    <li class="arrow"><a href="#"><i class="icon-union-single"></i></a></li>
+            <Pagination
+                    :pagination="projectsPagination"
+                    :callback="loadProjectsPage"
+            />
 
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">6</a></li>
-                    <li><a href="#">7</a></li>
-
-                    <li class="arrow next"><a href="#"><i class="icon-union-single"></i></a></li>
-                    <li class="arrow next"><a href="#"><i class="icon-union"></i></a></li>
-                </ul>
-            </div>
         </div>
 
     </div>
@@ -201,11 +185,13 @@
 
 <script>
     import CoverageGrowthChart from '../components/CoverageGrowthChart'
+    import Pagination from '../components/Pagination'
 
     export default {
         name: "Dashboard",
         components: {
-            CoverageGrowthChart
+            CoverageGrowthChart,
+            Pagination
         },
         data() {
             return {
@@ -221,6 +207,16 @@
                         "projectsInRed": 0
                     },
                     "uri": ""
+                },
+                projects: [],
+                projectsPagination: {
+                    "itemsCount": 1,
+                    "pageSize": 10,
+                    "currentPage": 1,
+                    "totalPages": 1,
+                    "links": {
+                        "next": null
+                    }
                 }
             }
         },
@@ -232,6 +228,20 @@
                         self.org = response.data
                         this.bootFailingProjectsChart()
                     })
+            },
+            getOrgProjects(page = 1) {
+                var self = this
+                this.$http.get(this.user.org + "/projects/?page=" + page)
+                    .then((response) => {
+                        self.projects = response.data.data
+                        self.projectsPagination = response.data.meta.pagination
+                    })
+            },
+            getTestResultStatus(result) {
+                return result == 1 ? "result-cell good" : "result-cell bad"
+            },
+            loadProjectsPage(page) {
+                return this.getOrgProjects(page)
             },
             bootFailingProjectsChart() {
                 this.$nextTick(() => {
@@ -248,6 +258,7 @@
         },
         mounted() {
             this.getOrg()
+            this.getOrgProjects()
         },
         computed: {
             user() {
