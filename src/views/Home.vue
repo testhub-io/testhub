@@ -12,7 +12,7 @@
                         </div>
 
                         <div class="dashboard-block__number-item">
-                            <div class="dashboard-block__num">{{ this.org.summary.avgTestsCount }}</div>
+                            <div class="dashboard-block__num">{{ Math.floor(this.org.summary.avgTestsCount) }}</div>
                             <div class="dashboard-block__number-caption">Average tests count</div>
                         </div>
 
@@ -43,9 +43,10 @@
                     <div class="h5 mb-3">Failing projects</div>
 
                     <div class="dashboard-block__progress-pie">
-                        <div class="circle-block" id="failing_projects_pie" :data-value="this.projectsInGreenPercentile"></div>
+                        <div class="circle-block" id="failing_projects_pie"
+                             :data-value="this.projectsInGreenPercentile"></div>
                         <div class="center-caption">
-                            <div class="num">{{ this.projectsInGreenPercentile * 100 }}%</div>
+                            <div class="num">{{ this.projectsInGreenPercentile }}%</div>
                             <div class="caption">Success rate</div>
                         </div>
                     </div>
@@ -200,6 +201,7 @@
 
 <script>
     import CoverageGrowthChart from '../components/CoverageGrowthChart'
+
     export default {
         name: "Dashboard",
         components: {
@@ -228,6 +230,7 @@
                 this.$http.get(this.user.org)
                     .then((response) => {
                         self.org = response.data
+                        this.bootFailingProjectsChart()
                     })
             },
             bootFailingProjectsChart() {
@@ -245,7 +248,6 @@
         },
         mounted() {
             this.getOrg()
-            this.bootFailingProjectsChart()
         },
         computed: {
             user() {
@@ -253,10 +255,15 @@
             },
             projectsInGreenPercentile() {
                 var total = this.org.summary.projectsInGreen + this.org.summary.projectsInRed
-                if(total === 0 || this.org.summary.projectsInGreen === 0) {
+                // console.log("TOTAL", total)
+                // console.log("RED", this.org.summary.projectsInRed)
+                // console.log("GREEN", this.org.summary.projectsInGreen)
+                if (total === 0 || this.org.summary.projectsInGreen === 0) {
                     return 0
                 }
-                return (this.org.summary.projectsInGreen / total) * 100
+                var percentile = this.org.summary.projectsInGreen / total
+                console.log("percentile", percentile)
+                return Math.floor(percentile * 100)
             }
         }
     }

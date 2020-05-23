@@ -10,7 +10,7 @@ const state = {
     roles: {
       data: []
     },
-    org: "test-hub"
+    org: "test-org"
   }
 }
 

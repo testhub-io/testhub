@@ -100,7 +100,7 @@
                     for(var i=0; i<data.length; i++) {
                         var dateLabel = moment(data[i].dateTime).format("M-D")
                         self.chartData.labels.push(dateLabel)
-                        self.chartData.datasets[0].data.push(data[i].coverage)
+                        self.chartData.datasets[0].data.push(data[i].coverage * 100)
                     }
                     // self.chartOptions.scales.yAxes[0].ticks.max = Math.max(self.chartData.datasets[0].data)
                     self.renderChart(this.chartData, this.chartOptions)
