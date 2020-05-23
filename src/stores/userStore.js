@@ -2,11 +2,11 @@ var Cookies = require('cookies-js')
 const state = {
   authUser: Cookies.get('token'),
   user: {
-    first_name: '',
-    last_name: '',
-    email: '',
-    photo: '',
-    photo_thumb: '',
+    firstName: 'JAV',
+    lastName: '20',
+    email: 'jav20@gmail.com',
+    photo: '/img/user-img.e2fe36bd.png',
+    photo_thumb: '/img/user-img.e2fe36bd.png',
     roles: {
       data: []
     },

@@ -7,8 +7,8 @@
 
           <div class="page-header__user-block">
             <a href="javascript:;" class="page-header__user-toggle">
-              <span class="img-wrapper"><img src="./assets/img/user-img.png" alt=""></span>
-              <span class="name">Brian Kerney</span>
+              <span class="img-wrapper"><img :src="user.photo_thumb" alt=""></span>
+              <span class="name">{{ user.firstName + " " + user.lastName }}</span>
               <i class="icon-chevron"></i>
             </a>
           </div>
@@ -87,10 +87,13 @@ export default {
     }
   },
   computed: {
-    authenticated: function () {
+    authenticated () {
       return this.$store.getters.isAuthenticated
     },
-    meta: function () {
+    user() {
+      return this.$store.getters.currentUser
+    },
+    meta () {
       return this.$store.state.pageMetaStore
     }
   },
@@ -100,9 +103,9 @@ export default {
     document.title = this.meta.title
     document.description = this.meta.description
   },
-  created: function () {
+  created () {
   }
-};
+}
 </script>
 
 <style>
