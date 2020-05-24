@@ -162,18 +162,23 @@ namespace TestHub.Api.ApiDataProvider
 
         private Dictionary<string, IEnumerable<Data.TestResultItem>> GetTestCaseHistory(int projectId, int testrunId, string branch)
         {
-            var recentTrs = from tr in _testHubDBContext.TestRuns
-                            join t in _testHubDBContext.TestCases on tr.Id equals t.TestRunId
-                            where tr.ProjectId == projectId && tr.Id < testrunId && tr.Branch == branch
-                            select new { t.Name, t.Status, tr.Timestamp, tr.TestRunName };
+            var recentTrs = _testHubDBContext.TestRuns
+                .Where(tr => tr.ProjectId == projectId && tr.Id < testrunId && tr.Branch.Equals(branch, StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(tr=>tr.Id)
+                .Take(5)
+                .ToDictionary(t=>t.Id);
+
+
+            var recentTestCases = from t in _testHubDBContext.TestCases
+                            where recentTrs.Keys.Contains (t.TestRunId) 
+                            select new { t.Name, t.Status, recentTrs[t.TestRunId].TestRunName };
             
-            var res = recentTrs.Take(5).AsEnumerable().GroupBy(
-                    p => p.TestRunName,                    
+            var res = recentTestCases.AsEnumerable().GroupBy(
+                    p => p.Name,
                     (key, g) => new { Id = key, Results = g })
                 .ToDictionary(s => s.Id, s=> s.Results.Select(rs=> new TestResultItem {
                  Status = (Data.TestResult)rs.Status, 
-                 TestRunName = rs.TestRunName,
-                 Timestemp = rs.Timestamp
+                 TestRunName = rs.TestRunName
                 }));
 
             return res;
