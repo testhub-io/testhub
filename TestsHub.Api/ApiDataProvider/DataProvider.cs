@@ -130,6 +130,7 @@ namespace TestHub.Api.ApiDataProvider
             var project = getProjectIntity(projectName);
 
             var testRun = _testHubDBContext.TestRuns
+                .Include(c=>c.Coverage)
                 .FirstOrDefault(t => t.ProjectId == project.Id && t.TestRunName == testRunName);
                       
 
