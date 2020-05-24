@@ -143,7 +143,8 @@ namespace TestHub.Api.ApiDataProvider
                 CommitId = testRun.CommitId,
                 Coverage = testRun.Coverage?.Percent,
                 Timestamp = testRun.Timestamp,
-                Time = testRun.Time                
+                Time = testRun.Time,
+                TestCasesCount = testRun.TestCasesCount
             };
         }
 
