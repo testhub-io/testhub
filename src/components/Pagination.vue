@@ -128,7 +128,13 @@
         background-color: #B79268;
         border-color: #B79268;
     }
-
+    .pagination-block {
+        ul {
+            li {
+                width: 45px !important;
+            }
+        }
+    }
     .page-link, .page-link:focus {
         color: #B79268;
     }

@@ -2,8 +2,8 @@
   <div>
     <div class="breadcrumbs-block">
       <ul>
-        <li><a href="#">Wibbits</a></li>
-        <li><span>Capsule</span></li>
+        <li><a @click.prevent="$router.push({ name: 'dashboard' })" href="#">{{ this.user.org }}</a></li>
+        <li><span>{{ this.$route.params.project }}</span></li>
       </ul>
     </div>
 
@@ -105,10 +105,10 @@
           </thead>
 
           <tbody>
-            <tr v-for="test in testResults" :key="test.id">
+            <tr v-for="(test, index) in testResults" :key="index">
               <td>
                 <div class="mobile-label">Test run</div>
-                <div class="val"><b>#{{ test.build_number }}</b></div>
+                <div class="val"><b>#{{ test.name }}</b></div>
               </td>
 
               <td>
@@ -118,7 +118,7 @@
 
               <td>
                 <div class="mobile-label">Timestamp</div>
-                <div class="val">{{ test.created_at }}</div>
+                <div class="val">{{ getTestRunTime(test.timeStemp) }}</div>
               </td>
 
               <td>
@@ -126,14 +126,14 @@
                 <div class="val">
                   <div class="dashboard-block__legend-label-item">
                     <div class="item-color" :style="getTestResultStyle(test.result)"></div>
-                    <div class="item-caption">{{ test.result }}</div>
+                    <div class="item-caption">{{ getTestResult(test.result) }}</div>
                   </div>
                 </div>
               </td>
 
               <td>
                 <div class="mobile-label">Tests qty</div>
-                <div class="val">{{ test.qty }}</div>
+                <div class="val">{{ test.stats.totalCount }}</div>
               </td>
 
               <td>
@@ -143,7 +143,7 @@
 
               <td>
                 <div class="mobile-label">Time</div>
-                <div class="val">{{ test.duration }}</div>
+                <div class="val">{{ parseFloat(test.time).toFixed(2) }}</div>
               </td>
             </tr>
 
@@ -151,20 +151,11 @@
         </table>
       </div>
 
-      <div class="pagination-block">
-        <ul>
-          <li class="arrow"><a href="#"><i class="icon-union"></i></a></li>
-          <li class="arrow"><a href="#"><i class="icon-union-single"></i></a></li>
+      <Pagination
+              :pagination="testResultsPagination"
+              :callback="loadTestResultsPage"
+      />
 
-          <li class="active"><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-
-          <li class="arrow next"><a href="#"><i class="icon-union-single"></i></a></li>
-          <li class="arrow next"><a href="#"><i class="icon-union"></i></a></li>
-        </ul>
-      </div>
     </div>
 
   </div>
@@ -173,78 +164,76 @@
 <script>
 import ProjectCoverageChart from '../components/ProjectCoverageChart'
 import ProjectTestResultChart from '../components/ProjectTestResultChart'
+import Pagination from '../components/Pagination'
+import moment from "moment";
 export default {
   data: function() {
     return {
       testResults: [
-        {
-          id: 6,
-          branch: "master",
-          build_number: "2045634",
-          created_at: "1:58, 2 May 2020",
-          result: "Skipped",
-          qty: "159",
-          coverage: "82%",
-          duration: "0.2"
-        },
-        {
-          id: 5,
-          branch: "feature/test-result",
-          build_number: "2355634",
-          created_at: "12:08, 2 May 2020",
-          result: "Success",
-          qty: "159",
-          coverage: "80%",
-          duration: "0.2"
-        },
-        {
-          id: 4,
-          branch: "develop",
-          build_number: "2145674",
-          created_at: "11:48, 2 May 2020",
-          result: "Fail",
-          qty: "159",
-          coverage: "78%",
-          duration: "0.3"
-        },
-        {
-          id: 3,
-          branch: "feature/fix-code",
-          build_number: "2248634",
-          created_at: "10:45, 2 May 2020",
-          result: "Fail",
-          qty: "159",
-          coverage: "76%",
-          duration: "0.1"
-        },
-        {
-          id: 2,
-          branch: "feature/fix-tests",
-          build_number: "2645434",
-          created_at: "9:15, 2 May 2020",
-          result: "Fail",
-          qty: "159",
-          coverage: "72%",
-          duration: "0.4"
-        },
-      ]
+      ],
+      testResultsPagination: {
+        "itemsCount": 1,
+        "pageSize": 10,
+        "currentPage": 1,
+        "totalPages": 1,
+        "links": {
+          "next": null
+        }
+      }
     }
   },
   components: {
     ProjectCoverageChart,
-    ProjectTestResultChart
+    ProjectTestResultChart,
+    Pagination
+  },
+  computed: {
+    user() {
+      return this.$store.getters.currentUser
+    },
   },
   methods: {
+    loadTestRuns(page = 1) {
+      var self = this
+      this.$http.get(this.user.org + "/projects/" + this.$route.params.project + "/runs?page=" + page)
+              .then((response) => {
+                self.testResults = response.data.data
+                self.testResultsPagination = response.data.meta.pagination
+              })
+    },
+    loadTestResultsPage(page) {
+      this.loadTestRuns(page)
+      this.$scrollTo(".dashboard-block__chart-element", 500, {})
+    },
+    getTestRunTime(timestamp) {
+      return moment(timestamp).format("HH:mm, D MMM YYYY")
+    },
+    getTestResult(result) {
+      switch(result.toString()) {
+        case "-1":
+          result = "Skipped"
+          break;
+        case "1":
+          result = "Passed"
+          break;
+        case "0":
+          result = "Failed"
+          break;
+        default:
+          result = "Unknown"
+      }
+      return result
+    },
     getTestResultStyle(result) {
       var style = ""
-      switch(result) {
-        case "Skipped":
+      switch(result.toString()) {
+        case "-1":
           style = "background-color: #F98809;"
           break;
-        case "Success":
+        case "1":
           style = "background-color: #24A44C;"
           break;
-        case "Fail":
+        case "0":
           style = "background-color: #E63F34;"
           break;
         default:
@@ -254,7 +243,7 @@ export default {
     }
   },
   mounted() {
-
+    this.loadTestRuns()
   }
 }
 </script>

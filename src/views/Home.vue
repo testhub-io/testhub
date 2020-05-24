@@ -276,7 +276,7 @@
                     return 0
                 }
                 var percentile = this.org.summary.projectsInGreen / total
-                console.log("percentile", percentile)
+                // console.log("percentile", percentile)
                 return Math.floor(percentile * 100)
             }
         }

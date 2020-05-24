@@ -14,7 +14,7 @@ import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/css/main.css'
-
+var VueScrollTo = require('vue-scrollto')
 window.moment = require('moment-timezone')
 window.authService = authService
 window.$ = window.jQuery = require('jquery')
@@ -31,6 +31,20 @@ Vue.use(VueBus)
 Vue.use(VueI18n)
 Vue.use(VueResource)
 Vue.use(VueRouter)
+
+Vue.use(VueScrollTo, {
+  container: "body",
+  duration: 500,
+  easing: "ease",
+  offset: 0,
+  force: true,
+  cancelable: true,
+  onStart: false,
+  onDone: false,
+  onCancel: false,
+  x: false,
+  y: true
+})
 
 Vue.http.options.root = 'https://test-hub-api.azurewebsites.net/API/'
 let lang = window.Sitedata !== undefined ? window.SiteData.lang : 'en'
