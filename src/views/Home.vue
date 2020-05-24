@@ -241,7 +241,8 @@
                 return result == 1 ? "result-cell good" : "result-cell bad"
             },
             loadProjectsPage(page) {
-                return this.getOrgProjects(page)
+                this.getOrgProjects(page)
+                this.$scrollTo(".dashboard-block__table-wrapper", 500, {})
             },
             gotoRuns(project) {
                 this.$router.push({ name: 'project-test-runs', params: { org: this.org.name, project: project.name } })
