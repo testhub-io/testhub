@@ -238,7 +238,7 @@
                     })
             },
             getTestResultStatus(result) {
-                return result == 1 ? "result-cell good" : "result-cell bad"
+                return result === 1 ? "result-cell good" : "result-cell bad"
             },
             loadProjectsPage(page) {
                 this.getOrgProjects(page)
