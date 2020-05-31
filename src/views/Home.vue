@@ -286,3 +286,11 @@
         }
     }
 </script>
+
+<style lang="scss" >
+    .table {
+        tr {
+            cursor: pointer;
+        }
+    }
+</style>
