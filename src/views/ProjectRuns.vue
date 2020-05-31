@@ -195,7 +195,7 @@ export default {
   methods: {
     loadTestRuns(page = 1) {
       var self = this
-      this.$http.get(this.user.org + "/projects/" + this.$route.params.project + "/runs?page=" + page)
+      this.$http.get(this.$route.params.org + "/projects/" + this.$route.params.project + "/runs?page=" + page)
               .then((response) => {
                 self.testResults = response.data.data
                 self.testResultsPagination = response.data.meta.pagination

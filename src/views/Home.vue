@@ -223,7 +223,7 @@
         methods: {
             getOrg() {
                 var self = this
-                this.$http.get(this.user.org)
+                this.$http.get(this.userOrg)
                     .then((response) => {
                         self.org = response.data
                         this.bootFailingProjectsChart()
@@ -231,7 +231,7 @@
             },
             getOrgProjects(page = 1) {
                 var self = this
-                this.$http.get(this.user.org + "/projects/?page=" + page)
+                this.$http.get(this.userOrg + "/projects/?page=" + page)
                     .then((response) => {
                         self.projects = response.data.data
                         self.projectsPagination = response.data.meta.pagination
@@ -245,7 +245,7 @@
                 this.$scrollTo(".dashboard-block__table-wrapper", 500, {})
             },
             gotoRuns(project) {
-                this.$router.push({ name: 'project-test-runs', params: { org: this.org.name, project: project.name } })
+                this.$router.push({ name: 'project-test-runs', params: { org: this.userOrg, project: project.name } })
             },
             bootFailingProjectsChart() {
                 this.$nextTick(() => {
@@ -267,6 +267,9 @@
         computed: {
             user() {
                 return this.$store.getters.currentUser
+            },
+            userOrg() {
+                return this.$route.params.org ? this.$route.params.org : this.user.org
             },
             projectsInGreenPercentile() {
                 var total = this.org.summary.projectsInGreen + this.org.summary.projectsInRed
