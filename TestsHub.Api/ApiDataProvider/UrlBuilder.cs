@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
-using System.Reflection;
 
 namespace TestHub.Api.ApiDataProvider
 {
@@ -16,13 +15,12 @@ namespace TestHub.Api.ApiDataProvider
 
         public string Action(string action, Type controller, object values)
         {
-            var m = controller.GetMethods().FirstOrDefault(m => m.Name.Equals(action, StringComparison.OrdinalIgnoreCase));
-            if (m == null)
+            var method = controller.GetMethods().FirstOrDefault(m => m.Name.Equals(action, StringComparison.OrdinalIgnoreCase));
+            if (method == null)
             {
                 throw new InvalidOperationException();
             }
             
-
             // TODO: add verification for action
             return _url.Action(action, controller.Name.Replace("Controller", "", StringComparison.Ordinal), values);
         }

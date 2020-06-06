@@ -19,7 +19,7 @@ namespace TestHub.Api.Data
 
         public decimal? Coverage { get; set; }
 
-        public TestRunSummary Summary { get; set; }
+        public TestRunStats Summary { get; set; }
 
         public decimal Time { get; set; }
 

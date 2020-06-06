@@ -138,13 +138,19 @@ namespace TestHub.Api.ApiDataProvider
             {
                 Name = testRun.TestRunName,
                 Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = project.Name, testRun = testRun.TestRunName }),
-
                 Branch = testRun.Branch,
                 CommitId = testRun.CommitId,
                 Coverage = testRun.Coverage?.Percent,
                 Timestamp = testRun.Timestamp,
                 Time = testRun.Time,
-                TestCasesCount = testRun.TestCasesCount
+                TestCasesCount = testRun.TestCasesCount,
+                Summary = new TestRunStats
+                {
+                     // TODO: Optimize, could be done in one go 
+                     Failed = testRun.TestCases.Count(t=>t.Status == TestHub.Data.DataModel.TestResult.Failed),
+                     Passed = testRun.TestCases.Count(t => t.Status == TestHub.Data.DataModel.TestResult.Passed),
+                     Skipped  = testRun.TestCases.Count(t => t.Status == TestHub.Data.DataModel.TestResult.Skipped),
+                }                
             };
         }
 

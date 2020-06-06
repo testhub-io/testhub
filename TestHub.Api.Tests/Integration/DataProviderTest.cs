@@ -6,6 +6,7 @@ using TestHub.Api.ApiDataProvider;
 using TestHub.Data.DataModel;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
+using System;
 
 namespace TestHub.Api.Tests.Integration
 {
@@ -72,7 +73,7 @@ namespace TestHub.Api.Tests.Integration
             Assert.AreEqual(5, results.Tests.First().RecentResults.Count());
 
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
-        }
+        }        
 
         [Test]
         public void GetTestResults()
@@ -86,6 +87,29 @@ namespace TestHub.Api.Tests.Integration
             Assert.AreEqual(3, results.Data.First().Failed);
             Assert.AreEqual(0, results.Data.First().Skipped);
             //Assert.NotNull(results.Uri);
+
+            System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
+        }
+
+        [Test]
+        public void GetRunSummary()
+        {
+            var urlBuilder = getUrlBuilder();
+
+            var dataProvider = new DataProvider(_db, org, urlBuilder);
+            // Act 
+            var results = dataProvider.GetTestRunSummary("TestDataUpload-Regular", "22");            
+
+            // Assert
+            Assert.AreEqual(1907, results.TestCasesCount);
+            Assert.AreEqual(DateTime.Parse("2020-05-01 20:00:15.28127"), results.Timestamp);
+            Assert.IsTrue (Math.Abs(238m - results.Time) < 1 );
+            Assert.AreEqual(Data.TestResult.Failed, results.Status);
+            Assert.AreEqual("22", results.Name);
+            Assert.AreEqual(null, results.Coverage);
+            Assert.AreEqual(1907, results.Summary.Passed);
+            Assert.AreEqual(0, results.Summary.Failed);
+            //Assert.NotNull("", results.Uri);
 
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
         }

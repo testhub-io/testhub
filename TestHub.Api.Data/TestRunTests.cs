@@ -6,7 +6,6 @@ namespace TestHub.Api.Data
 {
     public class TestRunTests : DataObjectBase
     {
-        public IEnumerable<TestCase> Tests { get; set; }
-        
+        public IEnumerable<TestCase> Tests { get; set; }        
     }
 }
