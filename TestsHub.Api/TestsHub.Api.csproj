@@ -27,6 +27,16 @@
     <ProjectReference Include="..\TestsHubUploadEndpoint\TestsHubUploadEndpoint.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DummyData\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DummyData\cobertura-coverage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <PropertyGroup Condition=" '$(Version)' == '' ">
     <VersionPrefix Condition=" '$(VersionPrefix)' == '' ">1.0.0-dev</VersionPrefix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>

@@ -66,9 +66,14 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]  
-        public ActionResult<string> GetCoverage(string org, string project, string testRun)
+        public IActionResult GetCoverage(string org, string project, string testRun)
         {
-            throw new NotImplementedException();
+            var stream = DummyDataProvider.GetDummyTestRunCoverage();
+
+            if (stream == null)
+                return NotFound();
+
+            return File(stream, "application/xml"); 
         }
 
         // PUT api/values/5

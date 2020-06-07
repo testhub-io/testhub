@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TestHub.Api.Data;
@@ -70,6 +71,11 @@ namespace TestHub.Api.ApiDataProvider
                 Uri = urlBuilder.Action("Get", typeof(Controllers.ProjectsController), new { org = org, project = "Project1" })
 
             };
+        }
+
+        internal static Stream GetDummyTestRunCoverage()
+        {
+            return File.OpenRead("DummyData\\cobertura-coverage.xml");
         }
     }
 }
