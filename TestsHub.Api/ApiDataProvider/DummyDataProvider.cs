@@ -75,7 +75,9 @@ namespace TestHub.Api.ApiDataProvider
 
         internal static Stream GetDummyTestRunCoverage()
         {
-            return File.OpenRead("DummyData\\cobertura-coverage.xml");
+            var assembly = typeof(DummyDataProvider).Assembly;
+            Stream resource = assembly.GetManifestResourceStream("TestHub.Api.DummyData.cobertura-coverage.xml");
+            return resource;
         }
     }
 }
