@@ -41,13 +41,17 @@ namespace TestHub.Api.Controllers
             return Ok(testResultsSeries);
         }
 
+
         /// <summary>
-        /// Dummy data. Not implemented.
-        /// </summary>     
-        [HttpGet("coverage")]   
-        public ActionResult<IEnumerable<Data.CoverageDataItem>> GetCoverage()
+        /// Get historical coverage data for project
+        /// </summary>        
+        [HttpGet("{project}/coverage")]
+        public ActionResult<Data.CoverageHistoricalData> GetProjectCoverage(string org, string project)
         {
-            return Ok(DummyDataProvider.GetDummyCoverage());
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            var coverage = repository.GetCoverageHistory(project);
+
+            return Ok(coverage);
         }
 
         [HttpGet]

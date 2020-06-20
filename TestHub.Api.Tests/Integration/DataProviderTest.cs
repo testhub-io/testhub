@@ -21,9 +21,13 @@ namespace TestHub.Api.Tests.Integration
         {
             var conf = new Mock<IConfiguration>(MockBehavior.Strict);
             var confSection = new Mock<IConfigurationSection>(MockBehavior.Strict);
-            
+
             confSection.Setup(c => c["DefaultConnection"])
                 .Returns("Host=localhost;Database=testHub;Username=root;Password=test_pass");
+
+            // Amazon
+            //confSection.Setup(c => c["DefaultConnection"])
+            //    .Returns("Host=test-hub.chhksx9i82ny.us-east-2.rds.amazonaws.com;Database=testHub;Username=root;Password=test_pass");
             conf.Setup(c => c.GetSection("ConnectionStrings")).Returns(confSection.Object);
             _db = new TestHubDBContext(conf.Object);
         }
@@ -114,7 +118,21 @@ namespace TestHub.Api.Tests.Integration
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
         }
 
-        private static UrlBuilder getUrlBuilder()
+        [Test]
+        public void GetProjectCoverage()
+        {
+            var urlBuilder = getUrlBuilder();
+
+            var dataProvider = new DataProvider(_db, "test-hub", urlBuilder);
+            // Act 
+            var results = dataProvider.GetCoverageHistory("testhub-api");
+
+            // Assert
+            Assert.Greater(results.Items.Count(), 37);
+            Assert.AreEqual(3.716m, results.Items.First(c => c.TestRunName == "20200611.1").Coverage);
+        }
+
+            private static UrlBuilder getUrlBuilder()
         {
             var url = new Mock<IUrlHelper>();
             var urlBuilder = new UrlBuilder(url.Object);

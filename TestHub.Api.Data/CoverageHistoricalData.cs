@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TestHub.Api.Data
 {
-    public class CoverageHistoricalData
+    public class CoverageHistoricalData : DataObjectBase
     {
         public IEnumerable<CoverageDataItem> Items { get; set; }
     }
@@ -13,5 +13,9 @@ namespace TestHub.Api.Data
     {
         public DateTime DateTime { get; set; }
         public decimal Coverage { get; set; }
+
+        public string TestRunName { get; set; }
+
+        public string Uri { get; set; }
     }
 }

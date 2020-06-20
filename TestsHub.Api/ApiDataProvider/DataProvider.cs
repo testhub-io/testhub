@@ -88,7 +88,7 @@ namespace TestHub.Api.ApiDataProvider
                 TestCountGrowth = previousTestRun.TestCasesCount - (t?.TestCasesCount ?? 0),
                 Time = previousTestRun.Time,
                 TimeStemp = previousTestRun.Timestamp,
-                Uri = _urlBuilder.Action("Get", typeof(Controllers.TestRunsController), new { org = Organisation, project = project.Name, testRun = previousTestRun.TestRunName })
+                Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = project.Name, testRun = previousTestRun.TestRunName })
             };        
         }
 
@@ -162,7 +162,7 @@ namespace TestHub.Api.ApiDataProvider
 
             if (project == null)
             {
-                throw new TesthubApiException("Project does not exist");
+                throw new TesthubApiException($"Project {projectName} does not exist");
             }
 
             return project;
@@ -406,7 +406,37 @@ namespace TestHub.Api.ApiDataProvider
             };
         }
 
-    
+        public CoverageHistoricalData GetCoverageHistory(string projectName)
+        {
+            var project = getProjectIntity(projectName);
+
+            var coverage =  _testHubDBContext.Query<CoverageHistoricalItem>(@"select tr.TestRunName, tr.Timestamp, sum(c.LinesCovered)/sum(c.LinesValid)*100 as percent
+                      from  TestRuns tr
+                      left join Coverage c on c.TestRunId = tr.Id
+                    where tr.ProjectId = 1   
+                      group by tr.id
+                      order by tr.Timestamp desc", new { projectId = project.Id });
+
+            return new CoverageHistoricalData
+            {
+                Items = coverage.Select(c => new CoverageDataItem
+                {
+                    DateTime = c.Timestamp,
+                    Coverage = c.Percent,
+                    TestRunName = c.TestRunName,
+                    Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = project.Name, testRun = c.TestRunName })
+                }),
+                Uri = _urlBuilder.Action(
+                    "GetTestResults",
+                    typeof(ProjectsController),
+                    new
+                    {
+                        org = _organisation.Name,
+                        project = project.Name
+                    })
+            };
+        }
+
     }
 
 }
