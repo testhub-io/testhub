@@ -3,7 +3,6 @@ import glob
 import argparse
 import json
 from pathlib import Path
-from git import Repo
 
 
 import os
@@ -40,6 +39,7 @@ parser.add_argument("--coverage", "-c", help="Coverage file pattern")
 parser.add_argument("--org", "-o", help="Organisation")
 parser.add_argument("--project", "-p", help="Project name")
 parser.add_argument("--build", "-b", help="Build id")
+parser.add_argument("--branch", "-br", help="Branch name")
 
 
 args = parser.parse_args()
@@ -71,9 +71,8 @@ for root, dirs, files in os.walk("."):
                     toUpload["coverage"]= readFileContent(coverPath)
 
             # get branch name
-            repo = Repo(".")            
-            print("Branch name is {}", repo.active_branch.name)
-            toUpload["branch"] = repo.active_branch.name
+            print("Branch name is {}".format(args.branch))
+            toUpload["branch"] = args.branch
             
             response = requests.put(url,
                          files=toUpload,
