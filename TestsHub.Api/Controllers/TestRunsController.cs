@@ -50,6 +50,14 @@ namespace TestHub.Api.Controllers
             return FormateResult(testRunEntity, $"{org}/{project}/{testRun}");
         }
 
+        /// <summary>
+        /// Get list of test runs for a project. Paginated
+        /// </summary>
+        /// <param name="org"></param>
+        /// <param name="project"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<PaginatedList<Data.TestRunSummary>> GetTestRuns(string org, string project, [FromQuery]int? page, [FromQuery]int? pageSize)
         {            

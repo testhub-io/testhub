@@ -58,7 +58,7 @@ namespace TestHub.Api.ApiDataProvider
                 // we returning previous test run because we go descending and want to calc difference ! 
                 if (previousTestRun != null)
                 {
-                    yield return PrepareTestSummary(project, previousTestRun, currentCoverage, t, previousCoverage);                    
+                    yield return PrepareTestSummary(project, previousTestRun, previousCoverage, t, currentCoverage);                    
                 }
 
                 previousTestRun = t;
@@ -67,7 +67,7 @@ namespace TestHub.Api.ApiDataProvider
 
             if (previousTestRun != null)
             {
-                yield return PrepareTestSummary(project, null, 0, previousTestRun, 0);
+                yield return PrepareTestSummary(project, previousTestRun, 0, null, 0);
             }
         }
 
@@ -75,20 +75,20 @@ namespace TestHub.Api.ApiDataProvider
         {
             return new TestRunSummary()
             {
-                Name = previousTestRun.TestRunName,
-                Branch = previousTestRun.Branch,
+                Name = t.TestRunName,
+                Branch = t.Branch,
                 Coverage = currentCoverage,
-                Result = (Data.TestResult)previousTestRun.Status,
+                Result = (Data.TestResult)t.Status,
                 Stats = new TestRunStats()
                 {
-                    TotalCount = previousTestRun.TestCasesCount,
+                    TotalCount = t.TestCasesCount,
 
                 },
                 CoverageGrowth = currentCoverage - previousCoverage,
-                TestCountGrowth = previousTestRun.TestCasesCount - (t?.TestCasesCount ?? 0),
-                Time = previousTestRun.Time,
-                TimeStemp = previousTestRun.Timestamp,
-                Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = project.Name, testRun = previousTestRun.TestRunName })
+                TestCountGrowth = t.TestCasesCount - (previousTestRun?.TestCasesCount ?? 0),
+                Time = t.Time,
+                TimeStemp = t.Timestamp,
+                Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = project.Name, testRun = t.TestRunName })
             };        
         }
 
