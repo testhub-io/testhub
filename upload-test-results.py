@@ -56,8 +56,8 @@ for root, dirs, files in os.walk("."):
             print(root.split("/")[1])
             testRunId = root.split("/")[1]
                         
-            # url = "https://test-hub-api.azurewebsites.net/api/{}/projects/{}/runs/{}".format(args.org, args.project, args.build)
-            url = "https://localhost:44355/api/{}/projects/{}/runs/{}".format(args.org, args.project, args.build)
+            url = "https://test-hub-api.azurewebsites.net/api/{}/projects/{}/runs/{}".format(args.org, args.project, args.build)
+            # url = "https://localhost:44355/api/{}/projects/{}/runs/{}".format(args.org, args.project, args.build)
             print("Uploading to: " + url)
                                     
             toUpload = dict(file=readFileContent(os.path.join(root, file)))
