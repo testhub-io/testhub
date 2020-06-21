@@ -71,11 +71,11 @@ for root, dirs, files in os.walk("."):
                     toUpload["coverage"]= readFileContent(coverPath)
 
             # get branch name
-            print("Branch name is {}".format(args.branch))
-            toUpload["branch"] = args.branch
+            print("Branch name is {}".format(args.branch))             
             
             response = requests.put(url,
                          files=toUpload,
+                         data={'branch': args.branch },
                          verify=False)
                                     
             if response.status_code != 200:
