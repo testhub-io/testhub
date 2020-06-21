@@ -18,15 +18,15 @@ namespace TestHub.Api.Controllers
         }
 
         /// <summary>
-        /// Dummy data. Not implemented.
+        /// Get project summary
         /// </summary>    
         [HttpGet("{project}")]
         public ActionResult<string> Get(string org, string project)
         {
-            //var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            //var projectData = repository.GetProjectSummary(project);
-
-            return FormateResult(DummyDataProvider.GetDummyProjectSummary(org, project, new UrlBuilder(Url)), $"{org}/{project}");
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            var projectData = repository.GetProjectSummary(project);
+            // FormateResult(DummyDataProvider.GetDummyProjectSummary(org, project, new UrlBuilder(Url)), $"{org}/{project}");
+            return Ok(projectData);
         }
 
         /// <summary>

@@ -276,9 +276,10 @@ namespace TestHub.Api.ApiDataProvider
             var tr = getLast5TestRuns(org);
 
             var projects = _testHubDBContext.Query<ProjectExtended>(
-                @"select p.Name, p.Id, count(t.Id) as TestRunsCount
+                @"select p.Name, p.Id, count(t.Id) as TestRunsCount, max(t.TestCasesCount) as TestCasesCount, (sum(c.LinesCovered)/sum(c.LinesValid)) * 100 as coverage
                         from Projects p 
                       inner join TestRuns t on t.ProjectId = p.id
+                      inner join Coverage c on c.TestRunId = t.Id
                       where OrganisationId = @orgId
                     group by p.Id"
                     , new { orgId = org.Id }).ToDictionary(k => k.Id);
@@ -295,9 +296,11 @@ namespace TestHub.Api.ApiDataProvider
                            {
                                TestResults = g.Select(t => (Data.TestResult)t.Status).ToArray()
                            },
-                           TestsCount = g.First().TestCasesCount,
+                           TestsCount = projects[g.Key].TestCasesCount,
                            TestQuantityGrowth = getQuantityGrowth(g),
-                           CoverageGrowth = getCoverageGrowth(g)
+                           CoverageGrowth = getCoverageGrowth(g),
+                           TestRunFrequency = "occasionally",
+                           Coverage = projects[g.Key].Coverage
                        });
             return groups.AsQueryable();
         }
