@@ -44,7 +44,7 @@ namespace TestHub.Api.ApiDataProvider
             var project = _testHubDBContext.Projects.FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.CurrentCultureIgnoreCase));
             if (project == null)
             {
-                throw new TesthubApiException("Project does not exist");
+                TesthubApiException.ThrowProjectDoesNotExist(projectName);
             }
 
             var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id)
@@ -162,7 +162,7 @@ namespace TestHub.Api.ApiDataProvider
 
             if (project == null)
             {
-                throw new TesthubApiException($"Project {projectName} does not exist");
+                TesthubApiException.ThrowProjectDoesNotExist(projectName);
             }
 
             return project;
@@ -366,9 +366,14 @@ namespace TestHub.Api.ApiDataProvider
             return null;
         }
 
-        public ProjectSummary GetProjectSummary(string project)
+        public ProjectSummary GetProjectSummary(string projectName)
         {
-            throw new NotImplementedException();
+            var projectSummary = GetProjects().FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase));
+            if (projectSummary == null)
+            {
+                TesthubApiException.ThrowProjectDoesNotExist(projectName);
+            }
+            return projectSummary;
         }
 
         public TestResultsHistoricalData GetTestResultsForProject(string projectName)

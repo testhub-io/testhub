@@ -132,7 +132,22 @@ namespace TestHub.Api.Tests.Integration
             Assert.AreEqual(3.716m, results.Items.First(c => c.TestRunName == "20200611.1").Coverage);
         }
 
-            private static UrlBuilder getUrlBuilder()
+        [Test]
+        public void GetProjectSummary()
+        {
+            var urlBuilder = getUrlBuilder();
+
+            var dataProvider = new DataProvider(_db, "test-hub", urlBuilder);
+            // Act 
+            var results = dataProvider.GetProjectSummary("testhub-api");
+
+            // Assert
+            Assert.Greater(results.TestsCount, 17);
+            Assert.Greater(results.TestRunsCount, 37);
+            Assert.AreEqual(3.716m, results.Coverage);
+        }
+
+        private static UrlBuilder getUrlBuilder()
         {
             var url = new Mock<IUrlHelper>();
             var urlBuilder = new UrlBuilder(url.Object);

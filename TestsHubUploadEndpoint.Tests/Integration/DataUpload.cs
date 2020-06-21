@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,8 +17,8 @@ namespace TestsHubUploadEndpoint.Tests.Integration
         [SetUp]
         public void Inti()
         {
-            //_testHubDBContext = new TestHubDBContext();            
-            _testHubDBContext = new TestHubDBContext("Host=test-hub.chhksx9i82ny.us-east-2.rds.amazonaws.com;Database=testHub;Username=root;Password=test_pass");            
+            _testHubDBContext = new TestHubDBContext();            
+            //_testHubDBContext = new TestHubDBContext("Host=test-hub.chhksx9i82ny.us-east-2.rds.amazonaws.com;Database=testHub;Username=root;Password=test_pass");            
         }
 
         [Test]
@@ -55,6 +56,27 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             Assert.Pass();
         }
 
+        [Test]
+        public void UploadAndMegeTwoJUnitFiles()
+        {                                        
+            var sw = new Stopwatch();
+            sw.Start();
+            var jUnitReader = new JUnitReader(
+                new DataLoader(_testHubDBContext, "TestDataUpload-SmallJUnit", _org.Name));
+
+            var testRun = $"{DateTime.Now.ToString("ddMMyyyy_hh:mm")}-{++counter}";
+            var task = jUnitReader.Read(TestData.GetFile("Kiln\\Frontend-JUnit.xml"), testRun, "develop", "");
+            var task2 = jUnitReader.Read(TestData.GetFile("test-results-rpclib.xml"), testRun, "develop", "");
+            
+
+            Task.WaitAll(task, task2);
+            sw.Stop();
+
+            Debug.WriteLine("Load time: " + sw.ElapsedMilliseconds);
+
+            Assert.Pass();
+        }
+
         private void LoadJunitFile(Stream stream, string projectName)
         {
             var sw = new Stopwatch();
@@ -62,7 +84,7 @@ namespace TestsHubUploadEndpoint.Tests.Integration
             var jUnitReader = new JUnitReader(
                 new DataLoader(_testHubDBContext, projectName, _org.Name));
 
-            var task = jUnitReader.Read(stream, (++counter).ToString(), "develop", "");
+            var task = jUnitReader.Read(stream, $"{DateTime.Now.ToString("ddMMyyyy")}-{++counter}", "develop", "");
 
             Task.WaitAll(task);
             sw.Stop();

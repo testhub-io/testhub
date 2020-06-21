@@ -20,6 +20,8 @@ namespace TestsHubUploadEndpoint
         public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org)
         {
             _testHubDBContext = testHubDBContext;
+            _testHubDBContext.ChangeTracker.AutoDetectChangesEnabled = false;
+
             ProjectName = projectName;
             Organisation = testHubDBContext.Organisations.SingleOrDefault(s => s.Name.Equals(org, StringComparison.OrdinalIgnoreCase));
             if (Organisation == null)
@@ -64,6 +66,11 @@ namespace TestsHubUploadEndpoint
             }
             else
             {
+                existingTestRun.TestCasesCount = existingTestRun.TestCasesCount + testCases.Count;
+                existingTestRun.Status = testRun.Status == TestResult.Failed ? TestResult.Failed : existingTestRun.Status;
+                existingTestRun.Time = existingTestRun.Time + testRun.Time;
+                _testHubDBContext.TestRuns.Update(existingTestRun);
+                _testHubDBContext.SaveChanges();
                 BatchInsert(testCases, existingTestRun.Id);
             }
 

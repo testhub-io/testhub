@@ -21,5 +21,10 @@ namespace TestHub.Api.ApiDataProvider
         protected TesthubApiException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+
+        public static void ThrowProjectDoesNotExist(string project)
+        {
+            throw new TesthubApiException($"Project {project} does not exist");
+        }
     }
 }

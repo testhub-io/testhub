@@ -114,7 +114,7 @@ namespace TestsHubUploadEndpoint
             }
 
             testRun.TestRunName = testRunName;
-            testRun.TestCasesCount = testRun.TestCasesCount + testCases.Count;
+            testRun.TestCasesCount = testCases.Count;
             testRun.Status = testCases.Any(t => t.Status.Equals(TestStatus.Failed, StringComparison.OrdinalIgnoreCase)) ?
                 TestStatus.Failed : TestStatus.Passed;
             _dataLoader.Add(testRun, testCases);
