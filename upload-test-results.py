@@ -3,6 +3,7 @@ import glob
 import argparse
 import json
 from pathlib import Path
+from git import Repo
 
 
 import os
@@ -55,17 +56,24 @@ for root, dirs, files in os.walk("."):
             print(root.split("/")[1])
             testRunId = root.split("/")[1]
                         
-            url = "https://test-hub-api.azurewebsites.net/api/{}/projects/{}/runs/{}".format(args.org, args.project, args.build)
+            # url = "https://test-hub-api.azurewebsites.net/api/{}/projects/{}/runs/{}".format(args.org, args.project, args.build)
+            url = "https://localhost:44355/api/{}/projects/{}/runs/{}".format(args.org, args.project, args.build)
             print("Uploading to: " + url)
                                     
             toUpload = dict(file=readFileContent(os.path.join(root, file)))
             
             #coverPath = getCoverage(root, args.coverage) 
-            coverPath = coverageFiles[covCount] 
-            covCount = covCount+1
-            if coverPath != "":
-                print("Uploading coverage from : " +coverPath)
-                toUpload["coverage"]= readFileContent(coverPath)
+            if covCount > 0:
+                coverPath = coverageFiles[covCount]             
+                covCount = covCount+1
+                if coverPath != "":
+                    print("Uploading coverage from : " +coverPath)
+                    toUpload["coverage"]= readFileContent(coverPath)
+
+            # get branch name
+            repo = Repo(".")            
+            print("Branch name is {}", repo.active_branch.name)
+            toUpload["branch"] = repo.active_branch.name
             
             response = requests.put(url,
                          files=toUpload,
