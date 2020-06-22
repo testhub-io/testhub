@@ -11,12 +11,14 @@
 
   <ItemGroup>
     <None Remove="DummyData\cobertura-coverage.xml" />
+    <None Remove="DummyData\dummy-data-code.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="DummyData\cobertura-coverage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="DummyData\dummy-data-code.txt" />
   </ItemGroup>
 
   <ItemGroup>      

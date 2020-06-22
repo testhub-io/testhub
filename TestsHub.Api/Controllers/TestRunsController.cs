@@ -84,6 +84,23 @@ namespace TestHub.Api.Controllers
             return File(stream, "application/xml"); 
         }
 
+        /// <summary>
+        /// Not implemented 
+        /// </summary>      
+        [HttpGet("{testrun}/code/{file_path}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetSourceCode(string org, string project, string testRun, string filepath)
+        {
+            var stream = DummyDataProvider.GetDummyTestRunCode();
+
+            if (stream == null)
+                return NotFound();
+
+            return File(stream, "text/plain");
+        }
+
         // PUT api/values/5
         [HttpPut("{testrun}")]
         public ActionResult<string> Put(string org, string project, string testRun)

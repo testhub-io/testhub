@@ -76,7 +76,14 @@ namespace TestHub.Api.ApiDataProvider
         internal static Stream GetDummyTestRunCoverage()
         {
             var assembly = typeof(DummyDataProvider).Assembly;
-            Stream resource = assembly.GetManifestResourceStream("TestHub.Api.DummyData.cobertura-coverage.xml");
+            var resource = assembly.GetManifestResourceStream("TestHub.Api.DummyData.cobertura-coverage.xml");
+            return resource;
+        }
+
+        internal static Stream GetDummyTestRunCode()
+        {
+            var assembly = typeof(DummyDataProvider).Assembly;
+            var resource = assembly.GetManifestResourceStream("TestHub.Api.DummyData.dummy-data-code.txt");
             return resource;
         }
     }
