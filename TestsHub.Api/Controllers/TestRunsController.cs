@@ -87,7 +87,7 @@ namespace TestHub.Api.Controllers
         /// <summary>
         /// Not implemented 
         /// </summary>      
-        [HttpGet("{testrun}/code/{file_path}")]
+        [HttpGet("{testrun}/code/{**file_path}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
