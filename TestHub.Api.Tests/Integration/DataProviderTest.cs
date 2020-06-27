@@ -36,7 +36,7 @@ namespace TestHub.Api.Tests.Integration
         public void GetProjectsTest()
         {
             var dataProvider = new DataProvider(_db, org, new UrlBuilder(Mock.Of<IUrlHelper>()));
-            var results = dataProvider.GetProjects();
+            var results = dataProvider.GetProjects().Where(p => p.Name.Contains("many", StringComparison.OrdinalIgnoreCase));
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));            
         }
 

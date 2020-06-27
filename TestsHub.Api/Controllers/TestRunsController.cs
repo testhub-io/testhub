@@ -57,12 +57,15 @@ namespace TestHub.Api.Controllers
         /// <param name="project"></param>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
+        /// <param name="filter"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult<PaginatedList<Data.TestRunSummary>> GetTestRuns(string org, string project, [FromQuery]int? page, [FromQuery]int? pageSize)
-        {            
+        public ActionResult<PaginatedList<Data.TestRunSummary>> GetTestRuns(string org, string project, [FromQuery]int? page, [FromQuery]int? pageSize, [FromQuery]string filter)
+        {
+            if (filter == null)
+                filter = string.Empty;
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var res = dataProvider.GetTestRuns(project).AsQueryable();
+            var res = dataProvider.GetTestRuns(project).AsQueryable().Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
             return PaginatedListBuilder.CreatePaginatedList(res, page, pageSize, this.Request.Path); 
         }
 
