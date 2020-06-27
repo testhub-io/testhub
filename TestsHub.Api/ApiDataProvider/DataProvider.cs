@@ -278,8 +278,8 @@ namespace TestHub.Api.ApiDataProvider
             var projects = _testHubDBContext.Query<ProjectExtended>(
                 @"select p.Name, p.Id, count(t.Id) as TestRunsCount, max(t.TestCasesCount) as TestCasesCount, (sum(c.LinesCovered)/sum(c.LinesValid)) * 100 as coverage
                         from Projects p 
-                      inner join TestRuns t on t.ProjectId = p.id
-                      inner join Coverage c on c.TestRunId = t.Id
+                      left join TestRuns t on t.ProjectId = p.id
+                      left join Coverage c on c.TestRunId = t.Id
                       where OrganisationId = @orgId
                     group by p.Id"
                     , new { orgId = org.Id }).ToDictionary(k => k.Id);
