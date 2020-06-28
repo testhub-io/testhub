@@ -26,5 +26,10 @@ namespace TestHub.Api.ApiDataProvider
         {
             throw new TesthubApiException($"Project {project} does not exist");
         }
+
+        public static void ThrowTestRunDoesNotExist(string testRun)
+        {
+            throw new TesthubApiException($"Test-run {testRun} does not exist");
+        }
     }
 }

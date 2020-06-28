@@ -131,8 +131,13 @@ namespace TestHub.Api.ApiDataProvider
 
             var testRun = _testHubDBContext.TestRuns
                 .Include(c=>c.Coverage)
-                .FirstOrDefault(t => t.ProjectId == project.Id && t.TestRunName == testRunName);
+                .Include(c=>c.TestCases)
+                .FirstOrDefault(t => t.ProjectId == project.Id && t.TestRunName.Equals(testRunName, StringComparison.OrdinalIgnoreCase));
                       
+            if (testRun == null)
+            {
+                TesthubApiException.ThrowTestRunDoesNotExist(testRunName);
+            }
 
             return new Data.TestRun
             {
