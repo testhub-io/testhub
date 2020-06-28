@@ -27,7 +27,7 @@ export const routes = [
         meta: {requiresAuth: false}
     },
     {
-        path: '/:org/projects/:project/runs/{run}',
+        path: '/:org/projects/:project/runs/:run',
         name: 'test-run',
         component: TestRun,
         meta: {requiresAuth: false}

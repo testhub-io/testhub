@@ -17,7 +17,7 @@
           </div>
 
           <div class="dashboard-block__chart-element">
-            <ProjectTestResultChart />
+            <ProjectTestResultChart/>
           </div>
 
           <div class="dashboard-block__legend-labels dashboard-block__tests-results-legend">
@@ -48,7 +48,7 @@
           </div>
 
           <div class="dashboard-block__chart-element">
-            <ProjectCoverageChart />
+            <ProjectCoverageChart/>
           </div>
         </div>
       </div>
@@ -93,67 +93,67 @@
       <div class="dashboard-block__table">
         <table class="table">
           <thead>
-            <tr>
-              <th>Test run</th>
-              <th>Branch</th>
-              <th>Timestamp</th>
-              <th>Test run result</th>
-              <th>Tests qty</th>
-              <th>Coverage</th>
-              <th>Time</th>
-            </tr>
+          <tr>
+            <th>Test run</th>
+            <th>Branch</th>
+            <th>Timestamp</th>
+            <th>Test run result</th>
+            <th>Tests qty</th>
+            <th>Coverage</th>
+            <th>Time</th>
+          </tr>
           </thead>
 
           <tbody>
-            <tr v-for="(test, index) in testResults" :key="index" @click.prevent="gotoRun(test)">
-              <td>
-                <div class="mobile-label">Test run</div>
-                <div class="val"><b>#{{ test.name }}</b></div>
-              </td>
+          <tr v-for="(test, index) in testResults" :key="index" @click.prevent="gotoRun(test)">
+            <td>
+              <div class="mobile-label">Test run</div>
+              <div class="val"><b>#{{ test.name }}</b></div>
+            </td>
 
-              <td>
-                <div class="mobile-label">Branch</div>
-                <div class="val">{{ test.branch }}</div>
-              </td>
+            <td>
+              <div class="mobile-label">Branch</div>
+              <div class="val">{{ test.branch }}</div>
+            </td>
 
-              <td>
-                <div class="mobile-label">Timestamp</div>
-                <div class="val">{{ getTestRunTime(test.timeStemp) }}</div>
-              </td>
+            <td>
+              <div class="mobile-label">Timestamp</div>
+              <div class="val">{{ getTestRunTime(test.timeStemp) }}</div>
+            </td>
 
-              <td>
-                <div class="mobile-label">Test run result</div>
-                <div class="val">
-                  <div class="dashboard-block__legend-label-item">
-                    <div class="item-color" :style="getTestResultStyle(test.result)"></div>
-                    <div class="item-caption">{{ getTestResult(test.result) }}</div>
-                  </div>
+            <td>
+              <div class="mobile-label">Test run result</div>
+              <div class="val">
+                <div class="dashboard-block__legend-label-item">
+                  <div class="item-color" :style="getTestResultStyle(test.result)"></div>
+                  <div class="item-caption">{{ getTestResult(test.result) }}</div>
                 </div>
-              </td>
+              </div>
+            </td>
 
-              <td>
-                <div class="mobile-label">Tests qty</div>
-                <div class="val">{{ test.stats.totalCount }}</div>
-              </td>
+            <td>
+              <div class="mobile-label">Tests qty</div>
+              <div class="val">{{ test.stats.totalCount }}</div>
+            </td>
 
-              <td>
-                <div class="mobile-label">Coverage</div>
-                <div class="val">{{ test.coverage }}</div>
-              </td>
+            <td>
+              <div class="mobile-label">Coverage</div>
+              <div class="val">{{ test.coverage }}</div>
+            </td>
 
-              <td>
-                <div class="mobile-label">Time</div>
-                <div class="val">{{ parseFloat(test.time).toFixed(2) }}</div>
-              </td>
-            </tr>
+            <td>
+              <div class="mobile-label">Time</div>
+              <div class="val">{{ parseFloat(test.time).toFixed(2) }}</div>
+            </td>
+          </tr>
 
           </tbody>
         </table>
       </div>
 
       <Pagination
-              :pagination="testResultsPagination"
-              :callback="loadTestResultsPage"
+          :pagination="testResultsPagination"
+          :callback="loadTestResultsPage"
       />
 
     </div>
@@ -162,95 +162,98 @@
 </template>
 
 <script>
-import ProjectCoverageChart from '../components/ProjectCoverageChart'
-import ProjectTestResultChart from '../components/ProjectTestResultChart'
-import Pagination from '../components/Pagination'
-import moment from "moment";
-export default {
-  data: function() {
-    return {
-      testResults: [
-      ],
-      testResultsPagination: {
-        "itemsCount": 1,
-        "pageSize": 10,
-        "currentPage": 1,
-        "totalPages": 1,
-        "links": {
-          "next": null
+    import ProjectCoverageChart from '../components/ProjectCoverageChart'
+    import ProjectTestResultChart from '../components/ProjectTestResultChart'
+    import Pagination from '../components/Pagination'
+    import moment from "moment";
+
+    export default {
+        data: function () {
+            return {
+                testResults: [],
+                testResultsPagination: {
+                    "itemsCount": 1,
+                    "pageSize": 10,
+                    "currentPage": 1,
+                    "totalPages": 1,
+                    "links": {
+                        "next": null
+                    }
+                }
+            }
+        },
+        components: {
+            ProjectCoverageChart,
+            ProjectTestResultChart,
+            Pagination
+        },
+        computed: {
+            user() {
+                return this.$store.getters.currentUser
+            },
+            userOrg() {
+                return this.$route.params.org ? this.$route.params.org : this.user.org
+            },
+        },
+        methods: {
+            loadTestRuns(page = 1) {
+                var self = this
+                this.$http.get(this.$route.params.org + "/projects/" + this.$route.params.project + "/runs?page=" + page)
+                    .then((response) => {
+                        self.testResults = response.data.data
+                        self.testResultsPagination = response.data.meta.pagination
+                    })
+            },
+            loadTestResultsPage(page) {
+                this.loadTestRuns(page)
+                this.$scrollTo(".dashboard-block__chart-element", 500, {})
+            },
+            getTestRunTime(timestamp) {
+                return moment(timestamp).format("HH:mm, D MMM YYYY")
+            },
+            gotoRun(test) {
+                console.log(test)
+                const project = this.$route.params.project
+                const runId = test.name.toString().trim()
+                console.log(runId)
+                this.$router.push({name: 'test-run', params: {org: this.userOrg, project: project, run: runId}})
+            },
+            getTestResult(result) {
+                switch (result.toString()) {
+                    case "-1":
+                        result = "Skipped"
+                        break;
+                    case "1":
+                        result = "Passed"
+                        break;
+                    case "0":
+                        result = "Failed"
+                        break;
+                    default:
+                        result = "Unknown"
+                }
+                return result
+            },
+            getTestResultStyle(result) {
+                var style = ""
+                switch (result.toString()) {
+                    case "-1":
+                        style = "background-color: #F98809;"
+                        break;
+                    case "1":
+                        style = "background-color: #24A44C;"
+                        break;
+                    case "0":
+                        style = "background-color: #E63F34;"
+                        break;
+                    default:
+                        style = "background-color: #E63F34;"
+                }
+                return style
+            }
+        },
+        mounted() {
+            this.loadTestRuns()
         }
-      }
     }
-  },
-  components: {
-    ProjectCoverageChart,
-    ProjectTestResultChart,
-    Pagination
-  },
-  computed: {
-    user() {
-      return this.$store.getters.currentUser
-    },
-    userOrg() {
-        return this.$route.params.org ? this.$route.params.org : this.user.org
-    },
-  },
-  methods: {
-    loadTestRuns(page = 1) {
-      var self = this
-      this.$http.get(this.$route.params.org + "/projects/" + this.$route.params.project + "/runs?page=" + page)
-              .then((response) => {
-                self.testResults = response.data.data
-                self.testResultsPagination = response.data.meta.pagination
-              })
-    },
-    loadTestResultsPage(page) {
-      this.loadTestRuns(page)
-      this.$scrollTo(".dashboard-block__chart-element", 500, {})
-    },
-    getTestRunTime(timestamp) {
-      return moment(timestamp).format("HH:mm, D MMM YYYY")
-    },
-    gotoRun(test) {
-      const project = this.$route.params.project
-      this.$router.push({ name: 'test-run', params: { org: this.userOrg, project: project, run: test.name } })
-    },
-    getTestResult(result) {
-      switch(result.toString()) {
-        case "-1":
-          result = "Skipped"
-          break;
-        case "1":
-          result = "Passed"
-          break;
-        case "0":
-          result = "Failed"
-          break;
-        default:
-          result = "Unknown"
-      }
-      return result
-    },
-    getTestResultStyle(result) {
-      var style = ""
-      switch(result.toString()) {
-        case "-1":
-          style = "background-color: #F98809;"
-          break;
-        case "1":
-          style = "background-color: #24A44C;"
-          break;
-        case "0":
-          style = "background-color: #E63F34;"
-          break;
-        default:
-          style = "background-color: #E63F34;"
-      }
-      return style
-    }
-  },
-  mounted() {
-    this.loadTestRuns()
-  }
-}
 </script>
