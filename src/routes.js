@@ -26,13 +26,11 @@ export const routes = [
         component: ProjectRuns,
         meta: {requiresAuth: false}
     },
-
     {
-        path: '/:org/test-run',
+        path: '/:org/projects/:project/runs/{run}',
         name: 'test-run',
         component: TestRun,
         meta: {requiresAuth: false}
     },
-
 ]
 

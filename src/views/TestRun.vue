@@ -2,9 +2,9 @@
   <div>
     <div class="breadcrumbs-block">
       <ul>
-        <li><a href="#">Wibbits</a></li>
-        <li><a href="#">Capsule</a></li>
-        <li><span>#2045634</span></li>
+        <li><a href="#">{{ this.$route.params.org }}</a></li>
+        <li><a href="#">{{ this.$route.params.project }}</a></li>
+        <li><span>#{{ this.$route.params.run }}</span></li>
       </ul>
     </div>
 

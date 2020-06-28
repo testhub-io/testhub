@@ -105,7 +105,7 @@
           </thead>
 
           <tbody>
-            <tr v-for="(test, index) in testResults" :key="index">
+            <tr v-for="(test, index) in testResults" :key="index" @click.prevent="gotoRun(test)">
               <td>
                 <div class="mobile-label">Test run</div>
                 <div class="val"><b>#{{ test.name }}</b></div>
@@ -191,6 +191,9 @@ export default {
     user() {
       return this.$store.getters.currentUser
     },
+    userOrg() {
+        return this.$route.params.org ? this.$route.params.org : this.user.org
+    },
   },
   methods: {
     loadTestRuns(page = 1) {
@@ -207,6 +210,10 @@ export default {
     },
     getTestRunTime(timestamp) {
       return moment(timestamp).format("HH:mm, D MMM YYYY")
+    },
+    gotoRun(test) {
+      const project = this.$route.params.project
+      this.$router.push({ name: 'test-run', params: { org: this.userOrg, project: project, run: test.name } })
     },
     getTestResult(result) {
       switch(result.toString()) {
