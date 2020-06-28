@@ -212,10 +212,10 @@
                 return moment(timestamp).format("HH:mm, D MMM YYYY")
             },
             gotoRun(test) {
-                console.log(test)
+                // console.log(test)
                 const project = this.$route.params.project
                 const runId = test.name.toString().trim()
-                console.log(runId)
+                // console.log(runId)
                 this.$router.push({name: 'test-run', params: {org: this.userOrg, project: project, run: runId}})
             },
             getTestResult(result) {
