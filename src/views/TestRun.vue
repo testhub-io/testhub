@@ -41,21 +41,9 @@
         </div>
       </div>
     </div>
-
-    <div class="nav-tabs__wrapper">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" data-toggle="tab" data-target="#test_results_tab" href="javascript:;">Test
-            results</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" data-target="#coverage_tab" href="javascript:;">Coverage</a>
-        </li>
-      </ul>
-    </div>
-
-    <div class="tab-content">
-      <div class="tab-pane active" id="test_results_tab">
+    
+    <b-tabs class="tab-content">
+      <b-tab class="tab-pane active" title="Test Results" id="test_results_tab">
         <div class="filter-block">
           <div class="row align-items-center">
             <div class="col-12 col-md-4 col-lg-3">
@@ -127,91 +115,95 @@
 
           </div>
         </div>
-      </div>
+      </b-tab>
 
-      <div class="tab-pane" id="coverage_tab">
-        <h3>Coverage Tab Content</h3>
-      </div>
-    </div>
+      <b-tab class="tab-pane" title="Coverage" id="coverage_tab" >
+        <CoverageTab v-if="baseRunUrl" :baseRunUrl="baseRunUrl"></CoverageTab>
+      </b-tab>
+    </b-tabs>
   </div>
 </template>
 
 <script>
-    export default {
-        data: function () {
-            return {
-                testRuns: [],
-            }
-        },
-        components: {
-        },
-        computed: {
-            passed() {
-                if (this.testRuns.tests === undefined) {
-                    return 0
-                }
-                return this.testRuns.tests.reduce((sum, { status }) => {
-                    if (parseInt(status) === 1) {
-                        sum++
-                    }
-                    return sum
-                }, 0)
-            },
-            failed() {
-                if (this.testRuns.tests === undefined) {
-                    return 0
-                }
-                return this.testRuns.tests.reduce((sum, { status }) => {
-                    if (parseInt(status) === 0) {
-                        sum++
-                    }
-                    return sum
-                }, 0)
-            },
-            skipped() {
-                if (this.testRuns.tests === undefined) {
-                    return 0
-                }
-                return this.testRuns.tests.reduce((sum, { status }) => {
-                    if (parseInt(status) === 2) {
-                        sum++
-                    }
-                    return sum
-                }, 0)
-            },
-            total() {
-                if (this.testRuns.tests === undefined) {
-                    return 0
-                }
-                return this.testRuns.tests.length
-            },
-            executionTime() {
-                if (this.testRuns.tests === undefined) {
-                    return 0
-                }
-                return this.testRuns.tests.reduce((sum, {time}) => {
-                    const execTime = (sum + parseFloat(time))
-                    return parseFloat(execTime).toFixed(2)
-                }, 0)
-            },
-            coverage() {
-                return 0
-            }
-        },
-        methods: {
-            load() {
-                var self = this
-                this.$http.get(this.$route.params.org + "/projects/" + this.$route.params.project + "/runs/" + this.$route.params.run + "/tests/")
-                    .then((response) => {
-                        self.testRuns = response.data
-                    })
-            },
-            getTestResultStatus(result) {
-                return result.status === 1 ? "result-cell good" : "result-cell bad"
-            },
-        },
-        mounted() {
-            this.load()
+  import CoverageTab from '../components/CoverageTab'
+
+  export default {
+    data: function () {
+        return {
+            testRuns: [],
+            baseRunUrl: ''
         }
+    },
+    components: { CoverageTab },
+    computed: {
+      passed() {
+          if (this.testRuns.tests === undefined) {
+              return 0
+          }
+          return this.testRuns.tests.reduce((sum, { status }) => {
+              if (parseInt(status) === 1) {
+                  sum++
+              }
+              return sum
+          }, 0)
+      },
+      failed() {
+          if (this.testRuns.tests === undefined) {
+              return 0
+          }
+          return this.testRuns.tests.reduce((sum, { status }) => {
+              if (parseInt(status) === 0) {
+                  sum++
+              }
+              return sum
+          }, 0)
+      },
+      skipped() {
+          if (this.testRuns.tests === undefined) {
+              return 0
+          }
+          return this.testRuns.tests.reduce((sum, { status }) => {
+              if (parseInt(status) === 2) {
+                  sum++
+              }
+              return sum
+          }, 0)
+      },
+      total() {
+          if (this.testRuns.tests === undefined) {
+              return 0
+          }
+          return this.testRuns.tests.length
+      },
+      executionTime() {
+          if (this.testRuns.tests === undefined) {
+              return 0
+          }
+          return this.testRuns.tests.reduce((sum, {time}) => {
+              const execTime = (sum + parseFloat(time))
+              return parseFloat(execTime).toFixed(2)
+          }, 0)
+      },
+      coverage() {
+          return 0
+      }
+    },
+    methods: {
+        load() {
+            var self = this
+            this.$http.get(`${this.baseRunUrl}tests/`)
+                .then((response) => {
+                    self.testRuns = response.data
+                })
+        },
+        getTestResultStatus(result) {
+            return result.status === 1 ? "result-cell good" : "result-cell bad"
+        },
+    },
+    mounted() {
+        this.baseRunUrl = `${this.$route.params.org}/projects/${this.$route.params.project}/runs/${this.$route.params.run}/`
+        this.$store.dispatch('setBaseRunUrl', this.baseRunUrl)
+        this.load()
     }
+  }
 </script>

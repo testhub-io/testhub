@@ -59,7 +59,7 @@
         <div class="row align-items-center">
           <div class="col-12 col-md-auto col-lg-3">
             <div class="filter-block__search-block">
-              <input type="text" class="form-control" placeholder="Search by name">
+              <input type="text" class="form-control" placeholder="Search by name" v-model="searchString">
               <button type="submit" title="Search" class="search-button"><i class="icon-search"></i></button>
             </div>
           </div>
@@ -105,7 +105,7 @@
           </thead>
 
           <tbody>
-          <tr v-for="(test, index) in testResults" :key="index" @click.prevent="gotoRun(test)">
+          <tr v-for="(test, index) in filteredTestResults" :key="index" @click.prevent="gotoRun(test)">
             <td>
               <div class="mobile-label">Test run</div>
               <div class="val"><b>#{{ test.name }}</b></div>
@@ -135,7 +135,7 @@
               <div class="mobile-label">Tests qty</div>
               <div class="val">{{ test.stats.totalCount }}</div>
             </td>
-
+'
             <td>
               <div class="mobile-label">Coverage</div>
               <div class="val">{{ test.coverage }}</div>
@@ -170,6 +170,8 @@
     export default {
         data: function () {
             return {
+                searchString: null,
+                filteredTestResults: [],
                 testResults: [],
                 testResultsPagination: {
                     "itemsCount": 1,
@@ -181,6 +183,13 @@
                     }
                 }
             }
+        },
+        watch: {
+          searchString() {
+            if (this.searchString) {
+              this.filteredTestResults = this.testResults.filter(test => test.name.includes(this.searchString))
+            }
+          }
         },
         components: {
             ProjectCoverageChart,
@@ -200,7 +209,7 @@
                 var self = this
                 this.$http.get(this.$route.params.org + "/projects/" + this.$route.params.project + "/runs?page=" + page)
                     .then((response) => {
-                        self.testResults = response.data.data
+                        self.testResults = self.filteredTestResults = response.data.data
                         self.testResultsPagination = response.data.meta.pagination
                     })
             },

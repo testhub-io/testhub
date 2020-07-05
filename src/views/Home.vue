@@ -71,7 +71,7 @@
         <div class="row align-items-center">
           <div class="col-12 col-md-auto col-lg-3">
             <div class="filter-block__search-block">
-              <input type="text" class="form-control" placeholder="Search by name">
+              <input type="text" class="form-control" placeholder="Search by name" v-model="searchString">
               <button type="submit" title="Search" class="search-button"><i class="icon-search"></i>
               </button>
             </div>
@@ -118,7 +118,7 @@
           </thead>
 
           <tbody>
-          <tr v-for="(project,index) in projects" :key="index" @click.prevent="gotoRuns(project)">
+          <tr v-for="(project,index) in filteredProjects" :key="index" @click.prevent="gotoRuns(project)">
             <td>
               <div class="mobile-label">Project Name</div>
               <div class="val"><b>{{ project.name }}</b></div>
@@ -196,6 +196,7 @@
         },
         data() {
             return {
+                searchString: null,
                 org: {
                     "name": "",
                     "projects": "",
@@ -210,6 +211,7 @@
                     "uri": ""
                 },
                 projects: [],
+                filteredProjects: [],
                 projectsPagination: {
                     "itemsCount": 1,
                     "pageSize": 10,
@@ -220,6 +222,13 @@
                     }
                 }
             }
+        },
+        watch: {
+          searchString() {
+            if(this.searchString) {
+              this.filteredProjects = this.projects.filter(project => project.name.includes(this.searchString))
+            } else this.filteredProjects = this.projects
+          }
         },
         methods: {
             getOrg() {
@@ -234,7 +243,7 @@
                 var self = this
                 this.$http.get(this.userOrg + "/projects/?page=" + page)
                     .then((response) => {
-                        self.projects = response.data.data
+                        self.filteredProjects = self.projects = response.data.data
                         self.projectsPagination = response.data.meta.pagination
                     })
             },
