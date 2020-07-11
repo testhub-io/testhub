@@ -1,9 +1,14 @@
 const state = {
+  projectName: null,
   codeFile: null,
   baseRunUrl: null,
 };
 
 const actions = {
+  setProjectName({ commit }, name) {
+    commit('SET_PROJECT_NAME', name)
+  },
+
   setCodeFile({ commit }, codeFile) {
     commit('SET_CURRENT_CODE_FILE', codeFile)
   },
@@ -14,6 +19,10 @@ const actions = {
 };
 
 const mutations = {
+  SET_PROJECT_NAME (state, name) {
+    state.projectName = name
+  },
+
   SET_CURRENT_CODE_FILE (state, codeFile) {
     state.codeFile = codeFile
   },
@@ -24,6 +33,7 @@ const mutations = {
 };
 
 const getters = {
+  projectName: () => state.projectName,
   codeFile: () => state.codeFile,
   baseRunUrl: () => state.baseRunUrl
 };

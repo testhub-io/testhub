@@ -3,9 +3,10 @@
     <b-card
       class="mb-12"
       border-variant="light"
+      v-if="projectSummary && activeView === 'FileTree'"
     >
-      <b-card-text>
-        <b-row v-if="projectSummary">
+      <b-card-text >
+        <b-row>
           <b-col>
           <b-row>
             <b-col sm="12" class="metric">
@@ -172,6 +173,7 @@ export default {
 
       const summary = xmlDoc.getElementsByTagName("coverage")
       this.projectSummary = this.getProperties(summary[0])
+
 
       let files = []
 

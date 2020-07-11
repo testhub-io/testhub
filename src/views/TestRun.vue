@@ -203,6 +203,7 @@
     mounted() {
         this.baseRunUrl = `${this.$route.params.org}/projects/${this.$route.params.project}/runs/${this.$route.params.run}/`
         this.$store.dispatch('setBaseRunUrl', this.baseRunUrl)
+        this.$store.dispatch('setProjectName', this.$route.params.project)
         this.load()
     }
   }

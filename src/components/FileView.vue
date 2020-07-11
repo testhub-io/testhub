@@ -4,7 +4,7 @@
       <b-link @click="goBack">Back to file tree</b-link>
     </b-container>
     <b-container fluid v-if="loading === false">
-      <h4 class="text-left">{{ node.name }}</h4>
+      <h6 class="text-left">{{ projectName }}/{{ node.data.filename }}</h6>
       <table>
         <tbody>
           <tr
@@ -47,13 +47,13 @@ export default {
 
   computed: {
     node () { return this.$store.getters.codeFile },
-    fileUrl () { return `${this.$store.getters.baseRunUrl}code/${this.node.name}` }
+    projectName () { return this.$store.getters.projectName },
+    fileUrl () { return `${this.$store.getters.baseRunUrl}code/${this.node.data.filename}` }
   },
 
   methods: {
     goBack() { 
       this.$store.dispatch('setCodeFile', null)
-      this.$emit('changeView', 'FileTree') 
     },
     
     getSource() {
