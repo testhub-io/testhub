@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h6>{{ user.org }}</h6>
+    <h6>{{ userOrg }}</h6>
 
     <div class="row dashboard-block__topbar-row">
       <div class="col-12 col-md-6 col-xl-3 order-1 order-xl-1">
@@ -28,8 +28,6 @@
         <div class="panel mb-3">
           <div class="form-row no-gutters justify-content-between align-items-center mb-3">
             <div class="h5 mb-0">Coverage growth</div>
-
-            <div class="dashboard-block__num smaller-version">{{ this.org.summary.avgCoverage }}%</div>
           </div>
 
           <div class="dashboard-block__chart-element">
@@ -43,8 +41,7 @@
           <div class="h5 mb-3">Failing projects</div>
 
           <div class="dashboard-block__progress-pie">
-            <div class="circle-block" id="failing_projects_pie"
-                 :data-value="this.projectsInGreenPercentile"></div>
+            <div class="circle-block" id="failing_projects_pie"></div>
             <div class="center-caption">
               <div class="num">{{ this.projectsInGreenPercentile }}%</div>
               <div class="caption">Success rate</div>
@@ -74,15 +71,6 @@
               <input type="text" class="form-control" placeholder="Search by name" v-model="searchString">
               <button type="submit" title="Search" class="search-button"><i class="icon-search"></i>
               </button>
-            </div>
-          </div>
-
-          <div class="col-auto">
-            <div class="filter-block__filter-list-block">
-              <a href="javascript:;" class="filter-block__filter-list-toggle">
-                <i class="icon-filter"></i>
-                <span>Filter list</span>
-              </a>
             </div>
           </div>
 
@@ -118,10 +106,10 @@
           </thead>
 
           <tbody>
-          <tr v-for="(project,index) in filteredProjects" :key="index" @click.prevent="gotoRuns(project)">
+          <tr v-for="(project,index) in projects" :key="index">
             <td>
               <div class="mobile-label">Project Name</div>
-              <div class="val"><b>{{ project.name }}</b></div>
+              <div class="val project-name" @click.prevent="gotoRuns(project)"><b>{{ project.name }}</b></div>
             </td>
 
             <td>
@@ -141,7 +129,7 @@
 
             <td>
               <div class="mobile-label">Coverage</div>
-              <div class="val">{{ project.coverage }}%</div>
+              <div class="val">{{ Number(Math.round(project.coverage)).toFixed(2) }}%</div>
             </td>
 
             <td>
@@ -152,9 +140,7 @@
             <td>
               <div class="mobile-label">Tests qty growth</div>
               <div class="val">
-                <div class="dashboard-block__percent-num plus">
-                  <span>{{ parseInt(project.testQuantityGrowth) >= 0 ? "+" : "-" }} {{ project.testQuantityGrowth }}%</span>
-                  <i class="icon-arrow"></i>
+                <div class="dashboard-block__percent-num plus" v-html="displayGrowth(project.testQuantityGrowth)">
                 </div>
               </div>
             </td>
@@ -162,9 +148,7 @@
             <td>
               <div class="mobile-label">Coverage growth</div>
               <div class="val">
-                <div class="dashboard-block__percent-num plus">
-                  <span>{{ parseInt(project.coverageGrowth) >= 0 ? "+" : "-" }} {{ project.coverageGrowth }}%</span>
-                  <i class="icon-arrow"></i>
+                <div class="dashboard-block__percent-num plus" v-html="displayGrowth(project.coverageGrowth)">
                 </div>
               </div>
             </td>
@@ -231,6 +215,22 @@
           }
         },
         methods: {
+            displayGrowth(growth) {
+              if(growth === null || growth === undefined) {
+                return `<span class="no-growth">-</span>`
+              }  
+
+              growth = parseInt(growth)
+              if(growth === 0) return `<span class="no-growth"> ${growth}%<span>`
+              if(growth > 0) {
+                return `<span>+ ${growth}%</span>
+                        <i class="icon-arrow"></i>`
+              }
+              if(growth < 0) {
+                return `<span class="decreased-growth">${growth}%</span>`
+              }
+             
+            },
             getOrg() {
                 var self = this
                 this.$http.get(this.userOrg)
@@ -261,6 +261,7 @@
                 this.$nextTick(() => {
                     $('#failing_projects_pie').circleProgress({
                         size: 160,
+                        value: this.projectsInGreenPercentile / 100,
                         startAngle: -Math.PI / 2,
                         lineCap: 'round',
                         thickness: 20,
@@ -272,7 +273,7 @@
         },
         mounted() {
             this.getOrg()
-            this.getOrgProjects()
+            this.getOrgProjects() 
         },
         computed: {
             user() {
@@ -282,15 +283,14 @@
                 return this.$route.params.org ? this.$route.params.org : this.user.org
             },
             projectsInGreenPercentile() {
+               
                 var total = this.org.summary.projectsInGreen + this.org.summary.projectsInRed
-                // console.log("TOTAL", total)
-                // console.log("RED", this.org.summary.projectsInRed)
-                // console.log("GREEN", this.org.summary.projectsInGreen)
+                
                 if (total === 0 || this.org.summary.projectsInGreen === 0) {
                     return 0
                 }
                 var percentile = this.org.summary.projectsInGreen / total
-                // console.log("percentile", percentile)
+
                 return Math.floor(percentile * 100)
             }
         }
@@ -298,9 +298,13 @@
 </script>
 
 <style lang="scss">
-  .table {
-    tr {
+  .project-name {
       cursor: pointer;
-    }
+  } 
+  .no-growth { 
+    color: #212529
+  }
+  .decreased-growth {
+    color: #E63F34
   }
 </style>

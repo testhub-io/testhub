@@ -2,8 +2,8 @@
   <div>
     <div class="breadcrumbs-block">
       <ul>
-        <li><a @click.prevent="$router.push({ name: 'dashboard' })" href="#">{{ this.user.org }}</a></li>
-        <li><span>{{ this.$route.params.project }}</span></li>
+        <li><a @click.prevent="$router.push({ name: 'dashboard' })" href="#">{{ $route.params.org }}</a></li>
+        <li><span>{{ $route.params.project }}</span></li>
       </ul>
     </div>
 
@@ -64,15 +64,6 @@
             </div>
           </div>
 
-          <div class="col-auto">
-            <div class="filter-block__filter-list-block">
-              <a href="javascript:;" class="filter-block__filter-list-toggle">
-                <i class="icon-filter"></i>
-                <span>Filter list</span>
-              </a>
-            </div>
-          </div>
-
           <div class="col-auto ml-auto">
             <div class="filter-block__show-quant">
               <label>Rows per page:</label>
@@ -105,10 +96,10 @@
           </thead>
 
           <tbody>
-          <tr v-for="(test, index) in filteredTestResults" :key="index" @click.prevent="gotoRun(test)">
+          <tr v-for="(test, index) in filteredTestResults" :key="index">
             <td>
               <div class="mobile-label">Test run</div>
-              <div class="val"><b>#{{ test.name }}</b></div>
+              <div class="val test-name" @click.prevent="gotoRun(test)"><b>#{{ test.name }}</b></div>
             </td>
 
             <td>
@@ -135,7 +126,6 @@
               <div class="mobile-label">Tests qty</div>
               <div class="val">{{ test.stats.totalCount }}</div>
             </td>
-'
             <td>
               <div class="mobile-label">Coverage</div>
               <div class="val">{{ test.coverage }}</div>
@@ -266,3 +256,9 @@
         }
     }
 </script>
+
+<style lang="scss">
+  .test-name{
+    cursor: pointer;
+  }
+</style>

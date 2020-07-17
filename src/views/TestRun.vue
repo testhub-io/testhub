@@ -2,8 +2,8 @@
   <div>
     <div class="breadcrumbs-block">
       <ul>
-        <li><a href="#">{{ this.$route.params.org }}</a></li>
-        <li><a href="#">{{ this.$route.params.project }}</a></li>
+        <li><a @click.prevent="$router.push({ name: 'dashboard' })" >{{ this.$route.params.org }}</a></li>
+        <li><a @click.prevent="gotoRuns">{{ this.$route.params.project }}</a></li>
         <li><span>#{{ this.$route.params.run }}</span></li>
       </ul>
     </div>
@@ -42,8 +42,8 @@
       </div>
     </div>
     
-    <b-tabs class="tab-content">
-      <b-tab class="tab-pane active" title="Test Results" id="test_results_tab">
+    <b-tabs>
+      <b-tab title="Test Results" active>
         <div class="filter-block">
           <div class="row align-items-center">
             <div class="col-12 col-md-4 col-lg-3">
@@ -59,17 +59,17 @@
 
                 <div class="filter-block__status-row">
                   <div class="filter-block__status-item passed">
-                    <input type="checkbox" id="filter_status_passed">
+                    <input type="checkbox" id="filter_status_passed" value="1" v-model="selectedFilters">
                     <label for="filter_status_passed">Passed</label>
                   </div>
 
                   <div class="filter-block__status-item failed">
-                    <input type="checkbox" id="filter_status_failed">
+                    <input type="checkbox" id="filter_status_failed" value="0" v-model="selectedFilters">
                     <label for="filter_status_failed">Failed</label>
                   </div>
 
                   <div class="filter-block__status-item skipped">
-                    <input type="checkbox" id="filter_status_skipped">
+                    <input type="checkbox" id="filter_status_skipped" value="2" v-model="selectedFilters">
                     <label for="filter_status_skipped">Skipped</label>
                   </div>
                 </div>
@@ -83,7 +83,7 @@
 
           <div class="testrun-block__table" v-if="testRuns.tests !== undefined">
 
-            <div v-for="(test, index) in testRuns.tests" :key="index" class="testrun-block__table-item">
+            <div v-for="(test, index) in filteredTests" :key="index" class="testrun-block__table-item">
               <div class="testrun-block__table-row">
                 <div class="testrun-block__table-main-td" :style="parseInt(test.status) === 1 ? '' : 'color: #E63F34;'">{{ test.name }}
                 </div>
@@ -97,8 +97,11 @@
 
                 <div class="testrun-block__table-results-td">
                   <div class="dashboard-block__results-cells">
-                    <div v-for="(result, resultIndex) in test.recentResults" :key="resultIndex"
-                         :class="getTestResultStatus(result)"></div>
+                    <div v-for="(result, resultIndex) in test.recentResults" 
+                          :key="resultIndex"
+                          :class="getTestResultStatus(result)"
+                          :v-if="test.recentResults"></div>
+                    <span v-if="test.recentResults === null">New test</span>
                   </div>
                 </div>
               </div>
@@ -117,7 +120,7 @@
         </div>
       </b-tab>
 
-      <b-tab class="tab-pane" title="Coverage" id="coverage_tab" >
+      <b-tab title="Coverage">
         <CoverageTab v-if="baseRunUrl" :baseRunUrl="baseRunUrl"></CoverageTab>
       </b-tab>
     </b-tabs>
@@ -130,9 +133,23 @@
   export default {
     data: function () {
         return {
-            testRuns: [],
+            testRuns: {},
+            selectedFilters: [],
+            filteredTests: [],
             baseRunUrl: ''
         }
+    },
+    watch: {
+      selectedFilters() {
+        if (this.selectedFilters.length === 0) {
+          this.filteredTests = this.testRuns.tests
+        } else {
+          const filtered = [...this.testRuns.tests].filter(test => {
+            return this.selectedFilters.some(key => test.status === parseInt(key))
+          })
+          this.filteredTests = filtered
+        }
+      }
     },
     components: { CoverageTab },
     computed: {
@@ -189,11 +206,21 @@
       }
     },
     methods: {
+        gotoRuns() {
+          this.$router.push({
+            name: 'project-test-runs', 
+            params: {
+              org: this.$route.params.org, 
+              project: this.$route.params.project
+            }
+          })
+        },
         load() {
             var self = this
             this.$http.get(`${this.baseRunUrl}tests/`)
                 .then((response) => {
                     self.testRuns = response.data
+                    self.filteredTests = response.data.tests
                 })
         },
         getTestResultStatus(result) {
@@ -208,3 +235,13 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  a {
+    cursor: pointer;
+  }
+  .nav-tabs .nav-link{
+    padding-left: 10px !important;
+    padding-right: 10px;
+  }
+</style>

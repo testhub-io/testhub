@@ -4035,8 +4035,8 @@ input[type=number]::-webkit-outer-spin-button {
     text-decoration: none !important;
     font-size: 24px;
     line-height: 28px;
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-top: 14px;
     padding-bottom: 14px;
     font-weight: 600;
@@ -4812,11 +4812,11 @@ input[type=number]::-webkit-outer-spin-button {
 
 .testrun-block__error-block {
   width: 100%;
-  background-color: #E63F34;
+  /*background-color: #E63F34;*/
   border-radius: 2px;
   font-size: 12px;
   line-height: 1.4;
-  color: #fff;
+  
   padding: 8px 24px;
   margin-bottom: 10px;
   /* These are technically the same, but use both */
