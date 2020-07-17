@@ -129,7 +129,7 @@
 
             <td>
               <div class="mobile-label">Coverage</div>
-              <div class="val">{{ Number(Math.round(project.coverage)).toFixed(2) }}%</div>
+              <div class="val">{{ Math.round((project.coverage + Number.EPSILON) * 100) / 100 }}%</div>
             </td>
 
             <td>

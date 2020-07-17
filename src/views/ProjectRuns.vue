@@ -2,7 +2,9 @@
   <div>
     <div class="breadcrumbs-block">
       <ul>
-        <li><a @click.prevent="$router.push({ name: 'dashboard' })" href="#">{{ $route.params.org }}</a></li>
+        <li><a 
+          @click.prevent="$router.push({ name: 'org-home', params: { org: $route.params.org }})" 
+          >{{ $route.params.org }}</a></li>
         <li><span>{{ $route.params.project }}</span></li>
       </ul>
     </div>
@@ -128,12 +130,12 @@
             </td>
             <td>
               <div class="mobile-label">Coverage</div>
-              <div class="val">{{ test.coverage }}</div>
+              <div class="val">{{ Math.round((test.coverage + Number.EPSILON) * 100) / 100 }}</div>
             </td>
 
             <td>
               <div class="mobile-label">Time</div>
-              <div class="val">{{ parseFloat(test.time).toFixed(2) }}</div>
+              <div class="val">{{ Math.round((test.time + Number.EPSILON) * 100) / 100  }}</div>
             </td>
           </tr>
 
