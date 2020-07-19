@@ -2,9 +2,9 @@
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace TestsHubUploadEndpoint
+namespace TestsHubUploadEndpoint.Coverage
 {
-    public class JacocoReader
+    public class JacocoReader : ICoverageReader
     {
         private readonly IDataLoader _dataLoader;
 
@@ -22,11 +22,11 @@ namespace TestsHubUploadEndpoint
             {
                 throw new FormatException("Malformed Jacoco coverage report");
             }
-            
-            var linesCovered = int.Parse(element.Attribute("covered").Value);     
-            var linesValid = linesCovered + int.Parse(element.Attribute("missed").Value);            
 
-            _dataLoader.Add(new CoverageModel.CoverageSummary(linesCovered, linesValid, testRunName));
+            var linesCovered = int.Parse(element.Attribute("covered").Value);
+            var linesValid = linesCovered + int.Parse(element.Attribute("missed").Value);
+
+            _dataLoader.Add(new CoverageSummary(linesCovered, linesValid, testRunName));
         }
     }
 }

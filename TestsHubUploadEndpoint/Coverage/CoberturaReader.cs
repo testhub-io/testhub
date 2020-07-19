@@ -1,9 +1,9 @@
 ﻿using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace TestsHubUploadEndpoint
+namespace TestsHubUploadEndpoint.Coverage
 {
-    public class CoberturaReader
+    public class CoberturaReader : ICoverageReader
     {
         private readonly IDataLoader _dataLoader;
 
@@ -28,7 +28,7 @@ namespace TestsHubUploadEndpoint
                 linesValid += int.Parse(element.Attribute("lines-valid").Value);
             }
 
-            _dataLoader.Add(new CoverageModel.CoverageSummary(linesCovered, linesValid, testRunName));
+            _dataLoader.Add(new CoverageSummary(linesCovered, linesValid, testRunName));
 
         }
     }

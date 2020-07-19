@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TestHub.Data.DataModel;
-using TestsHubUploadEndpoint.CoverageModel;
+using TestsHubUploadEndpoint.Coverage;
 using report = TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint
@@ -114,7 +114,7 @@ namespace TestsHubUploadEndpoint
             if (testRunCache != null &&
                 coverageSummary.TestRunName.Equals(testRunCache.TestRunName, StringComparison.OrdinalIgnoreCase))
             {
-                var coverageDto = _mapper.Map<Coverage>(coverageSummary);
+                var coverageDto = _mapper.Map<TestHub.Data.DataModel.Coverage>(coverageSummary);
                 coverageDto.TestRunId = testRunCache.Id;
 
                 var existingCoverage = _testHubDBContext.Coverage.FirstOrDefault(c => c.TestRunId == testRunCache.Id);

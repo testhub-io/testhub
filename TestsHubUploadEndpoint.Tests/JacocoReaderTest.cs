@@ -1,9 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using TestsHubUploadEndpoint.CoverageModel;
+using TestsHubUploadEndpoint.Coverage;
 
 namespace TestsHubUploadEndpoint.Tests
 {
@@ -19,10 +16,12 @@ namespace TestsHubUploadEndpoint.Tests
                 .Verifiable();
 
             var jacocoReader = new JacocoReader(dl.Object);
-            var coverageStream = TestData.GetFile("coverage/jacoco.xml");
+            using (var coverageStream = TestData.GetFile("coverage/jacoco.xml"))
+            {
 
-            jacocoReader.Read(coverageStream, TestRunName);
-            dl.VerifyAll();
+                jacocoReader.Read(coverageStream, TestRunName);
+                dl.VerifyAll();
+            }
         }
 
     }

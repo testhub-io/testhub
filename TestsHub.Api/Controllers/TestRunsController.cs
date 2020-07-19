@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TestHub.Api.ApiDataProvider;
 using TestHub.Api.Controllers.Helpers;
 using TestsHubUploadEndpoint;
+using TestsHubUploadEndpoint.Coverage;
 
 namespace TestHub.Api.Controllers
 {
@@ -138,8 +139,12 @@ namespace TestHub.Api.Controllers
 
             if (Request.Form.Files[CoverageKey] != null && Request.Form.Files[CoverageKey].Length > 0)
             {
-                var coberturaReader = new CoberturaReader(dataLoader);
-                coberturaReader.Read(Request.Form.Files[CoverageKey].OpenReadStream(), testRun);
+                using (var coverageStream = Request.Form.Files[CoverageKey].OpenReadStream()) 
+                {
+                    var factory = new CoverageReaderFactory();
+                    var coberturaReader = factory.CreateReader(coverageStream, dataLoader);
+                    coberturaReader.Read(coverageStream, testRun);
+                }
             }
 
             return Ok(new { count = files.Count, size });

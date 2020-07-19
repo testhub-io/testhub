@@ -1,9 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using TestsHubUploadEndpoint.CoverageModel;
+using TestsHubUploadEndpoint.Coverage;
+
 
 namespace TestsHubUploadEndpoint.Tests
 {

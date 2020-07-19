@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TestHub.Data.DataModel;
+using TestsHubUploadEndpoint.Coverage;
 using report = TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint
@@ -38,7 +39,7 @@ namespace TestsHubUploadEndpoint
                     .ForMember(r => r.Status, m => m.ConvertUsing<StatusConverter, string>());
 
                 cfg.CreateMap<report.TestSuite, TestSuite>();
-                cfg.CreateMap<CoverageModel.CoverageSummary, Coverage>();
+                cfg.CreateMap<CoverageSummary, TestHub.Data.DataModel.Coverage>();
             });
 
             return new Mapper(config);

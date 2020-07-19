@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using TestsHubUploadEndpoint.CoverageModel;
+using TestsHubUploadEndpoint.Coverage;
 using TestsHubUploadEndpoint.ReportModel;
 
 namespace TestsHubUploadEndpoint

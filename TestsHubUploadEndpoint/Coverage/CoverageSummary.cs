@@ -1,4 +1,4 @@
-﻿namespace TestsHubUploadEndpoint.CoverageModel
+﻿namespace TestsHubUploadEndpoint.Coverage
 {
     public class CoverageSummary
     {
