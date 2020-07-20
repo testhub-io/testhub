@@ -4,21 +4,14 @@ import { Line } from 'vue-chartjs'
 export default {
   data() {
     return {
+      coverage: {},
       chartData: {
-        labels: ['1.01', '5.01', '10.01', '15.01', '20.01', '25.01', '31.01'],
+        labels: [],
         datasets: [{
           label: 'Date',
           backgroundColor: '#C8D4FF',
           borderColor: '#0038FF',
-          data: [
-            15,
-            30,
-            22,
-            35,
-            30,
-            50,
-            65
-          ],
+          data: [],
           fill: true,
           pointBackgroundColor: '#0038FF',
           pointBorderColor: '#fff',
@@ -60,6 +53,16 @@ export default {
             },
             gridLines: {
               display: false
+            }, 
+            type: 'time',
+            time: {
+              parser: 'MM/DD/YYYY HH:mm',
+              tooltipFormat: 'll HH:mm',
+              unit: 'day',
+              unitStepSize: 1,
+              displayFormats: {
+                'day': 'MM/DD/YYYY'
+              }
             }
           }],
           yAxes: [{
@@ -86,15 +89,28 @@ export default {
               borderCapStyle: 'round',
               drawBorder: false,
               zeroLineColor: "#d7e1ea"
-            }
+            },
           }]
         }
       }
     }
   },
   extends: Line,
+  methods: {
+      
+    getCoverageChartData() {
+      return this.$http.get(`${this.$route.params.org}/projects/${this.$route.params.project}/coverage`)
+        .then(response => {
+          this.coverageChartData = response.data
+          this.chartData.labels = response.data.items.map(item => new Date(item.dateTime))
+          this.chartData.datasets[0].data = response.data.items.map(item => item.coverage)
+        })
+    },
+  },
   mounted () {
-    this.renderChart(this.chartData, this.chartOptions)
+    this.getCoverageChartData().then(() => {
+      this.renderChart(this.chartData, this.chartOptions)
+    })
   }
 }
 </script>

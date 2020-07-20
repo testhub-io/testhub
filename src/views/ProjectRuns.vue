@@ -70,13 +70,12 @@
             <div class="filter-block__show-quant">
               <label>Rows per page:</label>
 
-              <select class="form-control">
-                <option value="5" selected>5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="25">25</option>
+              <select class="form-control" 
+                v-model="testResultsPagination.pageSize">
+                <option value="25" selected>25</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
+                <option :value="testResultsPagination.itemsCount">All</option>
               </select>
             </div>
           </div>
@@ -166,10 +165,10 @@
                 filteredTestResults: [],
                 testResults: [],
                 testResultsPagination: {
-                    "itemsCount": 1,
-                    "pageSize": 10,
+                    "itemsCount": null,
+                    "pageSize": 25,
                     "currentPage": 1,
-                    "totalPages": 1,
+                    "totalPages": null,
                     "links": {
                         "next": null
                     }
@@ -181,7 +180,8 @@
             if (this.searchString) {
               this.filteredTestResults = this.testResults.filter(test => test.name.includes(this.searchString))
             }
-          }
+          },
+          'testResultsPagination.pageSize' () { this.loadTestRuns() }
         },
         components: {
             ProjectCoverageChart,
@@ -195,11 +195,14 @@
             userOrg() {
                 return this.$route.params.org ? this.$route.params.org : this.user.org
             },
+            pageSize() { return this.testResultsPagination.pageSize }
         },
         methods: {
-            loadTestRuns(page = 1) {
+            loadTestRuns(page) {
                 var self = this
-                this.$http.get(this.$route.params.org + "/projects/" + this.$route.params.project + "/runs?page=" + page)
+                const selectedPage = page ? page : this.testResultsPagination.currentPage
+                const runsUrl = `${this.$route.params.org}/projects/${this.$route.params.project}/runs?page=${selectedPage}&pageSize=${this.testResultsPagination.pageSize}`
+                this.$http.get(runsUrl)                    
                     .then((response) => {
                         self.testResults = self.filteredTestResults = response.data.data
                         self.testResultsPagination = response.data.meta.pagination
@@ -251,7 +254,7 @@
                         style = "background-color: #E63F34;"
                 }
                 return style
-            }
+            },
         },
         mounted() {
             this.loadTestRuns()

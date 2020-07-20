@@ -4,21 +4,15 @@ import { Line } from 'vue-chartjs'
 export default {
   data() {
     return {
+      testResultsChartData: {},
       chartData: {
-        labels: ['1.01', '5.01', '10.01', '15.01', '20.01', '25.01', '31.01'],
+        labels: [],
         datasets: [
+        // Skipped
         {
           backgroundColor: '#fbac54',
           borderColor: '#F98809',
-          data: [
-            0,
-            0,
-            3,
-            4,
-            0,
-            1,
-            2
-          ],
+          data: [],
           fill: true,
           pointBackgroundColor: '#F98809',
           pointBorderColor: '#fff',
@@ -26,18 +20,11 @@ export default {
           pointRadius: 5,
           pointHoverRadius: 5
         },
+        // Failed
         {
           backgroundColor: '#FFA39D',
           borderColor: '#E63F34',
-          data: [
-            26,
-            30,
-            35,
-            39,
-            42,
-            55,
-            50
-          ],
+          data: [],
           fill: true,
           pointBackgroundColor: '#E63F34',
           pointBorderColor: '#fff',
@@ -45,18 +32,11 @@ export default {
           pointRadius: 5,
           pointHoverRadius: 5
         },
+        // Passed
         {
           backgroundColor: '#B2DBBF',
           borderColor: '#24A44C',
-          data: [
-            100,
-            122,
-            134,
-            140,
-            160,
-            160,
-            180
-          ],
+          data: [],
           fill: true,
           pointBackgroundColor: '#24A44C',
           pointBorderColor: '#fff',
@@ -99,6 +79,16 @@ export default {
             },
             gridLines: {
               display: false
+            },
+            type: 'time',
+            time: {
+              parser: 'MM/DD/YYYY',
+              tooltipFormat: 'll HH:mm',
+              unit: 'day',
+              unitStepSize: 1,
+              displayFormats: {
+                'day': 'MM/DD/YYYY'
+              }
             }
           }],
           yAxes: [{
@@ -123,11 +113,29 @@ export default {
       }
     }
   },
-  extends: Line,
+  extends: Line,  
+  methods: {    
+    getTestResultsChartData() {
+      return this.$http.get(`${this.$route.params.org}/projects/${this.$route.params.project}/testresults`)
+        .then(response => {
+          this.testResultsChartData = response.data
+          this.chartData.labels = response.data.data.map(item => new Date(item.dateTime))
+          
+          this.chartData.datasets[2].data = response.data.data.map(item => item.passed)
+
+          this.chartData.datasets[1].data = response.data.data.map(item => item.failed)
+
+          this.chartData.datasets[0].data = response.data.data.map(item => item.skipped)
+        })
+    },
+  },
   mounted () {
-    this.renderChart(this.chartData, this.chartOptions)
+    this.getTestResultsChartData().then(() => {
+      this.renderChart(this.chartData, this.chartOptions)
+    })
   }
 }
+
 </script>
 
 <style>
