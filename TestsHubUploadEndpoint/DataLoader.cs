@@ -44,7 +44,9 @@ namespace TestsHubUploadEndpoint
             {
                 project = new Project()
                 {
-                    Name = ProjectName
+                    Name = ProjectName,
+                    Organisation = Organisation,
+                    OrganisationId = Organisation.Id
                 };
                 _testHubDBContext.Projects.Add(project);
             }
