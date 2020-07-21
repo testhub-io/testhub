@@ -80,6 +80,7 @@ export default {
             gridLines: {
               display: false
             },
+            distribution: 'series',
             type: 'time',
             time: {
               parser: 'MM/DD/YYYY',
@@ -87,14 +88,14 @@ export default {
               unit: 'day',
               unitStepSize: 1,
               displayFormats: {
-                'day': 'MM/DD/YYYY'
+                'day': 'MM-DD'
               }
             }
           }],
           yAxes: [{
             ticks: {
-              stepSize: 50
-                    },
+              source: 'data'
+            },
 
             display: true,
             scaleLabel: {

@@ -53,7 +53,8 @@ export default {
             },
             gridLines: {
               display: false
-            }, 
+            },
+            distribution: 'series', 
             type: 'time',
             time: {
               parser: 'MM/DD/YYYY HH:mm',
@@ -61,7 +62,7 @@ export default {
               unit: 'day',
               unitStepSize: 1,
               displayFormats: {
-                'day': 'MM/DD/YYYY'
+                'day': 'MM-DD'
               }
             }
           }],
@@ -71,11 +72,7 @@ export default {
               callback: function(value) {
                 return value + '%';
               },
-              min: 0,
-              max: 100,
-
-              // forces step size to be 5 units
-              stepSize: 25 // <----- This prop sets the stepSize
+              source: 'data',
             },
 
             display: true,

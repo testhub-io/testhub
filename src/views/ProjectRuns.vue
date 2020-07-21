@@ -45,8 +45,6 @@
         <div class="panel mb-3">
           <div class="form-row no-gutters justify-content-between align-items-center mb-3">
             <div class="h5 mb-0">Coverage growth</div>
-
-            <div class="dashboard-block__num smaller-version">82%</div>
           </div>
 
           <div class="dashboard-block__chart-element">
