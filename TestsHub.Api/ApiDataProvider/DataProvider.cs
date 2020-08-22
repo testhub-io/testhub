@@ -188,8 +188,7 @@ namespace TestHub.Api.ApiDataProvider
                             { 
                                 t.Name, 
                                 t.Status, 
-                                recentTrs[t.TestRunId].TestRunName,
-                                url = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = projectName, testRun = t.Name })                                
+                                recentTrs[t.TestRunId].TestRunName
                             };
             
             var res = recentTestCases.AsEnumerable().GroupBy(
@@ -198,7 +197,7 @@ namespace TestHub.Api.ApiDataProvider
                 .ToDictionary(s => s.Id, s=> s.Results.Select(rs=> new TestResultItem {
                  Status = (Data.TestResult)rs.Status, 
                  TestRunName = rs.TestRunName,
-                 Uri = rs.url                 
+                 Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = projectName, testRun = rs.TestRunName })
                  // add timestamp of test run here
                 }));
 
