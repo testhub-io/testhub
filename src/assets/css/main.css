@@ -4027,9 +4027,9 @@ input[type=number]::-webkit-outer-spin-button {
   .nav-tabs__wrapper::-webkit-scrollbar {
     display: none; }
   .nav-tabs .nav-item {
-    margin-bottom: -2px; }
-    .nav-tabs .nav-item:not(:last-child) {
-      margin-right: 40px; }
+    margin-bottom: -2px;
+    width: 170px; 
+  }
   .nav-tabs .nav-link {
     border-bottom: 2px solid transparent;
     width: 100%;
@@ -4490,6 +4490,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .filter-block {
   width: 100%;
+  margin-top: 10px;
   margin-bottom: 25px; }
   .filter-block__search-block {
     cursor: pointer;

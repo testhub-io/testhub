@@ -94,7 +94,8 @@ export default {
           }],
           yAxes: [{
             ticks: {
-              source: 'data'
+              source: 'data',
+              precision: 0
             },
 
             display: true,

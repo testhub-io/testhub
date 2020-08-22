@@ -47,7 +47,7 @@
       <b-tabs>
         <b-tab title="Test Results" active>
           <div class="filter-block">
-            <div class="row align-items-center">
+            <div class="row align-items-center mt-10">
               <div class="col-12 col-md-4 col-lg-3">
                 <div class="filter-block__search-block">
                   <input type="text" class="form-control" placeholder="Search by name">
@@ -81,39 +81,48 @@
           </div>
 
           <div class="testrun-block__table-wrapper">
-            <div class="testrun-block__table-title">E2eNode Suite</div>
+            <div v-for="group in Object.keys(groupedTests)" :key="group" class="groupedClass">
+            
+              <div class="testrun-block__table-title" v-if="groupedTests[group].length">{{ group }}</div>
 
-            <div class="testrun-block__table" v-if="testRuns.tests !== undefined">
+              <div class="testrun-block__table" v-if="groupedTests[group].length">
 
-              <div v-for="(test, index) in filteredTests" :key="index" class="testrun-block__table-item">
-                <div class="testrun-block__table-row">
-                  <div class="testrun-block__table-main-td" :style="parseInt(test.status) === 1 ? '' : 'color: #E63F34;'">{{ test.name }}
-                  </div>
+                <div v-for="(test, index) in groupedTests[group]" :key="index" class="testrun-block__table-item">
+                  <div class="testrun-block__table-row">
+                    <div class="testrun-block__table-main-td" :style="parseInt(test.status) === 1 ? '' : 'color: #E63F34;'">{{ test.name }}
+                    </div>
 
-                  <div class="testrun-block__table-date-td">
-                    <div class="testrun-block__date-time">
-                      <i class="icon-clock"></i>
-                      <span>{{ parseFloat(test.time).toFixed(2) }}</span>
+                    <div class="testrun-block__table-date-td">
+                      <div class="testrun-block__date-time">
+                        <i class="icon-clock"></i>
+                        <span>{{ parseFloat(test.time).toFixed(2) }}</span>
+                      </div>
+                    </div>
+
+                    <div class="testrun-block__table-results-td">
+                      <div class="dashboard-block__results-cells">
+                        <div v-for="(result, resultIndex) in test.recentResults"
+                          v-b-tooltip.hover 
+                          :title="`${result.testRunName} ${getDateTime(result)}`" 
+                          :key="resultIndex"
+                          :class="getTestResultStatus(result)"
+                          :id="`${result.testRunName}-${resultIndex}`"
+                          :v-if="test.recentResults">
+                          <a @click.prevent="gotoRun(result)"></a>
+                        </div>
+                        <span v-if="test.recentResults === null">New test</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="testrun-block__table-results-td">
-                    <div class="dashboard-block__results-cells">
-                      <div v-for="(result, resultIndex) in test.recentResults" 
-                            :key="resultIndex"
-                            :class="getTestResultStatus(result)"
-                            :v-if="test.recentResults"></div>
-                      <span v-if="test.recentResults === null">New test</span>
-                    </div>
+                  <div class="testrun-block__error-block" v-if="test.systemOut !== null && parseInt(test.status) !== 1">
+                    <p>{{ test.systemOut }}</p>
                   </div>
-                </div>
 
-                <div class="testrun-block__error-block" v-if="test.systemOut !== null && parseInt(test.status) !== 1">
-                  <p>{{ test.systemOut }}</p>
-                </div>
+                  <div class="testrun-block__error-block" v-if="test.systemOut !== null && parseInt(test.status) === 1">
+                    <p>{{ test.systemOut }}</p>
+                  </div>
 
-                <div class="testrun-block__error-block" v-if="test.systemOut !== null && parseInt(test.status) === 1">
-                  <p>{{ test.systemOut }}</p>
                 </div>
 
               </div>
@@ -137,19 +146,20 @@
           return {
               testRuns: {},
               selectedFilters: [],
-              filteredTests: [],
+              groupedTests: {},
               baseRunUrl: ''
           }
       },
       watch: {
         selectedFilters() {
           if (this.selectedFilters.length === 0) {
-            this.filteredTests = this.testRuns.tests
+            this.groupedTests = this.groupTestsByClass(this.testRuns.tests)
           } else {
-            const filtered = [...this.testRuns.tests].filter(test => {
-            return this.selectedFilters.some(key => test.status === parseInt(key))
-          })
-          this.filteredTests = filtered
+            const filteredTests = [...this.testRuns.tests].filter(test => {
+              return this.selectedFilters.some(key => test.status === parseInt(key))
+            });
+
+            this.groupedTests = this.groupTestsByClass(filteredTests);
         }
       }
     },
@@ -222,12 +232,43 @@
             this.$http.get(`${this.baseRunUrl}tests/`)
                 .then((response) => {
                     self.testRuns = response.data
-                    self.filteredTests = response.data.tests
+                    self.groupedTests = self.groupTestsByClass(response.data.tests);
                 })
+        },
+        groupTestsByClass(tests) {
+          return tests.reduce((accumulator, currentTest) => {
+            const group = currentTest.className;
+    
+            accumulator[group] = accumulator[group] || [];
+    
+            accumulator[group].push(currentTest);
+    
+            return accumulator; 
+          }, {}); 
         },
         getTestResultStatus(result) {
             return result.status === 1 ? "result-cell good" : "result-cell bad"
         },
+        gotoRun(result) {
+          const project = this.$route.params.project
+          const runId = result.testRunName.toString().trim();
+
+          this.$router.push({
+            name: 'test-run', 
+            params: { org: this.$route.params.org, project: project, run: runId }
+          })
+        },
+        getDateTime(result) {
+          let { timestemp: timestamp } = result; // 'timestemp' typo to be fixed from API
+          timestamp = new Date(timestamp);
+
+          const date = timestamp.getDate().toString().padStart(2, "0");
+          const month = timestamp.getMonth().toString().padStart(2, "0"); 
+          const year = timestamp.getFullYear().toString().padStart(4, "0");
+          const time = timestamp.toTimeString().slice(3, 9);
+
+          return `${date}-${month}-${year} ${time}`;
+        }
     },
     mounted() {
         this.baseRunUrl = `${this.$route.params.org}/projects/${this.$route.params.project}/runs/${this.$route.params.run}/`
@@ -245,5 +286,13 @@
   .nav-tabs .nav-link{
     padding-left: 10px !important;
     padding-right: 10px;
+  }
+  .dashboard-block__results-cells > div > a {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+  .groupedClass {
+    margin-top: 20px !important;
   }
 </style>
