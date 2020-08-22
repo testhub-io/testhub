@@ -104,7 +104,7 @@ namespace TestHub.Api.ApiDataProvider
                 throw new TesthubApiException("Test run does not exist");
             }
 
-            var history = GetTestCaseHistory(testRun.ProjectId, testRun.Id, testRun.Branch);
+            var history = GetTestCaseHistory(testRun.ProjectId, projectName, testRun.Id, testRun.Branch);
 
             var testCases = _testHubDBContext.TestCases.Where(t => t.TestRunId == testRun.Id)
               .Select(s => new Data.TestCase
@@ -173,7 +173,7 @@ namespace TestHub.Api.ApiDataProvider
             return project;
         }
 
-        private Dictionary<string, IEnumerable<Data.TestResultItem>> GetTestCaseHistory(int projectId, int testrunId, string branch)
+        private Dictionary<string, IEnumerable<Data.TestResultItem>> GetTestCaseHistory(int projectId, string projectName, int testrunId, string branch)
         {
             var recentTrs = _testHubDBContext.TestRuns
                 .Where(tr => tr.ProjectId == projectId && tr.Id < testrunId && tr.Branch.Equals(branch, StringComparison.OrdinalIgnoreCase))
@@ -184,14 +184,22 @@ namespace TestHub.Api.ApiDataProvider
 
             var recentTestCases = from t in _testHubDBContext.TestCases
                             where recentTrs.Keys.Contains (t.TestRunId) 
-                            select new { t.Name, t.Status, recentTrs[t.TestRunId].TestRunName };
+                            select new 
+                            { 
+                                t.Name, 
+                                t.Status, 
+                                recentTrs[t.TestRunId].TestRunName,
+                                url = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = projectName, testRun = t.Name })                                
+                            };
             
             var res = recentTestCases.AsEnumerable().GroupBy(
                     p => p.Name,
                     (key, g) => new { Id = key, Results = g })
                 .ToDictionary(s => s.Id, s=> s.Results.Select(rs=> new TestResultItem {
                  Status = (Data.TestResult)rs.Status, 
-                 TestRunName = rs.TestRunName
+                 TestRunName = rs.TestRunName,
+                 Uri = rs.url                 
+                 // add timestamp of test run here
                 }));
 
             return res;

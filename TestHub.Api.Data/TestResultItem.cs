@@ -4,11 +4,11 @@ using System.Text;
 
 namespace TestHub.Api.Data
 {
-    public class TestResultItem
+    public class TestResultItem : DataObjectBase
     {
         public TestResult Status { get; set; }
         public string TestRunName { get; set; }
 
-        public DateTime Timestemp { get; set; }
+        public DateTime Timestemp { get; set; }       
     }
 }
