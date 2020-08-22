@@ -433,7 +433,7 @@ namespace TestHub.Api.ApiDataProvider
             var coverage =  _testHubDBContext.Query<CoverageHistoricalItem>(@"select tr.TestRunName, tr.Timestamp, sum(c.LinesCovered)/sum(c.LinesValid)*100 as percent
                       from  TestRuns tr
                       left join Coverage c on c.TestRunId = tr.Id
-                    where tr.ProjectId = 1   
+                    where tr.ProjectId = @projectId   
                       group by tr.id
                       order by tr.Timestamp desc", new { projectId = project.Id });
 
