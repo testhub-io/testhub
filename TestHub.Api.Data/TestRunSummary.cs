@@ -1,4 +1,7 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace TestHub.Api.Data
 {
@@ -13,12 +16,12 @@ namespace TestHub.Api.Data
         public string Branch { get; set; }
 
         public TestResult Result { get; set; }
-        
-        public decimal Coverage { get; set; }
+                
+        public decimal? Coverage { get; set; }
 
         public decimal TestCountGrowth { get; set; }
 
-        public decimal CoverageGrowth { get; set; }
+        public decimal? CoverageGrowth { get; set; }
 
         public TestRunStats Stats { get; set; }
     }

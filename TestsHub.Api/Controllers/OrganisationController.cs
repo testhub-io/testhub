@@ -31,7 +31,7 @@ namespace TestHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var orgSummary = repository.GetOrgSummary();
 
-            return FormateResult(orgSummary, $"{org}");
+            return FormatResult(orgSummary, $"{org}");
         }
 
         [HttpGet("{org}/coverage")]

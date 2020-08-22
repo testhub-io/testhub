@@ -17,7 +17,7 @@ namespace TestHub.Api.Controllers
             RepositoryFactory = repositoryFactory;
         }
 
-        protected static ActionResult FormateResult(dynamic data, string request)
+        protected static ActionResult FormatResult(dynamic data, string request)
         {
             if (data == null)
             {

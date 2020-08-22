@@ -35,7 +35,7 @@ namespace TestHub.Api.Controllers
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var testRunEntity = dataProvider.GetTestRunSummary(project, testRun);
 
-            return FormateResult(testRunEntity, $"{org}/{project}/{testRun}");
+            return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
         }
 
         [HttpGet("{testrun}/tests")]        
@@ -48,7 +48,7 @@ namespace TestHub.Api.Controllers
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var testRunEntity = dataProvider.GetTests(project, testRun);
 
-            return FormateResult(testRunEntity, $"{org}/{project}/{testRun}");
+            return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
         }
 
         /// <summary>

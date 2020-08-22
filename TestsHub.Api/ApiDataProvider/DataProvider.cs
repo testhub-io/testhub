@@ -50,10 +50,10 @@ namespace TestHub.Api.ApiDataProvider
             var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id)
                 .OrderByDescending(t => t.Timestamp).Include(c => c.Coverage);
             TestHub.Data.DataModel.TestRun previousTestRun = null;
-            decimal previousCoverage = 0;
+            decimal? previousCoverage = null;
             foreach (var t in testRuns)
             {
-                var currentCoverage = t.Coverage?.Percent ?? 0;
+                var currentCoverage = t.Coverage?.Percent ?? null;
 
                 // we returning previous test run because we go descending and want to calc difference ! 
                 if (previousTestRun != null)
@@ -71,7 +71,7 @@ namespace TestHub.Api.ApiDataProvider
             }
         }
 
-        private TestRunSummary PrepareTestSummary(Project project, TestHub.Data.DataModel.TestRun t, decimal currentCoverage, TestHub.Data.DataModel.TestRun previousTestRun, decimal previousCoverage)
+        private TestRunSummary PrepareTestSummary(Project project, TestHub.Data.DataModel.TestRun t, decimal? currentCoverage, TestHub.Data.DataModel.TestRun previousTestRun, decimal? previousCoverage)
         {
             return new TestRunSummary()
             {
@@ -84,7 +84,7 @@ namespace TestHub.Api.ApiDataProvider
                     TotalCount = t.TestCasesCount,
 
                 },
-                CoverageGrowth = currentCoverage - previousCoverage,
+                CoverageGrowth = !currentCoverage.HasValue ? null : (currentCoverage - previousCoverage),
                 TestCountGrowth = t.TestCasesCount - (previousTestRun?.TestCasesCount ?? 0),
                 Time = t.Time,
                 TimeStemp = t.Timestamp,
@@ -357,10 +357,15 @@ namespace TestHub.Api.ApiDataProvider
 
         private decimal getQuantityGrowth(IEnumerable<TestRunExtended> c)
         {
-            var t = c.OrderByDescending(s => s.Timestamp).Take(2);
-            if (t.Count() == 2)
+            // Last seven days
+            var t = c.OrderByDescending(s => s.Timestamp)
+                    .Where(s => s.Timestamp < DateTime.Now.AddDays(-7));
+            if (t.Count() >= 2)
             {
-                return t.Last().TestCasesCount - t.First().TestCasesCount;
+                return t.First().TestCasesCount - t.Last().TestCasesCount;
+            }else if (t.Count() == 1)
+            {
+                return t.First().TestCasesCount;
             }
 
             return 0;
@@ -368,13 +373,20 @@ namespace TestHub.Api.ApiDataProvider
 
         private decimal? getCoverageGrowth(IEnumerable<TestRunExtended> c)
         {
-            if (c.Count() == 2)
+            // last seven days
+            var t = c.OrderByDescending(s => s.Timestamp)
+                    .Where(s => s.Timestamp < DateTime.Now.AddDays(-7));
+            if (c.Count() >= 2)
             {
-                var coverageLast = c.First()?.CoveragePercent;
-                var coveragePrev = c.Last()?.CoveragePercent;
-                if (coverageLast.HasValue && coveragePrev.HasValue)
+                var coverageFirst = c.First()?.CoveragePercent;
+                var coverageLast = c.Last()?.CoveragePercent;
+                if (coverageFirst.HasValue && coverageLast.HasValue)
                 {
-                    return coverageLast.Value - coveragePrev.Value;
+                    return coverageFirst.Value - coverageLast.Value;
+                }
+                else if(coverageFirst.HasValue && coverageLast.HasValue)
+                {
+                    return coverageFirst.Value;
                 }
             }
 
