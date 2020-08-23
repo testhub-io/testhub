@@ -259,7 +259,7 @@
           })
         },
         getDateTime(result) {
-          let { timestemp: timestamp } = result; // 'timestemp' typo to be fixed from API
+          let { timestamp } = result; 
           timestamp = new Date(timestamp);
 
           const date = timestamp.getDate().toString().padStart(2, "0");
