@@ -134,7 +134,7 @@
 
             <td>
               <div class="mobile-label">Frequency</div>
-              <div class="val">Every {{ project.testRunFrequency }}</div>
+              <div class="val">{{ project.testRunFrequency }}</div>
             </td>
 
             <td>
@@ -221,13 +221,13 @@
               }  
 
               growth = parseInt(growth)
-              if(growth === 0) return `<span class="no-growth"> ${growth}%<span>`
+              if(growth === 0) return `<span class="no-growth"> ${growth}<span>`
               if(growth > 0) {
-                return `<span>+ ${growth}%</span>
+                return `<span>+ ${growth}</span>
                         <i class="icon-arrow"></i>`
               }
               if(growth < 0) {
-                return `<span class="decreased-growth">${growth}%</span>`
+                return `<span class="decreased-growth">${growth}</span>`
               }
              
             },
