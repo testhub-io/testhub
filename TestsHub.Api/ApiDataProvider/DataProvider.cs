@@ -87,7 +87,7 @@ namespace TestHub.Api.ApiDataProvider
                 CoverageGrowth = !currentCoverage.HasValue ? null : (currentCoverage - previousCoverage),
                 TestCountGrowth = t.TestCasesCount - (previousTestRun?.TestCasesCount ?? 0),
                 Time = t.Time,
-                TimeStemp = t.Timestamp,
+                Timestamp = t.Timestamp,
                 Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = project.Name, testRun = t.TestRunName })
             };        
         }
@@ -188,18 +188,19 @@ namespace TestHub.Api.ApiDataProvider
                             { 
                                 t.Name, 
                                 t.Status, 
-                                recentTrs[t.TestRunId].TestRunName
+                                recentTrs[t.TestRunId].TestRunName,
+                                recentTrs[t.TestRunId].Timestamp
                             };
             
-            var res = recentTestCases.AsEnumerable().GroupBy(
-                    p => p.Name,
-                    (key, g) => new { Id = key, Results = g })
+            var res = recentTestCases
+                .AsEnumerable()
+                .GroupBy( p => p.Name, (key, g) => new { Id = key, Results = g })
                 .ToDictionary(s => s.Id, s=> s.Results.Select(rs=> new TestResultItem {
-                 Status = (Data.TestResult)rs.Status, 
-                 TestRunName = rs.TestRunName,
-                 Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = projectName, testRun = rs.TestRunName })
-                 // add timestamp of test run here
-                }));
+                     Status = (Data.TestResult)rs.Status, 
+                     TestRunName = rs.TestRunName,
+                     Uri = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = projectName, testRun = rs.TestRunName }),
+                     Timestamp = rs.Timestamp
+                    }).Take(5));
 
             return res;
         }

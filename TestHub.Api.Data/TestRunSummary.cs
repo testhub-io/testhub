@@ -9,7 +9,7 @@ namespace TestHub.Api.Data
     {
         public string Name { get; set; }
 
-        public DateTime TimeStemp { get; set; }
+        public DateTime Timestamp { get; set; }
 
         public decimal Time { get; set; }
 
