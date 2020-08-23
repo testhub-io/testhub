@@ -261,14 +261,15 @@
         },
         getDateTime(result) {
           let { timestamp } = result; 
+
           timestamp = new Date(timestamp);
 
           const date = timestamp.getDate().toString().padStart(2, "0");
           const month = timestamp.getMonth().toString().padStart(2, "0"); 
           const year = timestamp.getFullYear().toString().padStart(4, "0");
-          const time = timestamp.toTimeString().slice(3, 9);
+          const time = `${timestamp.getHours()}:${timestamp.getMinutes()}`;
 
-          const dateString = `${year}-${month}-${date} ${time}`  
+          const dateString = `${year}-${month}-${date} ${time}`;
 
           return month !== "00" ? dateString : null;
         }
