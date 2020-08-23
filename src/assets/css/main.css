@@ -4041,7 +4041,7 @@ input[type=number]::-webkit-outer-spin-button {
     padding-top: 14px;
     padding-bottom: 14px;
     font-weight: 600;
-    text-align: left;
+    text-align: center;
     color: rgba(0, 0, 0, 0.5);
     white-space: nowrap;
     transition: all 0.2s ease-in-out; }
@@ -4594,6 +4594,7 @@ input[type=number]::-webkit-outer-spin-button {
     .filter-block__filter-list-toggle:hover {
       color: #0038FF; }
   .filter-block__status-filter {
+    padding-left: 10px;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: row;
@@ -4994,3 +4995,11 @@ input[type="radio"].visually-hidden {
   clip-path: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden; }
+
+.b-tooltip {
+  max-width: 100% !important;
+}
+  .b-tooltip .tooltip-inner {
+    max-width: 100% !important;
+    text-align: left !important;
+  }

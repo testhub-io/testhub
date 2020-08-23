@@ -47,13 +47,7 @@
       <b-tabs>
         <b-tab title="Test Results" active>
           <div class="filter-block">
-            <div class="row align-items-center mt-10">
-              <div class="col-12 col-md-4 col-lg-3">
-                <div class="filter-block__search-block">
-                  <input type="text" class="form-control" placeholder="Search by name">
-                  <button type="submit" title="Search" class="search-button"><i class="icon-search"></i></button>
-                </div>
-              </div>
+            <div class="row align-items-center">
 
               <div class="col-12 col-md-8 col-lg-auto">
                 <div class="filter-block__status-filter">
@@ -102,8 +96,7 @@
                     <div class="testrun-block__table-results-td">
                       <div class="dashboard-block__results-cells">
                         <div v-for="(result, resultIndex) in test.recentResults"
-                          v-b-tooltip.hover 
-                          :title="`${result.testRunName} ${getDateTime(result)}`" 
+                          v-b-tooltip.hover.html="getTooltipHTML(result)"
                           :key="resultIndex"
                           :class="getTestResultStatus(result)"
                           :id="`${result.testRunName}-${resultIndex}`"
@@ -258,6 +251,14 @@
             params: { org: this.$route.params.org, project: project, run: runId }
           })
         },
+        getTooltipHTML(test) {
+          const date = this.getDateTime(test);
+          const dateString = date ? `Date: ${date}` : '';
+          const tooltipData = {
+            title: `<span style="white-space: nowrap;">Test Run: ${test.testRunName} <br /> ${dateString}</span>`
+          };
+          return tooltipData;
+        },
         getDateTime(result) {
           let { timestemp: timestamp } = result; // 'timestemp' typo to be fixed from API
           timestamp = new Date(timestamp);
@@ -267,7 +268,9 @@
           const year = timestamp.getFullYear().toString().padStart(4, "0");
           const time = timestamp.toTimeString().slice(3, 9);
 
-          return `${date}-${month}-${year} ${time}`;
+          const dateString = `${year}-${month}-${date} ${time}`  
+
+          return month !== "00" ? dateString : null;
         }
     },
     mounted() {
@@ -282,10 +285,6 @@
 <style lang="scss" scoped>
   a {
     cursor: pointer;
-  }
-  .nav-tabs .nav-link{
-    padding-left: 10px !important;
-    padding-right: 10px;
   }
   .dashboard-block__results-cells > div > a {
     display: block;
