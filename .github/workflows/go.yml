@@ -63,3 +63,4 @@ jobs:
         GOOS: linux
         EXTRA_FILES: "LICENSE"  
         GO111MODULE: "on"          
+        PROJECT_NAME: "testhub"
