@@ -35,11 +35,7 @@ jobs:
 
     - name: Test
       run: go test -v .
-    
-    - name: Go Release Binary
-      # You may pin to the exact commit or the version.
-      # uses: ngs/go-release.action@a32a23d081d503245410d9d7bf59b722b50cc766
-      uses: ngs/go-release.action@v1.0.2
+      
   
   release-windows-386:
     name: release windows/386
