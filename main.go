@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "testhub/cmd"
+import "testhub-cli/cmd"
 
 func main() {
   cmd.Execute()

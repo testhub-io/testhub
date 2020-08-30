@@ -11,7 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"testhub/pkg/console"
+	"testhub-cli/pkg/console"
 )
 
 type UploadFilesParameters struct {

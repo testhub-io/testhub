@@ -1,4 +1,4 @@
-module testhub
+module testhub-cli
 
 go 1.14
 

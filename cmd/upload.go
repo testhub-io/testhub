@@ -19,7 +19,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"os"
-	"testhub/pkg"
+	"testhub-cli/pkg"
 )
 
 // uploadCmd represents the upload command
