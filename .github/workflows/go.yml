@@ -49,6 +49,7 @@ jobs:
         GOARCH: "386"
         GOOS: windows
         EXTRA_FILES: "LICENSE"        
+        GO111MODULE: "on"
   release-linux-386:
     name: release linux/386
     runs-on: ubuntu-latest
@@ -61,4 +62,4 @@ jobs:
         GOARCH: "386"
         GOOS: linux
         EXTRA_FILES: "LICENSE"  
-    
+        GO111MODULE: "on"          
