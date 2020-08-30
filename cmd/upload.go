@@ -16,8 +16,10 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	"os"
+	"testhub/pkg"
 )
 
 // uploadCmd represents the upload command
@@ -31,22 +33,36 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("upload called")
+		err := uploadParams.UploadTestResultFiles()
+		if err != nil{
+			color.Red("Error executing upload. Err: %v", err)
+			os.Exit(1)
+		}
 	},
 }
 
-var uploadParams = new(main.UploadFilesParameters)
+var uploadParams = new(pkg.UploadFilesParameters)
 
 func init() {
 	rootCmd.AddCommand(uploadCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// uploadCmd.PersistentFlags().String("foo", "", "A help for foo")
-
 	const orgCommand = "org"
-	uploadCmd.Flags().StringVarP(p, orgCommand, "o", true, "Organisation name")
+	uploadCmd.Flags().StringVarP(&uploadParams.Org, orgCommand, "o", "", "Organisation name")
 	uploadCmd.MarkFlagRequired(orgCommand)
+
+	uploadCmd.Flags().StringVarP(&uploadParams.Project, "project", "p", "", "Project name")
+
+	const build = "build"
+	uploadCmd.Flags().StringVarP(&uploadParams.Build, build, "b", "", "Build name or id")
+	uploadCmd.MarkFlagRequired(build)
+
+	const pattern = "pattern"
+	uploadCmd.Flags().StringVarP(&uploadParams.FilePattern, pattern, "f", "", "Files pattern to search and upload")
+	uploadCmd.MarkFlagRequired(pattern)
+
+	uploadCmd.Flags().BoolVarP(&uploadParams.IsTestRun,"debug", "d", false, "Skip uploading and test the pattern only")
+
+
+	uploadCmd.Flags().StringVarP(&uploadParams.ContextDir, "root", "r", "", "Files pattern to search and upload")
+
 }

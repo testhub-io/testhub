@@ -1,63 +1,77 @@
-package main
+package pkg
 
 import (
 	"bytes"
 	"fmt"
-	"github.com/fatih/color"
 	"github.com/pkg/errors"
 	"io"
+	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"testhub/pkg/console"
 )
 
 type UploadFilesParameters struct {
-	testPatter string
-	org        string
-	project    string
-	build      string
-	contextDir string
-	isCoverage bool
+	FilePattern string
+	Org         string
+	Project     string
+	Build       string
+	ContextDir  string
+	IsCoverage  bool
+	IsTestRun bool
 }
 
 
 func (u *UploadFilesParameters) UploadTestResultFiles () error{
-	root := u.contextDir
-	if len(u.contextDir) == 0{
-		root = "."
+	root := ""
+	if len(u.ContextDir) != 0 {
+		root = u.ContextDir + string(filepath.Separator)
 	}
 
-	files, err := walkMatch(root, u.testPatter)
+	//files, err := walkMatch(root, u.FilePattern)
+
+	pattern:=  root + u.FilePattern
+	console.PrintLn("Using pattern %s", pattern)
+	files, err := filepath.Glob(pattern)
 	if err != nil{
 		return errors.Wrap(err, "Error listing the files")
 	}
 
+	console.PrintLn("%d files found", len(files))
 	for _,f := range (files){
-		err = uploadFile(f, u.isCoverage)
+		console.PrintLn("Uploading file %s", f)
+
+		if u.IsTestRun{
+			continue
+		}
+
+		err = u.uploadFile(f, u.IsCoverage)
 		if err != nil{
-			color.Red("Fail to upload file %s. Error: %v", f, err)
+			console.PrintError("Fail to upload file %s. Error: %v", f, err)
 		}
 	}
 
 	return nil
 }
 
-func uploadFile(f string, isCoverage bool) error {
+func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 	const testhubDomain = "test-hub-api.azurewebsites.net"
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s",testhubDomain,  u.org, u.project, u.build)
+	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s",testhubDomain, u.Org, u.Project, u.Build)
 
 	values := map[string]io.Reader{
-		"testResult":mustOpen(f),
-		"branch": strings.NewReader("not specified"),
+		"testResult": mustOpen(f),
+		"branch":     strings.NewReader("not specified"),
 	}
 	err := upload(url, values )
 	return err
 }
 
 
-func upload( url string, values map[string]io.Reader) (err error) {
+func upload(url string, values map[string]io.Reader) (err error) {
+	console.PrintLn("Sending to url: %s", url)
 	client := &http.Client{}
 	// Prepare a form that you will submit to that URL.
 	var b bytes.Buffer
@@ -88,7 +102,7 @@ func upload( url string, values map[string]io.Reader) (err error) {
 	w.Close()
 
 	// Now that you have a form, you can submit it to your handler.
-	req, err := http.NewRequest("POST", url, &b)
+	req, err := http.NewRequest("PUT", url, &b)
 	if err != nil {
 		return
 	}
@@ -105,6 +119,14 @@ func upload( url string, values map[string]io.Reader) (err error) {
 	if res.StatusCode != http.StatusOK {
 		err = fmt.Errorf("bad status: %s", res.Status)
 	}
+
+	s, err := ioutil.ReadAll(res.Body)
+	if err != nil{
+		console.PrintError("Error reading response body. Error %v", err)
+		return err
+	}
+	console.PrintLn("Response body %v", string(s))
+
 	return
 }
 
