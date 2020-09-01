@@ -3,6 +3,7 @@ package pkg
 import (
 	"bytes"
 	"fmt"
+	"github.com/bmatcuk/doublestar"
 	"github.com/pkg/errors"
 	"io"
 	"io/ioutil"
@@ -21,11 +22,10 @@ type UploadFilesParameters struct {
 	Build       string
 	ContextDir  string
 	IsCoverage  bool
-	IsTestRun bool
+	IsTestRun   bool
 }
 
-
-func (u *UploadFilesParameters) UploadTestResultFiles () error{
+func (u *UploadFilesParameters) UploadTestResultFiles() error {
 	root := ""
 	if len(u.ContextDir) != 0 {
 		root = u.ContextDir + string(filepath.Separator)
@@ -33,23 +33,23 @@ func (u *UploadFilesParameters) UploadTestResultFiles () error{
 
 	//files, err := walkMatch(root, u.FilePattern)
 
-	pattern:=  root + u.FilePattern
+	pattern := root + u.FilePattern
 	console.PrintLn("Using pattern %s", pattern)
-	files, err := filepath.Glob(pattern)
-	if err != nil{
+	files, err := doublestar.Glob(pattern)
+	if err != nil {
 		return errors.Wrap(err, "Error listing the files")
 	}
 
 	console.PrintLn("%d files found", len(files))
-	for _,f := range (files){
+	for _, f := range files {
 		console.PrintLn("Uploading file %s", f)
 
-		if u.IsTestRun{
+		if u.IsTestRun {
 			continue
 		}
 
 		err = u.uploadFile(f, u.IsCoverage)
-		if err != nil{
+		if err != nil {
 			console.PrintError("Fail to upload file %s. Error: %v", f, err)
 		}
 	}
@@ -59,16 +59,15 @@ func (u *UploadFilesParameters) UploadTestResultFiles () error{
 
 func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 	const testhubDomain = "test-hub-api.azurewebsites.net"
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s",testhubDomain, u.Org, u.Project, u.Build)
+	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", testhubDomain, u.Org, u.Project, u.Build)
 
 	values := map[string]io.Reader{
 		"testResult": mustOpen(f),
 		"branch":     strings.NewReader("not specified"),
 	}
-	err := upload(url, values )
+	err := upload(url, values)
 	return err
 }
-
 
 func upload(url string, values map[string]io.Reader) (err error) {
 	console.PrintLn("Sending to url: %s", url)
@@ -78,9 +77,7 @@ func upload(url string, values map[string]io.Reader) (err error) {
 	w := multipart.NewWriter(&b)
 	for key, r := range values {
 		var fw io.Writer
-		if x, ok := r.(io.Closer); ok {
-			defer x.Close()
-		}
+
 		// Add an image file
 		if x, ok := r.(*os.File); ok {
 			if fw, err = w.CreateFormFile(key, x.Name()); err != nil {
@@ -92,19 +89,27 @@ func upload(url string, values map[string]io.Reader) (err error) {
 				return
 			}
 		}
+
 		if _, err = io.Copy(fw, r); err != nil {
 			return err
+		}
+
+		if x, ok := r.(io.Closer); ok {
+			x.Close()
 		}
 
 	}
 	// Don't forget to close the multipart writer.
 	// If you don't close it, your request will be missing the terminating boundary.
-	w.Close()
+	err = w.Close()
+	if err != nil {
+		return err
+	}
 
 	// Now that you have a form, you can submit it to your handler.
 	req, err := http.NewRequest("PUT", url, &b)
 	if err != nil {
-		return
+		return err
 	}
 	// Don't forget to set the content type, this will contain the boundary.
 	req.Header.Set("Content-Type", w.FormDataContentType())
@@ -112,7 +117,7 @@ func upload(url string, values map[string]io.Reader) (err error) {
 	// Submit the request
 	res, err := client.Do(req)
 	if err != nil {
-		return
+		return err
 	}
 
 	// Check the response
@@ -121,7 +126,7 @@ func upload(url string, values map[string]io.Reader) (err error) {
 	}
 
 	s, err := ioutil.ReadAll(res.Body)
-	if err != nil{
+	if err != nil {
 		console.PrintError("Error reading response body. Error %v", err)
 		return err
 	}
@@ -136,28 +141,4 @@ func mustOpen(f string) *os.File {
 		panic(err)
 	}
 	return r
-}
-
-
-
-func walkMatch(root, pattern string) ([]string, error) {
-	var matches []string
-	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if info.IsDir() {
-			return nil
-		}
-		if matched, err := filepath.Match(pattern, filepath.Base(path)); err != nil {
-			return err
-		} else if matched {
-			matches = append(matches, path)
-		}
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	return matches, nil
 }
