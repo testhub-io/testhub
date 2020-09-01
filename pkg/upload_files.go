@@ -16,13 +16,12 @@ import (
 )
 
 type UploadFilesParameters struct {
-	FilePattern string
-	Org         string
-	Project     string
-	Build       string
-	ContextDir  string
-	IsCoverage  bool
-	IsTestRun   bool
+	FilePattern   string
+	OrgAndProject string
+	Build         string
+	ContextDir    string
+	IsCoverage    bool
+	IsTestRun     bool
 }
 
 func (u *UploadFilesParameters) UploadTestResultFiles() error {
@@ -59,7 +58,12 @@ func (u *UploadFilesParameters) UploadTestResultFiles() error {
 
 func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 	const testhubDomain = "test-hub-api.azurewebsites.net"
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", testhubDomain, u.Org, u.Project, u.Build)
+	p := strings.Split(u.OrgAndProject, "/")
+	if len(p) != 2 {
+		return fmt.Errorf("incorrect format of project parameter. Should be AAAA/BBB")
+	}
+
+	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", testhubDomain, p[0], p[1], u.Build)
 
 	values := map[string]io.Reader{
 		"testResult": mustOpen(f),

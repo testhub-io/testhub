@@ -34,7 +34,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := uploadParams.UploadTestResultFiles()
-		if err != nil{
+		if err != nil {
 			color.Red("Error executing upload. Err: %v", err)
 			os.Exit(1)
 		}
@@ -46,11 +46,8 @@ var uploadParams = new(pkg.UploadFilesParameters)
 func init() {
 	rootCmd.AddCommand(uploadCmd)
 
-	const orgCommand = "org"
-	uploadCmd.Flags().StringVarP(&uploadParams.Org, orgCommand, "o", "", "Organisation name")
-	uploadCmd.MarkFlagRequired(orgCommand)
-
-	uploadCmd.Flags().StringVarP(&uploadParams.Project, "project", "p", "", "Project name")
+	uploadCmd.Flags().StringVarP(&uploadParams.OrgAndProject, "project", "p", "", "Organisation and Project name separated by slash like test-org/repo_a")
+	uploadCmd.MarkFlagRequired("project")
 
 	const build = "build"
 	uploadCmd.Flags().StringVarP(&uploadParams.Build, build, "b", "", "Build name or id")
@@ -60,8 +57,7 @@ func init() {
 	uploadCmd.Flags().StringVarP(&uploadParams.FilePattern, pattern, "f", "", "Files pattern to search and upload")
 	uploadCmd.MarkFlagRequired(pattern)
 
-	uploadCmd.Flags().BoolVarP(&uploadParams.IsTestRun,"debug", "d", false, "Skip uploading and test the pattern only")
-
+	uploadCmd.Flags().BoolVarP(&uploadParams.IsTestRun, "debug", "d", false, "Skip uploading and test the pattern only")
 
 	uploadCmd.Flags().StringVarP(&uploadParams.ContextDir, "root", "r", "", "Files pattern to search and upload")
 
