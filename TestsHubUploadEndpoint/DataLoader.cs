@@ -16,13 +16,17 @@ namespace TestsHubUploadEndpoint
         private TestRun testRunCache;
 
 
+        public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org):this(testHubDBContext, projectName, org, null)
+        {            
+        }
 
-        public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org)
+        public DataLoader(TestHubDBContext testHubDBContext, string projectName, string org, string testRun)
         {
             _testHubDBContext = testHubDBContext;
             _testHubDBContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
             ProjectName = projectName;
+            TestRun = testRun;
             Organisation = testHubDBContext.Organisations.SingleOrDefault(s => s.Name.Equals(org, StringComparison.OrdinalIgnoreCase));
             if (Organisation == null)
             {
@@ -35,7 +39,10 @@ namespace TestsHubUploadEndpoint
         }
 
         public string ProjectName { get; }
+
         public Organisation Organisation { get; private set; }
+
+        public string TestRun { get;  }
 
         public void Add(TestRun testRun)
         {
@@ -113,6 +120,14 @@ namespace TestsHubUploadEndpoint
 
         public void Add(CoverageSummary coverageSummary)
         {
+            if (testRunCache == null)
+            {
+                testRunCache = (from tr in _testHubDBContext.TestRuns
+                                join p in _testHubDBContext.Projects on tr.ProjectId equals p.Id
+                                where p.Name == ProjectName && tr.TestRunName == TestRun 
+                                select tr).FirstOrDefault();
+            }
+
             if (testRunCache != null &&
                 coverageSummary.TestRunName.Equals(testRunCache.TestRunName, StringComparison.OrdinalIgnoreCase))
             {
@@ -127,9 +142,11 @@ namespace TestsHubUploadEndpoint
                 }
                 else
                 {
+                    // TODO: Looks like this is not working
                     existingCoverage.LinesCovered += coverageDto.LinesCovered;
                     existingCoverage.LinesValid += coverageDto.LinesValid;
-                    _testHubDBContext.SaveChanges();
+                    _testHubDBContext.Coverage.Update(existingCoverage);
+                    _testHubDBContext.SaveChangesAsync();
                 }
             }
             else

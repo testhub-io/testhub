@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using TestHub.Api.ApiDataProvider;
 using TestHub.Api.Controllers.Helpers;
@@ -149,5 +151,26 @@ namespace TestHub.Api.Controllers
 
             return Ok(new { count = files.Count, size });
         }
+
+        // PUT api/values/5/coverage
+        [HttpPut("{testrun}/coverage")]
+        public async Task<ActionResult<string>> PutCoverage(string org, string project, string testRun)
+        {
+            var repository = RepositoryFactory.GetTestHubWritableDataProvider(org, Url);                        
+            var dataLoader = new DataLoader(repository.TestHubDBContext, project, org, testRun);
+
+            using (var ms = new MemoryStream(2048))
+            {
+                await Request.Body.CopyToAsync(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                var factory = new CoverageReaderFactory();
+                var coberturaReader = factory.CreateReader(ms, dataLoader);
+                coberturaReader.Read(ms, testRun);             
+            }
+            
+
+            return Ok(new { size = Request.ContentLength });
+        }
+
     }
 }
