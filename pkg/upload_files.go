@@ -24,6 +24,8 @@ type UploadFilesParameters struct {
 	IsTestRun     bool
 }
 
+const testhubDomain = "test-hub-api.azurewebsites.net"
+
 func (u *UploadFilesParameters) UploadTestResultFiles() error {
 	root := ""
 	if len(u.ContextDir) != 0 {
@@ -57,7 +59,6 @@ func (u *UploadFilesParameters) UploadTestResultFiles() error {
 }
 
 func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
-	const testhubDomain = "test-hub-api.azurewebsites.net"
 	p := strings.Split(u.OrgAndProject, "/")
 	if len(p) != 2 {
 		return fmt.Errorf("incorrect format of project parameter. Should be AAAA/BBB")
@@ -65,12 +66,42 @@ func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 
 	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", testhubDomain, p[0], p[1], u.Build)
 
+	fileParamName := "testResult"
+	if isCoverage {
+		file := mustOpen(f)
+		err := uploadCoverage(p[0], p[1], u.Build, file)
+		return err
+	}
+
 	values := map[string]io.Reader{
-		"testResult": mustOpen(f),
-		"branch":     strings.NewReader("not specified"),
+		fileParamName: mustOpen(f),
+		"branch":      strings.NewReader("not specified"),
 	}
 	err := upload(url, values)
 	return err
+}
+
+func uploadCoverage(org string, proj string, build string, file *os.File) error {
+	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s/coverage", testhubDomain, org, proj, build)
+
+	req, err := http.NewRequest(http.MethodPut, url, file)
+	if err != nil {
+		return errors.Wrap(err, "Error creating http request")
+	}
+	// req.Header.Set("Content-Type", "text/plain")
+
+	client := &http.Client{}
+	res, err := client.Do(req)
+
+	s, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		console.PrintError("Error reading response body. Error %v", err)
+		return err
+	}
+	console.PrintLn("Response body %v", string(s))
+
+	defer res.Body.Close()
+	return nil
 }
 
 func upload(url string, values map[string]io.Reader) (err error) {

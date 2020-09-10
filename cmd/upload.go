@@ -25,14 +25,24 @@ import (
 // uploadCmd represents the upload command
 var uploadCmd = &cobra.Command{
 	Use:   "upload",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Upload test results",
+	Long:  `Search for test results files and upload them as a Test Results`,
 	Run: func(cmd *cobra.Command, args []string) {
+		err := uploadParams.UploadTestResultFiles()
+		if err != nil {
+			color.Red("Error executing upload. Err: %v", err)
+			os.Exit(1)
+		}
+	},
+}
+
+// uploadCmd represents the upload command
+var uploadCoverageCmd = &cobra.Command{
+	Use:   "uploadCoverage",
+	Short: "Upload test coverage",
+	Long:  `Search for test results files and upload them as a Test Results`,
+	Run: func(cmd *cobra.Command, args []string) {
+		uploadParams.IsCoverage = true
 		err := uploadParams.UploadTestResultFiles()
 		if err != nil {
 			color.Red("Error executing upload. Err: %v", err)
@@ -44,21 +54,25 @@ to quickly create a Cobra application.`,
 var uploadParams = new(pkg.UploadFilesParameters)
 
 func init() {
-	rootCmd.AddCommand(uploadCmd)
+	rootCmd.AddCommand(uploadCmd, uploadCoverageCmd)
 
-	uploadCmd.Flags().StringVarP(&uploadParams.OrgAndProject, "project", "p", "", "Organisation and Project name separated by slash like test-org/repo_a")
-	uploadCmd.MarkFlagRequired("project")
+	addCommonFlags(uploadCmd)
+	addCommonFlags(uploadCoverageCmd)
+}
+
+func addCommonFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVarP(&uploadParams.OrgAndProject, "project", "p", "", "Organisation and Project name separated by slash like test-org/repo_a")
+	cmd.MarkFlagRequired("project")
 
 	const build = "build"
-	uploadCmd.Flags().StringVarP(&uploadParams.Build, build, "b", "", "Build name or id")
-	uploadCmd.MarkFlagRequired(build)
+	cmd.Flags().StringVarP(&uploadParams.Build, build, "b", "", "Build name or id")
+	cmd.MarkFlagRequired(build)
 
 	const pattern = "pattern"
-	uploadCmd.Flags().StringVarP(&uploadParams.FilePattern, pattern, "f", "", "Files pattern to search and upload")
-	uploadCmd.MarkFlagRequired(pattern)
+	cmd.Flags().StringVarP(&uploadParams.FilePattern, pattern, "f", "", "Files pattern to search and upload")
+	cmd.MarkFlagRequired(pattern)
 
-	uploadCmd.Flags().BoolVarP(&uploadParams.IsTestRun, "debug", "d", false, "Skip uploading and test the pattern only")
+	cmd.Flags().BoolVarP(&uploadParams.IsTestRun, "debug", "d", false, "Skip uploading and test the pattern only")
 
-	uploadCmd.Flags().StringVarP(&uploadParams.ContextDir, "root", "r", "", "Files pattern to search and upload")
-
+	cmd.Flags().StringVarP(&uploadParams.ContextDir, "root", "r", "", "Files pattern to search and upload")
 }
