@@ -20,6 +20,7 @@ type UploadFilesParameters struct {
 	OrgAndProject string
 	Build         string
 	ContextDir    string
+	Branch        string
 	IsCoverage    bool
 	IsTestRun     bool
 }
@@ -71,14 +72,14 @@ func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 		file := mustOpen(f)
 		err := uploadCoverage(p[0], p[1], u.Build, file)
 		return err
+	} else {
+		values := map[string]io.Reader{
+			fileParamName: mustOpen(f),
+			"branch":      strings.NewReader(u.Branch),
+		}
+		err := upload(url, values)
+		return err
 	}
-
-	values := map[string]io.Reader{
-		fileParamName: mustOpen(f),
-		"branch":      strings.NewReader("not specified"),
-	}
-	err := upload(url, values)
-	return err
 }
 
 func uploadCoverage(org string, proj string, build string, file *os.File) error {
@@ -88,7 +89,6 @@ func uploadCoverage(org string, proj string, build string, file *os.File) error 
 	if err != nil {
 		return errors.Wrap(err, "Error creating http request")
 	}
-	// req.Header.Set("Content-Type", "text/plain")
 
 	client := &http.Client{}
 	res, err := client.Do(req)

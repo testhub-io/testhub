@@ -75,4 +75,6 @@ func addCommonFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&uploadParams.IsTestRun, "debug", "d", false, "Skip uploading and test the pattern only")
 
 	cmd.Flags().StringVarP(&uploadParams.ContextDir, "root", "r", "", "Files pattern to search and upload")
+
+	cmd.Flags().StringVarP(&uploadParams.Branch, "branch", "", "not specified", "Branch")
 }
