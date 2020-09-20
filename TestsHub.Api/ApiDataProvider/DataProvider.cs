@@ -221,11 +221,10 @@ namespace TestHub.Api.ApiDataProvider
            TestCasesCount,
            id,
            Branch, Time, CommitId,
-           ROW_NUMBER() OVER(PARTITION BY ProjectId) row_num
+           ROW_NUMBER() OVER(PARTITION BY ProjectId  order by Timestamp DESC) row_num
         FROM
            TestRuns
-        where Branch = @branch or Branch is NULL
-        order by Timestamp DESC
+        where Branch = @branch or Branch = 'master' or Branch = 'refs/heads/master' or Branch is NULL or Branch = 'not specified'        
      )
     SELECT
       c.LinesCovered / c.LinesValid,
@@ -242,9 +241,9 @@ namespace TestHub.Api.ApiDataProvider
                 return new Data.Organisation
                 {
                     Name = organisation.Name,
-                    Uri = _urlBuilder.Action("Get", typeof(Controllers.OrganisationController), new { org = Organisation }),
-                    Projects = _urlBuilder.Action("GetProjects", typeof(Controllers.ProjectsController), new { org = Organisation }),
-                    Coverage = _urlBuilder.Action("GetCoverage", typeof(Controllers.OrganisationController), new { org = Organisation }),
+                    Uri = _urlBuilder.Action("Get", typeof(OrganisationController), new { org = Organisation }),
+                    Projects = _urlBuilder.Action("GetProjects", typeof(ProjectsController), new { org = Organisation }),
+                    Coverage = _urlBuilder.Action("GetCoverage", typeof(OrganisationController), new { org = Organisation }),
 
                     Summary = new OrgSummary()
                     {
