@@ -121,6 +121,10 @@ namespace TestHub.Api.Controllers
             if (Request.Form.ContainsKey("branch"))
             {
                 branch = Request.Form["branch"].ToString();
+                if (branch != null)
+                {
+                    branch = branch.Replace("refs/heads/", "");
+                }
             }
 
             if (Request.Form.ContainsKey("commitId"))
