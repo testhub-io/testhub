@@ -403,26 +403,18 @@ namespace TestHub.Api.ApiDataProvider
             return projectSummary;
         }
 
-        public TestResultsHistoricalData GetTestResultsForProject(string projectName)
+        public TestResultsHistoricalData GetTestResultsForOrganisation()
         {
-            var project = getProjectIntity(projectName);
-
-            var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"SELECT r.id,  r.TestRunName, r.Timestamp, tc.Status, COUNT(tc.Id) as count
+            
+            var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"SELECT DATE_FORMAT(r.Timestamp, '%Y-%m-%d') date, p.Id projectId,  r.TestRunName, r.Timestamp,  r.TestCasesCount as count
                                                               from TestRuns r
-                                                              left JOIN TestCases tc on tc.TestRunId = r.Id
-                                                              WHERE ProjectId = @projId
-                                                              GROUP by r.Id, tc.Status 
+                                                              inner join Projects p on r.ProjectId = p.Id                                                              
+                                                              WHERE p.OrganisationId = @orgId
+                                                              GROUP BY  DATE_FORMAT(r.Timestamp, '%Y-%m-%d'), p.Id
                                                               ORDER BY r.Timestamp DESC",
-                                                              new { projId = project.Id });
+                                                              new { orgId = this._organisation.Id });
 
-            var dataConverted = data.GroupBy(g => g.Id).Select(g => new TestResultsDataItem
-            {
-                DateTime = g.First().Timestamp,
-                Name = g.First().TestRunName,
-                Passed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Passed)?.Count ?? 0,
-                Failed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Failed)?.Count ?? 0,
-                Skipped = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Skipped)?.Count ?? 0
-            });
+            var dataConverted = convertToTestResultsDataItems(data);
 
             return new TestResultsHistoricalData
             {
@@ -436,6 +428,46 @@ namespace TestHub.Api.ApiDataProvider
                         project = project.Name
                     })
             };
+        }
+
+        public TestResultsHistoricalData GetTestResultsForProject(string projectName)
+        {
+            var project = getProjectIntity(projectName);
+
+            var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"SELECT r.id,  r.TestRunName, r.Timestamp, tc.Status, COUNT(tc.Id) as count
+                                                              from TestRuns r
+                                                              left JOIN TestCases tc on tc.TestRunId = r.Id
+                                                              WHERE ProjectId = @projId
+                                                              GROUP by r.Id, tc.Status 
+                                                              ORDER BY r.Timestamp DESC",
+                                                              new { projId = project.Id });
+
+            var dataConverted = convertToTestResultsDataItems(data);
+
+            return new TestResultsHistoricalData
+            {
+                Data = dataConverted,
+                Uri = _urlBuilder.Action(
+                    "GetTestResults",
+                    typeof(ProjectsController),
+                    new
+                    {
+                        org = _organisation.Name,
+                        project = project.Name
+                    })
+            };
+        }
+
+        private static IEnumerable<TestResultsDataItem> convertToTestResultsDataItems(IEnumerable<TestResultsHistoricalItem> data)
+        {
+            return data.GroupBy(g => g.Id).Select(g => new TestResultsDataItem
+            {
+                DateTime = g.First().Timestamp,
+                Name = g.First().TestRunName,
+                Passed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Passed)?.Count ?? 0,
+                Failed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Failed)?.Count ?? 0,
+                Skipped = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Skipped)?.Count ?? 0
+            });
         }
 
         public CoverageHistoricalData GetCoverageHistory(string projectName)
