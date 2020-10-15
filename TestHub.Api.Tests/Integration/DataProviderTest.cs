@@ -22,12 +22,12 @@ namespace TestHub.Api.Tests.Integration
             var conf = new Mock<IConfiguration>(MockBehavior.Strict);
             var confSection = new Mock<IConfigurationSection>(MockBehavior.Strict);
 
-            confSection.Setup(c => c["DefaultConnection"])
-                .Returns("Host=localhost;Database=testHub;Username=root;Password=test_pass");
+            //confSection.Setup(c => c["DefaultConnection"])
+            //    .Returns("Host=localhost;Database=testHub;Username=root;Password=test_pass");
 
             // Amazon
-            //confSection.Setup(c => c["DefaultConnection"])
-            //    .Returns("Host=test-hub.chhksx9i82ny.us-east-2.rds.amazonaws.com;Database=testHub;Username=root;Password=test_pass");
+            confSection.Setup(c => c["DefaultConnection"])
+                .Returns("Host=test-hub.chhksx9i82ny.us-east-2.rds.amazonaws.com;Database=testHub;Username=root;Password=test_pass");
             conf.Setup(c => c.GetSection("ConnectionStrings")).Returns(confSection.Object);
             _db = new TestHubDBContext(conf.Object);
         }
@@ -145,6 +145,21 @@ namespace TestHub.Api.Tests.Integration
             Assert.Greater(results.TestsCount, 17);
             Assert.Greater(results.TestRunsCount, 37);
             Assert.AreEqual(3.716m, results.Coverage);
+        }
+
+        [Test]
+        public void GetTestResultsForOrganisationTest()
+        {
+            var urlBuilder = getUrlBuilder();
+
+            var dataProvider = new DataProvider(_db, "test-hub", urlBuilder);
+            // Act 
+            var results = dataProvider.GetTestResultsForOrganisation();
+
+            // Assert
+            Assert.Greater(results.Data.Count(), 20);
+            Assert.AreEqual(results.Data.Skip(3).First().Failed, 1);
+            Assert.AreEqual(results.Data.Skip(3).First().Passed, 11);            
         }
 
         private static UrlBuilder getUrlBuilder()

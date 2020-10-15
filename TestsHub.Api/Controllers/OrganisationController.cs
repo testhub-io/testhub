@@ -40,15 +40,16 @@ namespace TestHub.Api.Controllers
             // retrieve list from database/whereverand
             return Ok(DummyDataProvider.GetDummyCoverage());
         }
+ 
 
         /// <summary>
         /// Get historical test results series
         /// </summary>        
         [HttpGet("{org}/testresults")]
-        public ActionResult<Data.TestResultsHistoricalData> GetTestResults(string org, string project)
+        public ActionResult<Data.TestResultsHistoricalData> GetTestResults(string org)
         {
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var testResultsSeries = repository.GetTestResultsForProject(project);
+            var testResultsSeries = repository.GetTestResultsForOrganisation();
 
             return Ok(testResultsSeries);
         }

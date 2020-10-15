@@ -406,12 +406,12 @@ namespace TestHub.Api.ApiDataProvider
         public TestResultsHistoricalData GetTestResultsForOrganisation()
         {
             
-            var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"SELECT DATE_FORMAT(r.Timestamp, '%Y-%m-%d') date, p.Id projectId,  r.TestRunName, r.Timestamp,  r.TestCasesCount as count
-                                                              from TestRuns r
-                                                              inner join Projects p on r.ProjectId = p.Id                                                              
-                                                              WHERE p.OrganisationId = @orgId
-                                                              GROUP BY  DATE_FORMAT(r.Timestamp, '%Y-%m-%d'), p.Id
-                                                              ORDER BY r.Timestamp DESC",
+            var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"select DATE_FORMAT(t.Timestamp, '%Y-%m-%d') 'Timestamp', YEAR(t.Timestamp) *1000 + DAYOFYEAR(t.Timestamp) as id, 
+  t.Status, count(t.Id) as 'Count' from TestRuns t
+  inner join Projects p on p.Id = t.ProjectId
+  where p.OrganisationId = @orgId
+    group by DAYOFYEAR(t.Timestamp), YEAR(t.Timestamp), t.Status
+  order by id",
                                                               new { orgId = this._organisation.Id });
 
             var dataConverted = convertToTestResultsDataItems(data);
@@ -424,8 +424,7 @@ namespace TestHub.Api.ApiDataProvider
                     typeof(ProjectsController),
                     new
                     {
-                        org = _organisation.Name,
-                        project = project.Name
+                        org = _organisation.Name
                     })
             };
         }
