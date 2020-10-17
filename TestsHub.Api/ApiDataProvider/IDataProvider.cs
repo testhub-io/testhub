@@ -22,10 +22,11 @@ namespace TestHub.Api.ApiDataProvider
         IEnumerable<TestRunSummary> GetTestRuns(string projectName);
         
         TestResultsHistoricalData GetTestResultsForProject(string project);
-        
-        TestResultsHistoricalData GetTestResultsForOrganisation();
+
+        TestCountHistoricalData GetTestResultsForOrganisation();
 
         TestRunTests GetTests(string projectName, string testRunName);
-        Data.CoverageHistoricalData GetCoverageHistory(string project);
+
+        CoverageHistoricalData GetCoverageHistory(string project);
     }
 }

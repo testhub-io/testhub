@@ -158,8 +158,7 @@ namespace TestHub.Api.Tests.Integration
 
             // Assert
             Assert.Greater(results.Data.Count(), 20);
-            Assert.AreEqual(results.Data.Skip(3).First().Failed, 1);
-            Assert.AreEqual(results.Data.Skip(3).First().Passed, 11);            
+            Assert.AreEqual( 18, results.Data.Skip(19).First().TestsCount);
         }
 
         private static UrlBuilder getUrlBuilder()

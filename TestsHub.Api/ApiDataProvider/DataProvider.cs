@@ -403,25 +403,46 @@ namespace TestHub.Api.ApiDataProvider
             return projectSummary;
         }
 
-        public TestResultsHistoricalData GetTestResultsForOrganisation()
-        {
+        public TestCountHistoricalData GetTestResultsForOrganisation()
+        {                        
+            var data = _testHubDBContext.Query<dynamic>(@"select DATE_FORMAT(t.Timestamp, '%Y-%m-%d') 'Timestamp', YEAR(t.Timestamp) *1000 + DAYOFYEAR(t.Timestamp) as Id, 
+                                                                    t.ProjectId, max(t.TestCasesCount) as 'Count' from TestRuns t
+                                                                    inner join Projects p on p.Id = t.ProjectId and p.OrganisationId = @orgId  
+                                                                    where p.OrganisationId = 2 
+                                                                    group by DAYOFYEAR(t.Timestamp), YEAR(t.Timestamp), t.Status, t.ProjectId
+                                                                    order by id",
+                                                            new { orgId = this._organisation.Id });
+
+
+            var dataConverted = new Dictionary<string, int>();
+            var projCount = new Dictionary<int, int>();
+            long lastId = -1;
+            foreach (var d in data)
+            {                                                
+                if (lastId != d.Id && lastId != -1)
+                {
+                    dataConverted[d.Timestamp] = projCount.Values.Sum();
+                }
+
+                projCount[d.ProjectId] = d.Count;
+                lastId = d.Id;
+            }       
             
-            var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"select DATE_FORMAT(t.Timestamp, '%Y-%m-%d') 'Timestamp', YEAR(t.Timestamp) *1000 + DAYOFYEAR(t.Timestamp) as id, 
-  t.Status, count(t.Id) as 'Count' from TestRuns t
-  inner join Projects p on p.Id = t.ProjectId
-  where p.OrganisationId = @orgId
-    group by DAYOFYEAR(t.Timestamp), YEAR(t.Timestamp), t.Status
-  order by id",
-                                                              new { orgId = this._organisation.Id });
-
-            var dataConverted = convertToTestResultsDataItems(data);
-
-            return new TestResultsHistoricalData
+            if (!dataConverted.ContainsKey(data.Last().Timestamp))
             {
-                Data = dataConverted,
+                dataConverted[data.Last()] = projCount.Values.Sum();
+            }
+
+            return new TestCountHistoricalData
+            {
+                Data = dataConverted.Select(kv=>new TestCountDataItem()
+                {
+                    DateTime = DateTime.ParseExact(kv.Key, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
+                    TestsCount = kv.Value
+                }).OrderBy(l => l.DateTime),
                 Uri = _urlBuilder.Action(
                     "GetTestResults",
-                    typeof(ProjectsController),
+                    typeof(OrganisationController),
                     new
                     {
                         org = _organisation.Name
