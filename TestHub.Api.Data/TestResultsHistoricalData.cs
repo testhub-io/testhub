@@ -18,6 +18,7 @@ namespace TestHub.Api.Data
         public int Failed { get; set; }
 
         public int Skipped { get; set; }
+
         public string Name { get; set; }
     }
 }
