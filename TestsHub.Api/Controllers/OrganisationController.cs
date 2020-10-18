@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TestHub.Api.ApiDataProvider;
+using TestHub.Api.Authentication;
 using TestHub.Api.Controllers.Helpers;
 
 namespace TestHub.Api.Controllers
-{
-    //[Route("")]
+{    
     [Route("api")]
     [ApiController]
     [Produces("application/json")]
@@ -32,6 +32,16 @@ namespace TestHub.Api.Controllers
             var orgSummary = repository.GetOrgSummary();
 
             return FormatResult(orgSummary, $"{org}");
+        }
+
+        [HttpGet("{org}/apikey")]
+        public ActionResult<Data.Organisation> Get(string org, [FromHeader] string token)
+        {
+            if (token != null && token.Equals("WinLost2020$")){
+                return Ok(ApiKeyValidator.GenerateApiKey(org));
+            }
+
+            return Forbid();
         }
 
         [HttpGet("{org}/coverage")]

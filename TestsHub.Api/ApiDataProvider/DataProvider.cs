@@ -408,7 +408,7 @@ namespace TestHub.Api.ApiDataProvider
             var data = _testHubDBContext.Query<dynamic>(@"select DATE_FORMAT(t.Timestamp, '%Y-%m-%d') 'Timestamp', YEAR(t.Timestamp) *1000 + DAYOFYEAR(t.Timestamp) as Id, 
                                                                     t.ProjectId, max(t.TestCasesCount) as 'Count' from TestRuns t
                                                                     inner join Projects p on p.Id = t.ProjectId and p.OrganisationId = @orgId  
-                                                                    where p.OrganisationId = 2 
+                                                                    where p.OrganisationId = @orgId 
                                                                     group by DAYOFYEAR(t.Timestamp), YEAR(t.Timestamp), t.Status, t.ProjectId
                                                                     order by id",
                                                             new { orgId = this._organisation.Id });
