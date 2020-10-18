@@ -23,17 +23,17 @@ type UploadFilesParameters struct {
 	Branch        string
 	IsCoverage    bool
 	IsTestRun     bool
+	ApiToken      string
 }
 
 const testhubDomain = "test-hub-api.azurewebsites.net"
+const ApiKeyHeader = "ApiToken"
 
 func (u *UploadFilesParameters) UploadTestResultFiles() error {
 	root := ""
 	if len(u.ContextDir) != 0 {
 		root = u.ContextDir + string(filepath.Separator)
 	}
-
-	//files, err := walkMatch(root, u.FilePattern)
 
 	pattern := root + u.FilePattern
 	console.PrintLn("Using pattern %s", pattern)
@@ -60,29 +60,29 @@ func (u *UploadFilesParameters) UploadTestResultFiles() error {
 }
 
 func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
-	p := strings.Split(u.OrgAndProject, "/")
-	if len(p) != 2 {
-		return fmt.Errorf("incorrect format of project parameter. Should be AAAA/BBB")
-	}
 
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", testhubDomain, p[0], p[1], u.Build)
+	org, proj, err := getOrgAndProject(u.OrgAndProject)
+	if err != nil {
+		return err
+	}
+	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", testhubDomain, org, proj, u.Build)
 
 	fileParamName := "testResult"
 	if isCoverage {
 		file := mustOpen(f)
-		err := uploadCoverage(p[0], p[1], u.Build, file)
+		err := uploadCoverage(org, proj, u.Build, file, u.ApiToken)
 		return err
 	} else {
 		values := map[string]io.Reader{
 			fileParamName: mustOpen(f),
 			"branch":      strings.NewReader(u.Branch),
 		}
-		err := upload(url, values)
+		err := upload(url, values, u.ApiToken)
 		return err
 	}
 }
 
-func uploadCoverage(org string, proj string, build string, file *os.File) error {
+func uploadCoverage(org string, proj string, build string, file *os.File, apiKey string) error {
 	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s/coverage", testhubDomain, org, proj, build)
 
 	req, err := http.NewRequest(http.MethodPut, url, file)
@@ -90,6 +90,7 @@ func uploadCoverage(org string, proj string, build string, file *os.File) error 
 		return errors.Wrap(err, "Error creating http request")
 	}
 
+	req.Header.Set(ApiKeyHeader, apiKey)
 	client := &http.Client{}
 	res, err := client.Do(req)
 
@@ -104,7 +105,7 @@ func uploadCoverage(org string, proj string, build string, file *os.File) error 
 	return nil
 }
 
-func upload(url string, values map[string]io.Reader) (err error) {
+func upload(url string, values map[string]io.Reader, apiKey string) (err error) {
 	console.PrintLn("Sending to url: %s", url)
 	client := &http.Client{}
 	// Prepare a form that you will submit to that URL.
@@ -148,6 +149,7 @@ func upload(url string, values map[string]io.Reader) (err error) {
 	}
 	// Don't forget to set the content type, this will contain the boundary.
 	req.Header.Set("Content-Type", w.FormDataContentType())
+	req.Header.Set(ApiKeyHeader, apiKey)
 
 	// Submit the request
 	res, err := client.Do(req)
@@ -176,4 +178,12 @@ func mustOpen(f string) *os.File {
 		panic(err)
 	}
 	return r
+}
+
+func getOrgAndProject(orgAndProject string) (org string, project string, err error) {
+	p := strings.Split(orgAndProject, "/")
+	if len(p) != 2 {
+		return "", "", fmt.Errorf("incorrect format of project parameter. Should be AAAA/BBB")
+	}
+	return p[0], p[1], nil
 }
