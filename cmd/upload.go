@@ -62,7 +62,7 @@ func init() {
 
 func addCommonFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&uploadParams.ApiToken, "ApiToken", "t", "", "Api token")
-	cmd.MarkFlagRequired("project")
+	cmd.MarkFlagRequired("ApiToken")
 
 	cmd.Flags().StringVarP(&uploadParams.OrgAndProject, "project", "p", "", "Organisation and Project name separated by slash like test-org/repo_a")
 	cmd.MarkFlagRequired("project")

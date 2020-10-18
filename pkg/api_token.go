@@ -9,7 +9,7 @@ import (
 
 // We have to use it only when we take org name from environment and not from user
 // otherwise it's really easy to workaround
-func getApiKey(orgAndProject string) (string, error) {
+func getApiKey(orgAndProject string, testhubDomain string) (string, error) {
 	org, _, err := getOrgAndProject(orgAndProject)
 	if err != nil {
 		return "", err

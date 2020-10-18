@@ -24,12 +24,15 @@ type UploadFilesParameters struct {
 	IsCoverage    bool
 	IsTestRun     bool
 	ApiToken      string
+	testhubDomain string
 }
 
-const testhubDomain = "test-hub-api.azurewebsites.net"
+const defaultTesthubDomain = "test-hub-api.azurewebsites.net"
 const ApiKeyHeader = "ApiToken"
 
 func (u *UploadFilesParameters) UploadTestResultFiles() error {
+	u.setTesthubDomain()
+
 	root := ""
 	if len(u.ContextDir) != 0 {
 		root = u.ContextDir + string(filepath.Separator)
@@ -59,18 +62,25 @@ func (u *UploadFilesParameters) UploadTestResultFiles() error {
 	return nil
 }
 
+func (u *UploadFilesParameters) setTesthubDomain() {
+	u.testhubDomain = os.Getenv("TESTHUB_DOMAIN")
+	if len(u.testhubDomain) == 0 {
+		u.testhubDomain = defaultTesthubDomain
+	}
+}
+
 func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 
 	org, proj, err := getOrgAndProject(u.OrgAndProject)
 	if err != nil {
 		return err
 	}
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", testhubDomain, org, proj, u.Build)
+	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", u.testhubDomain, org, proj, u.Build)
 
 	fileParamName := "testResult"
 	if isCoverage {
 		file := mustOpen(f)
-		err := uploadCoverage(org, proj, u.Build, file, u.ApiToken)
+		err := u.uploadCoverage(org, proj, u.Build, file)
 		return err
 	} else {
 		values := map[string]io.Reader{
@@ -82,15 +92,15 @@ func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 	}
 }
 
-func uploadCoverage(org string, proj string, build string, file *os.File, apiKey string) error {
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s/coverage", testhubDomain, org, proj, build)
+func (u *UploadFilesParameters) uploadCoverage(org string, proj string, build string, file *os.File) error {
+	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s/coverage", u.testhubDomain, org, proj, u.Build)
 
 	req, err := http.NewRequest(http.MethodPut, url, file)
 	if err != nil {
 		return errors.Wrap(err, "Error creating http request")
 	}
 
-	req.Header.Set(ApiKeyHeader, apiKey)
+	req.Header.Set(ApiKeyHeader, u.ApiToken)
 	client := &http.Client{}
 	res, err := client.Do(req)
 
