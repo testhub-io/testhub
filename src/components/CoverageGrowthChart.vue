@@ -106,6 +106,11 @@
                     self.renderChart(this.chartData, this.chartOptions)
                 })
 
+        },
+        created() {
+
+        },
+        destroyed() {
         }
     }
 </script>
