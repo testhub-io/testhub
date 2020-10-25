@@ -109,6 +109,7 @@ namespace TestHub.Api.Controllers
 
         // PUT api/values/5
         [HttpPut("{testrun}")]
+        [ApiKeyAuth]
         public ActionResult<string> Put(string org, string project, string testRun)
         {
             var repository = RepositoryFactory.GetTestHubWritableDataProvider(org, Url);
@@ -158,6 +159,7 @@ namespace TestHub.Api.Controllers
 
         // PUT api/values/5/coverage
         [HttpPut("{testrun}/coverage")]
+        [ApiKeyAuth]
         public async Task<ActionResult<string>> PutCoverage(string org, string project, string testRun)
         {
             var repository = RepositoryFactory.GetTestHubWritableDataProvider(org, Url);                        
