@@ -10,7 +10,7 @@ namespace TestHub.Api
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ApiKeyAuthAttribute : Attribute, IAsyncActionFilter
     {
-        private const string ApiKeyHeaderName = "ApiKey";
+        private const string ApiKeyHeaderName = "ApiToken";
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
