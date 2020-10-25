@@ -12,7 +12,7 @@ namespace TestHub.Api.Tests
         [Test]
         public void IsKeyValidTest()
         {
-            Assert.IsTrue(ApiKeyValidator.IsKeyValid("", "test-org"));
+            Assert.IsTrue(ApiKeyValidator.IsKeyValid("2b8e743efdefa277d6563e06f92c1574d8da3f82", "some_org"));
 
         }
     }
