@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollector.InProcDataCollector;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -519,6 +520,45 @@ namespace TestHub.Api.ApiDataProvider
                         project = project.Name
                     })
             };
+        }
+
+        public TestGridData GetTestGrid(string projectName)
+        {
+            var project = getProjectIntity(projectName);
+
+            var runTemplate = "TEST_RUN_TO_REPLACE_THAT_HOPEFULLY_NOBODY_USES";
+            var urlTempalte = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = projectName, testRun = runTemplate });
+
+            var testRun = _testHubDBContext.TestRuns
+                .Include(c => c.TestCases)
+                .Where(t => t.ProjectId == project.Id)
+                .Select(t => new TestRunTestData()
+                {
+                    TestRunName = t.TestRunName,                    
+                    Uri = urlTempalte.Replace(runTemplate, t.TestRunName),
+                    TestCases = t.TestCases.Select(tc=>new TestCaseWithResult()
+                    {
+                        Name = tc.Name,
+                        Status = (short)tc.Status
+                    })
+                });
+
+
+            var testCases = from tc in _testHubDBContext.TestCases
+                            join tr in _testHubDBContext.TestRuns on tc.TestRunId equals tr.Id
+                            where tr.ProjectId == project.Id 
+                            select tc.Name;
+
+            var testCaseNames = testCases.Distinct().ToList();
+            
+            
+
+            return new TestGridData()
+            {
+                Data = testRun.ToList(),
+                TestCaseNames = testCaseNames
+            };
+            
         }
 
     }

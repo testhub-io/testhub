@@ -28,5 +28,7 @@ namespace TestHub.Api.ApiDataProvider
         TestRunTests GetTests(string projectName, string testRunName);
 
         CoverageHistoricalData GetCoverageHistory(string project);
+
+        TestGridData GetTestGrid(string project);
     }
 }

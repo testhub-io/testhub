@@ -64,6 +64,19 @@ namespace TestHub.Api.Controllers
             var projects = repository.GetProjects().Where(p=>p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
 
             return PaginatedListBuilder.CreatePaginatedList(projects, page, pageSize, this.Request.Path);
-        }    
+        }
+
+        /// <summary>
+        /// Get tests analytics for project
+        /// </summary>        
+        [HttpGet("{project}/tests")]
+        public ActionResult<Data.TestResultsHistoricalData> GetTest(string org, string project)
+        {          
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+
+            var testResultsSeries = repository.GetTestGrid(project);
+
+            return Ok(testResultsSeries);
+        }
     }
 }
