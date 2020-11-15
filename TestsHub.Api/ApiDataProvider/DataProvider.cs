@@ -553,7 +553,7 @@ namespace TestHub.Api.ApiDataProvider
             var cases = testCases.GroupBy(t=>t.Name)
                 .Select(g=>g.FirstOrDefault())
                 .GroupBy(t => t.Suite, t=>t.Name)
-                .Select(r => new TestsCategory { Name = r.Key, Test = r.ToList() })
+                .Select(r => new TestsCategory { ClassName = r.Key, Test = r.ToList() })
                 .ToList();
            
             

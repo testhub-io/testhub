@@ -10,7 +10,7 @@ namespace TestHub.Api.Data
 
     public class TestsCategory
     {
-        public string Name { get; set; }
+        public string ClassName { get; set; }
         public List<string> Test { get; set; }
     }
 
