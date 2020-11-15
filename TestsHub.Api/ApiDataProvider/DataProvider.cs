@@ -544,19 +544,24 @@ namespace TestHub.Api.ApiDataProvider
                 });
 
 
-            var testCases = from tc in _testHubDBContext.TestCases
-                            join tr in _testHubDBContext.TestRuns on tc.TestRunId equals tr.Id
+            var testCases = (from tc in _testHubDBContext.TestCases
+                            join tr in _testHubDBContext.TestRuns on tc.TestRunId equals tr.Id                            
                             where tr.ProjectId == project.Id 
-                            select tc.Name;
+                            select new { tc.Name, Suite = tc.ClassName}).ToList();
 
-            var testCaseNames = testCases.Distinct().ToList();
-            
+            // first group by to select distinct only test names. Second to group by suite
+            var cases = testCases.GroupBy(t=>t.Name)
+                .Select(g=>g.FirstOrDefault())
+                .GroupBy(t => t.Suite, t=>t.Name)
+                .Select(r => new TestsSuite { Name = r.Key, TestNames = r.ToList() })
+                .ToList();
+           
             
 
             return new TestGridData()
             {
                 Data = testRun.ToList(),
-                TestCaseNames = testCaseNames
+                TestSuites = cases
             };
             
         }

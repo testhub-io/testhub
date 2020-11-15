@@ -4,9 +4,16 @@ namespace TestHub.Api.Data
 {
     public class TestGridData : DataObjectBase
     {
-        public List<string> TestCaseNames { get; set; }
+        public List<TestsSuite> TestSuites { get; set; }
         public IEnumerable<TestRunTestData>  Data { get; set; }
     }
+
+    public class TestsSuite
+    {
+        public string Name { get; set; }
+        public List<string> TestNames { get; set; }
+    }
+
 
     public class TestRunTestData : DataObjectBase
     {        
