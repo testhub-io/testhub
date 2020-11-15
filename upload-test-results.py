@@ -80,7 +80,7 @@ for root, dirs, files in os.walk("."):
                          files=toUpload,
                          data={'branch': args.token },
                          verify=False,
-                         headers=)
+                         headers=headers)
                                     
             if response.status_code != 200:
                 #exit(1)
