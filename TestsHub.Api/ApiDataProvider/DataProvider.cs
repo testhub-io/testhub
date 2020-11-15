@@ -534,7 +534,7 @@ namespace TestHub.Api.ApiDataProvider
                 .Where(t => t.ProjectId == project.Id)
                 .Select(t => new TestRunTestData()
                 {
-                    TestRunName = t.TestRunName,                    
+                    TestRun = t.TestRunName,                    
                     Uri = urlTempalte.Replace(runTemplate, t.TestRunName),
                     TestCases = t.TestCases.Select(tc=>new TestCaseWithResult()
                     {
@@ -553,7 +553,7 @@ namespace TestHub.Api.ApiDataProvider
             var cases = testCases.GroupBy(t=>t.Name)
                 .Select(g=>g.FirstOrDefault())
                 .GroupBy(t => t.Suite, t=>t.Name)
-                .Select(r => new TestsSuite { Name = r.Key, TestNames = r.ToList() })
+                .Select(r => new TestsCategory { Name = r.Key, Test = r.ToList() })
                 .ToList();
            
             
@@ -561,7 +561,7 @@ namespace TestHub.Api.ApiDataProvider
             return new TestGridData()
             {
                 Data = testRun.ToList(),
-                TestSuites = cases
+                Tests = cases
             };
             
         }

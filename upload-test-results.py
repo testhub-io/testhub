@@ -75,10 +75,10 @@ for root, dirs, files in os.walk("."):
             # get branch name
             print("Branch name is {}".format(args.branch))             
             
-            headers = {'ApiToken': args.apiToken}
+            headers = {'ApiToken': args.token}
             response = requests.put(url,
                          files=toUpload,
-                         data={'branch': args.token },
+                         data={'branch': args.branch },
                          verify=False,
                          headers=headers)
                                     
