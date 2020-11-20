@@ -12,7 +12,7 @@
     <b-tabs>
     <!-- Overview Tab -->
       <b-tab title="Overview" active>
-        <div class="row dashboard-block__topbar-row">
+        <div class="row dashboard-block__topbar-row mt-3">
           <div class="col-12 col-xl-6">
             <div class="panel mb-3">
               <div class="form-row no-gutters justify-content-between align-items-center mb-3">
@@ -186,6 +186,8 @@
           searchString() {
             if (this.searchString) {
               this.filteredTestResults = this.testResults.filter(test => test.name.includes(this.searchString))
+            } else {
+              this.filteredTestResults = this.testResults
             }
           },
           'testResultsPagination.pageSize' () { this.loadTestRuns() }

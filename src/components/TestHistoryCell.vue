@@ -10,22 +10,22 @@
     props: { testResult: { type: Object, required: true } },
     computed: {
       testResultStatus() {
+        if(!this.testResult.status && this.testResult.status !== 0) return 'result-cell missing'
+
         return this.testResult.status === 1 ? 
           "result-cell good" : "result-cell bad"
       },
       tooltipHTML() {
         const date = this.getDateTime();
-        console.log("date", date);
         const dateString = date ? `Date: ${date}` : '';
         const tooltipData = {
           title: `<span style="white-space: nowrap;">Test Run: ${this.testResult.testRunName} <br /> ${dateString}</span>`
         };
         return tooltipData;
-      }
+      }, 
     },
     methods: {
       gotoRun() {
-        console.log("hit")
         const project = this.$route.params.project
         const runId = this.testResult.testRunName.toString().trim();
 
@@ -34,9 +34,11 @@
           params: { org: this.$route.params.org, project: project, run: runId }
         })
       },
-      //getTooltipHTML() {},
+
       getDateTime() {
         let { timestamp } = this.testResult; 
+
+        if(!this.testResult.timestamp) timestamp = "2020-10-18T08:43:02.186171"
 
         timestamp = new Date(timestamp);
 
@@ -51,7 +53,6 @@
       },
     },
     mounted() {
-     // console.log(this.$route.params)
     } 
   }
 </script>
@@ -62,5 +63,13 @@
     display: block;
     height: 100%;
     width: 100%;
+  }
+
+  .result-cell {
+    min-width: 16px
+  }
+
+  .missing {
+    border: solid 1px rgba(0, 0, 0, 0.1);
   }
 </style>
