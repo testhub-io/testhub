@@ -526,6 +526,9 @@ namespace TestHub.Api.ApiDataProvider
         {
             var project = getProjectIntity(projectName);
 
+            var generator = new IdGenerator();
+            var cases = getCasesList(project, generator);
+
             var runTemplate = "TEST_RUN_TO_REPLACE_THAT_HOPEFULLY_NOBODY_USES";
             var urlTempalte = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = projectName, testRun = runTemplate });
 
@@ -534,37 +537,40 @@ namespace TestHub.Api.ApiDataProvider
                 .Where(t => t.ProjectId == project.Id)
                 .Select(t => new TestRunTestData()
                 {
-                    TestRun = t.TestRunName,                    
+                    TestRun = t.TestRunName,
                     Uri = urlTempalte.Replace(runTemplate, t.TestRunName),
-                    TestCases = t.TestCases.Select(tc=>new TestCaseWithResult()
+                    TestCases = t.TestCases.Select(tc => new TestCaseWithResult()
                     {
-                        Name = tc.Name,
+                        Id = generator.GetId(tc.Name),
                         Status = (short)tc.Status
                     })
                 });
-
-
-            var testCases = (from tc in _testHubDBContext.TestCases
-                            join tr in _testHubDBContext.TestRuns on tc.TestRunId equals tr.Id                            
-                            where tr.ProjectId == project.Id 
-                            select new { tc.Name, Suite = tc.ClassName}).ToList();
-
-            // first group by to select distinct only test names. Second to group by suite
-            var cases = testCases.GroupBy(t=>t.Name)
-                .Select(g=>g.FirstOrDefault())
-                .GroupBy(t => t.Suite, t=>t.Name)
-                .Select(r => new TestsCategory { ClassName = r.Key, Test = r.ToList() })
-                .ToList();
-           
-            
+                        
 
             return new TestGridData()
             {
                 Data = testRun.ToList(),
                 Tests = cases
             };
-            
+
         }
+
+        private List<TestsCategory> getCasesList(Project project, IdGenerator generator)
+        {
+            var testCases = (from tc in _testHubDBContext.TestCases
+                             join tr in _testHubDBContext.TestRuns on tc.TestRunId equals tr.Id
+                             where tr.ProjectId == project.Id
+                             select new { tc.Name, Id = generator.GetId(tc.Name), Suite = tc.ClassName }).ToList();
+
+            // first group by to select distinct only test names. Second to group by suite
+            var cases = testCases.GroupBy(t => t.Name)
+                .Select(g => g.FirstOrDefault())
+                .GroupBy(t => t.Suite, t => new TestCaseNameIdPair() { Id = t.Id, Name = t.Name })
+                .Select(r => new TestsCategory { ClassName = r.Key, Test = r.ToList() })
+                .ToList();
+            return cases;
+        }
+
 
     }
 

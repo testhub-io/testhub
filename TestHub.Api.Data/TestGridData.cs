@@ -11,7 +11,13 @@ namespace TestHub.Api.Data
     public class TestsCategory
     {
         public string ClassName { get; set; }
-        public List<string> Test { get; set; }
+        public List<TestCaseNameIdPair> Test { get; set; }
+    }
+
+    public class TestCaseNameIdPair
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 
 
@@ -24,8 +30,8 @@ namespace TestHub.Api.Data
     }
 
     public class TestCaseWithResult
-    {
-        public string Name { get; set; }
+    {        
         public short Status { get; set; }
+        public int Id { get; set; }
     }
 }
