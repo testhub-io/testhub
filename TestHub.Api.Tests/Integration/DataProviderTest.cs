@@ -169,7 +169,7 @@ namespace TestHub.Api.Tests.Integration
 
             var dataProvider = new DataProvider(_db, "test-hub", urlBuilder);
             // Act 
-            var results = dataProvider.GetTestGrid("java-maven-junit-helloworld");
+            var results = dataProvider.GetTestGrid("java-maven-junit-helloworld", 10);
 
             // Assert
             Assert.Greater(results.Data.Count(), 10);

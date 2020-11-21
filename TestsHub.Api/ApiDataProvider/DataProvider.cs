@@ -522,7 +522,7 @@ namespace TestHub.Api.ApiDataProvider
             };
         }
 
-        public TestGridData GetTestGrid(string projectName)
+        public TestGridData GetTestGrid(string projectName, int testRunsLimit)
         {
             var project = getProjectIntity(projectName);
 
@@ -535,6 +535,7 @@ namespace TestHub.Api.ApiDataProvider
             var testRun = _testHubDBContext.TestRuns
                 .Include(c => c.TestCases)
                 .Where(t => t.ProjectId == project.Id)
+                .Take(testRunsLimit)
                 .Select(t => new TestRunTestData()
                 {
                     TestRun = t.TestRunName,

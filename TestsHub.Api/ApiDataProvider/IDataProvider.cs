@@ -29,6 +29,6 @@ namespace TestHub.Api.ApiDataProvider
 
         CoverageHistoricalData GetCoverageHistory(string project);
 
-        TestGridData GetTestGrid(string project);
+        TestGridData GetTestGrid(string project, int testRunLimit);
     }
 }
