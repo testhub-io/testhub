@@ -26,7 +26,11 @@ namespace TestHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var projectData = repository.GetProjectSummary(project);
             // FormateResult(DummyDataProvider.GetDummyProjectSummary(org, project, new UrlBuilder(Url)), $"{org}/{project}");
-            return Ok(projectData);
+            if (projectData == null) {
+                return NoContent();
+            } else {
+                return Ok(projectData);
+            }
         }
 
         /// <summary>
@@ -38,7 +42,14 @@ namespace TestHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var testResultsSeries = repository.GetTestResultsForProject(project);
 
-            return Ok(testResultsSeries);
+            if (testResultsSeries == null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Ok(testResultsSeries);
+            }
         }
 
 
@@ -51,7 +62,14 @@ namespace TestHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var coverage = repository.GetCoverageHistory(project);
 
-            return Ok(coverage);
+            if (coverage == null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Ok(coverage);
+            }
         }
 
         [HttpGet]
@@ -62,7 +80,6 @@ namespace TestHub.Api.Controllers
 
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
             var projects = repository.GetProjects().Where(p=>p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
-
             return PaginatedListBuilder.CreatePaginatedList(projects, page, pageSize, this.Request.Path);
         }    
     }

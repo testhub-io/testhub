@@ -164,12 +164,7 @@ namespace TestHub.Api.ApiDataProvider
             var project = _testHubDBContext.Projects
                 .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase)
                 && p.Organisation.Id == _organisation.Id);
-
-            if (project == null)
-            {
-                TesthubApiException.ThrowProjectDoesNotExist(projectName);
-            }
-
+            
             return project;
         }
 
@@ -271,14 +266,7 @@ namespace TestHub.Api.ApiDataProvider
         public IQueryable<ProjectSummary> GetProjects()
         {
             var org = getOrganisation(Organisation);
-            if (org != null)
-            {
-                return getProjectsSummary(org);
-            }
-            else
-            {
-                return new List<ProjectSummary>().AsQueryable();
-            }
+            return org != null ? getProjectsSummary(org) : null;
         }
 
         private IQueryable<ProjectSummary> getProjectsSummary(TestHub.Data.DataModel.Organisation org)
@@ -396,16 +384,17 @@ namespace TestHub.Api.ApiDataProvider
         public ProjectSummary GetProjectSummary(string projectName)
         {
             var projectSummary = GetProjects().FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase));
-            if (projectSummary == null)
-            {
-                TesthubApiException.ThrowProjectDoesNotExist(projectName);
-            }
             return projectSummary;
         }
 
         public TestResultsHistoricalData GetTestResultsForProject(string projectName)
         {
             var project = getProjectIntity(projectName);
+
+            if (project == null)
+            {
+                return null;
+            }
 
             var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"SELECT r.id,  r.TestRunName, r.Timestamp, tc.Status, COUNT(tc.Id) as count
                                                               from TestRuns r
@@ -441,6 +430,11 @@ namespace TestHub.Api.ApiDataProvider
         public CoverageHistoricalData GetCoverageHistory(string projectName)
         {
             var project = getProjectIntity(projectName);
+            
+            if (project == null)
+            {
+                return null;
+            }
 
             var coverage =  _testHubDBContext.Query<CoverageHistoricalItem>(@"select tr.TestRunName, tr.Timestamp, sum(c.LinesCovered)/sum(c.LinesValid)*100 as percent
                       from  TestRuns tr

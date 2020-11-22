@@ -68,8 +68,18 @@ namespace TestHub.Api.Controllers
             if (filter == null)
                 filter = string.Empty;
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var res = dataProvider.GetTestRuns(project).AsQueryable().Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
-            return PaginatedListBuilder.CreatePaginatedList(res, page, pageSize, this.Request.Path); 
+            
+            var res = dataProvider.GetTestRuns(project).AsQueryable()
+                    .Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
+
+            try
+            {
+                return PaginatedListBuilder.CreatePaginatedList(res, page, pageSize, Request.Path);
+            }
+            catch
+            {
+                return NoContent();
+            }
         }
 
 
