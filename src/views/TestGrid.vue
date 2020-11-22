@@ -25,20 +25,23 @@
           
           <div v-for="group in filteredTestResults" :key="group.className" class="groupedClass">
           
-            <div class="testrun-block__table-title" v-if="Object.keys(group.testCases).length">{{ group.className }}</div>
+            <div class="testrun-block__table-title" v-if="group.test.length">{{ group.className }}</div>
 
-            <div class="testrun-block__table" v-if="Object.keys(group.testCases).length">
+            <div class="testrun-block__table" v-if="group.test.length">
 
-              <div v-for="(test, index) in Object.keys(group.testCases)" :key="index" class="testrun-block__table-item">
+              <div v-for="(test, index) in group.test" :key="index" class="testrun-block__table-item">
                 <div class="testrun-block__table-row">
-                  <div class="testrun-block__table-main-td"> {{ test }} </div>
+                  <div class="testrun-block__table-main-td selectable"> {{ test.name }} </div>
                   
                   <div class="testrun-block__table-results-td">
-                    <div class="dashboard-block__results-cells" v-if="group.testCases[test].length">
+                    <div class="dashboard-block__results-cells">
                       <TestHistoryCell 
-                        v-for="(result, resultIndex) in group.testCases[test].slice(0, 40)"
-                        :testResult="result"
-                        :key="resultIndex">
+                        v-for="(run, runIndex) in Object.keys(test.testRuns)"
+                        :testResult="test.testRuns[run]"
+                        :ref="run"
+                        @mouseover.native="highlightColumn(run)"
+                        @mouseleave.native="removeHighlight(run)"
+                        :key="runIndex">
                       </TestHistoryCell>
                     </div>
                   </div>
@@ -92,26 +95,34 @@
     },
     methods: {
       mapTestsToClasses(testClasses, testRuns) {
-        const grouped = testClasses.map(group => { 
-          const result = { className: group.className, testCases: {} };
+        const runIds = testRuns.map(run => run.testRun)
 
-          group.test.forEach(testName => { result.testCases[testName] = [] });
+        return testClasses.map(group => {  
+          group.test.forEach(test => { 
+            test.testRuns = {}
+            runIds.forEach(run => test.testRuns[run] = { testRunName: run })
 
-          return result;
+            testRuns.forEach(run => { 
+              run.testCases.forEach(item => {
+                if(item.id === test.id) test.testRuns[run.testRun] = { 
+                  ...item,
+                  ...test.testRuns[run.testRun]                  
+                }                
+              })
+            })
+          });
+
+
+          return group;
         });
+      },
 
-        testRuns.forEach(run => {
-          run.testCases && run.testCases.forEach(testCase => {
-            const [group] = grouped.filter(group => 
-              Object.keys(group.testCases).includes(testCase.name));
+      highlightColumn(runId) {
+        this.$refs[runId].forEach(cell => { cell.$el.classList.add('highlighted') })
+      },
 
-            group.testCases[testCase.name].push(
-              { ...testCase, uri: run.uri, testRunName: run.testRun }
-            )
-          })
-        });
-
-        return grouped;
+      removeHighlight(runId) {
+        this.$refs[runId].forEach(cell => { cell.$el.classList.remove('highlighted') })
       },
 
       gotoProjectRuns() {
@@ -125,7 +136,7 @@
       },
       
       async fetchTests() {       
-        const url = `${this.$route.params.org}/projects/${this.$route.params.project}/tests`
+        const url = `${this.$route.params.org}/projects/${this.$route.params.project}/tests?runsLimit=42`
         
         const testsData = await this.$http.get(url)                 
 
@@ -159,7 +170,11 @@
     pointer-events: auto
   }
 
-  .testrun-block__table-row:hover {
-    background-color: rgba(0,56,255, 0.1);
+  .highlighted {
+    background-color: rgba(0,56,255, 0.5) !important;
   } 
+
+  .selectable {
+    user-select: auto !important;
+  }
 </style>

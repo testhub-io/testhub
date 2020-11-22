@@ -2,7 +2,7 @@
   <div 
     v-b-tooltip.hover.html="tooltipHTML"
     :class="testResultStatus">
-    <a @click.prevent="gotoRun()"></a>
+    <a @click="gotoRun($event)"></a>
   </div>
 </template>
 <script>
@@ -25,15 +25,20 @@
       }, 
     },
     methods: {
-      gotoRun() {
+      gotoRun(event) {
         const project = this.$route.params.project
-        const runId = this.testResult.testRunName.toString().trim();
+        const runId = this.testResult.testRunName.toString().trim()
 
-        this.$router.push({
+        const options = {
           name: 'test-run', 
           params: { org: this.$route.params.org, project: project, run: runId }
-        })
-      },
+        }
+
+        if(event.ctrlKey) {
+          const page = this.$router.resolve(options)
+          window.open(page.href, "_blank");
+         } else { this.$router.push(options) }
+      }, 
 
       getDateTime() {
         let { timestamp } = this.testResult; 
@@ -69,7 +74,4 @@
     min-width: 16px
   }
 
-  .missing {
-    border: solid 1px rgba(0, 0, 0, 0.1);
-  }
-</style>
+ </style>
