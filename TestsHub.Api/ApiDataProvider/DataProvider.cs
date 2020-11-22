@@ -540,6 +540,7 @@ namespace TestHub.Api.ApiDataProvider
                 {
                     TestRun = t.TestRunName,
                     Uri = urlTempalte.Replace(runTemplate, t.TestRunName),
+                    Timestamp = t.Timestamp,
                     TestCases = t.TestCases.Select(tc => new TestCaseWithResult()
                     {
                         Id = generator.GetId(tc.Name),

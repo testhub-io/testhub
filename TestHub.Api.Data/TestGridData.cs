@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TestHub.Api.Data
 {
@@ -24,9 +25,9 @@ namespace TestHub.Api.Data
     public class TestRunTestData : DataObjectBase
     {        
         public string TestRun { get; set; }
-
+        
         public IEnumerable<TestCaseWithResult> TestCases { get; set; }
-
+        public DateTime Timestamp { get; set; }
     }
 
     public class TestCaseWithResult
