@@ -17,7 +17,7 @@
       },
       tooltipHTML() {
         const date = this.getDateTime();
-        const dateString = date ? `Date: ${date}` : '';
+        const dateString = date ? `Date: ${date}` : 'Date: N/A';
         const tooltipData = {
           title: `<span style="white-space: nowrap;">Test Run: ${this.testResult.testRunName} <br /> ${dateString}</span>`
         };
@@ -41,10 +41,10 @@
       }, 
 
       getDateTime() {
+        if(!this.testResult.timestamp) return
+
         let { timestamp } = this.testResult; 
-
-        if(!this.testResult.timestamp) timestamp = "2020-10-18T08:43:02.186171"
-
+ 
         timestamp = new Date(timestamp);
 
         const date = timestamp.getDate().toString().padStart(2, "0");
