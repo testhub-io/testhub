@@ -1,4 +1,0 @@
-﻿namespace TestHub.Api.Data
-{
-   
-}

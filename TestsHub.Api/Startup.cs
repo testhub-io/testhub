@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
+using System.IO.Compression;
 using TestHub.Api.ApiDataProvider;
 
 namespace TestHub.Api
@@ -27,7 +29,7 @@ namespace TestHub.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers();            
 
             services.AddCors(options => options.AddPolicy(AllowTestsHubOrigins,
                 builder =>
@@ -39,6 +41,14 @@ namespace TestHub.Api
                            .AllowAnyHeader()
                            .AllowAnyMethod()));
 
+            
+            // compression
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
+            services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<GzipCompressionProvider>();
+            });
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
             services.AddRazorPages();
@@ -77,6 +87,7 @@ namespace TestHub.Api
             }
 
             app.UseCors(AllowTestsHubOrigins);
+            app.UseResponseCompression();
             app.UseRouting();
             app.UseAuthorization();
             app.UseHttpsRedirection();
