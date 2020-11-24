@@ -19,27 +19,28 @@
           <button type="submit" title="Search" class="search-button"><i class="icon-search"></i></button>
         </div>
 
-        <div class="testrun-block__table-wrapper mt-3" v-if="mappedTests.length">
+        <div class="testrun-block__table-wrapper mt-3" v-if="testClasses.length">
            
-          <div v-for="group in filteredTestResults" :key="group.className" class="groupedClass">
+          <div v-for="group in testClasses.slice(0, 5)" :key="group.className" class="groupedClass">
           
             <div class="testrun-block__table-title" v-if="group.test.length">{{ group.className }}</div>
 
             <div class="testrun-block__table" v-if="group.test.length">
 
-              <div v-for="(test, index) in group.test" :key="index" class="testrun-block__table-item">
+              <div v-for="(test, index) in group.test.slice(0, 10)" :key="index" class="testrun-block__table-item">
                 <div class="testrun-block__table-row">
                   <div class="testrun-block__table-main-td"> {{ test.name }} </div>
                   
                   <div class="testrun-block__table-results-td">
                     <div class="dashboard-block__results-cells">
                       <TestHistoryCell 
-                        v-for="run in Object.keys(test.testRuns)"
-                        :testResult="test.testRuns[run]"
-                        :ref="run"
-                        @mouseover.native="highlightColumn(run)"
-                        @mouseleave.native="removeHighlight(run)"
-                        :key="test.id + run">
+                        v-for="run in testRuns"
+                        :matches="run.testCases.filter(cs => cs.id === test.id)"
+                        :ref="run.testRun"
+                        :testRun="run"
+                        @mouseover.native="highlightColumn(run.testRun)"
+                        @mouseleave.native="removeHighlight(run.testRun)"
+                        :key="test.id + run.testRun">
                       </TestHistoryCell>
                     </div>
                   </div>
@@ -89,27 +90,23 @@
       }
     },
     methods: {
-      mapTestsToClasses(testClasses, testRuns) {
-        const runIds = testRuns.map(run => run.testRun)
+      // mapTestsToClasses(testClasses, testRuns) {
 
-        return testClasses.map(group => {  
-          group.test.forEach(test => { 
-            test.testRuns = {}
-            runIds.forEach(run => test.testRuns[run] = { testRunName: run })
+      //   return testClasses.map(group => {  
+      //     group.test.forEach(test => { 
+      //       test.testRuns = []
+      //       //runIds.forEach(run => test.testRuns[run] = { testRunName: run })
 
-            testRuns.forEach(run => { 
-              run.testCases.forEach(item => {
-                if(item.id === test.id) test.testRuns[run.testRun] = { 
-                  ...item,
-                  ...test.testRuns[run.testRun]                  
-                }                
-              })
-            })
-          });
+      //       testRuns.forEach((run, index) => { 
+      //         run.testCases.forEach(item => {
+      //           if(item.id === test.id) test.testRuns.push({ runIndex: index, testRunName: run.testRun, ...item })              
+      //         })
+      //       })
+      //     });
 
-          return group;
-        });
-      },
+      //     return group;
+      //   });
+      // },
 
       highlightColumn(runId) {
         this.$refs[runId].forEach(cell => { cell.$el.classList.add('highlighted') })
@@ -136,10 +133,10 @@
           .then(response => {
             const { data, tests } = response.data
         
-            this.testRuns = data
-            this.testClasses = tests
+            this.testRuns = Object.freeze(data)
+            this.testClasses = Object.freeze(tests)
 
-            this.mappedTests = this.filteredTestResults = this.mapTestsToClasses(tests, data)
+            // this.mappedTests = this.filteredTestResults = Object.freeze(this.mapTestsToClasses(tests, data))
           })                
       }
     },

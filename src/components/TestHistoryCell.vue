@@ -1,25 +1,30 @@
-<template>
-  <div 
-    v-b-tooltip.hover.html="tooltipHTML"
-    :class="testResultStatus">
-    <a @click="gotoRun($event)"></a>
-  </div>
-</template>
+
 <script>
   export default {
-    props: { testResult: { type: Object, required: true } },
+    props: { 
+      testResult: { type: Object },
+      testRun: { type: Object }, 
+      matches: { type: Array }
+    },
+    data() {
+      return {
+        result: null
+      }
+    },
     computed: {
       testResultStatus() {
-        if(!this.testResult.status && this.testResult.status !== 0) return 'result-cell missing'
+        if(!this.result) return ''
+        if(this.result.status === null) return 'result-cell missing'
 
-        return this.testResult.status === 1 ? 
+        return this.result.status === 1 ? 
           "result-cell good" : "result-cell bad"
       },
       tooltipHTML() {
+        if(!this.result) return ''
         const date = this.getDateTime();
         const dateString = date ? `Date: ${date}` : 'Date: N/A';
         const tooltipData = {
-          title: `<span style="white-space: nowrap;">Test Run: ${this.testResult.testRunName} <br /> ${dateString}</span>`
+          title: `<span style="white-space: nowrap;">Test Run: ${this.result.testRunName} <br /> ${dateString}</span>`
         };
         return tooltipData;
       }, 
@@ -27,7 +32,7 @@
     methods: {
       gotoRun(event) {
         const project = this.$route.params.project
-        const runId = this.testResult.testRunName.toString().trim()
+        const runId = this.result.testRunName.toString().trim()
 
         const options = {
           name: 'test-run', 
@@ -41,9 +46,9 @@
       }, 
 
       getDateTime() {
-        if(!this.testResult.timestamp) return
+        if(!this.result.timestamp) return
 
-        let { timestamp } = this.testResult; 
+        let { timestamp } = this.result; 
  
         timestamp = new Date(timestamp);
 
@@ -58,7 +63,25 @@
       },
     },
     mounted() {
-    } 
+      if(this.testRun) {
+        const [match] = this.matches
+
+        this.result =  { 
+          status: match ? match.status : null,
+          testRunName: this.testRun.testRun
+        }
+      } else { this.result = this.testResult }
+    },
+    render(createElement) {
+      const self = this
+      return createElement('div', {
+          class: self.testResultStatus,
+        }, [
+          createElement('a', {
+            attrs: {}
+          })
+        ])
+    }
   }
 </script>
 <style scoped>
