@@ -75,12 +75,20 @@ namespace TestHub.Api.Controllers
         [HttpGet]
         public ActionResult<PaginatedList<Data.ProjectSummary>> GetProjects(string org, [FromQuery]int? page, [FromQuery]int? pageSize, [FromQuery]string filter)
         {
-            if (filter == null)
-                filter = string.Empty;
+            filter ??= string.Empty;
 
             var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var projects = repository.GetProjects().Where(p=>p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
-            return PaginatedListBuilder.CreatePaginatedList(projects, page, pageSize, this.Request.Path);
+
+            try
+            {
+                var projects = repository.GetProjects()
+                    .Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
+                return PaginatedListBuilder.CreatePaginatedList(projects, page, pageSize, this.Request.Path);
+            }
+            catch
+            {
+                return NoContent();
+            }
         }    
     }
 }

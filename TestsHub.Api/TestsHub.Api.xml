@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TestsHub.Api</name>
+    </assembly>
+    <members>
+        <member name="M:TestHub.Api.Controllers.ProjectsController.Get(System.String,System.String)">
+            <summary>
+            Get project summary
+            </summary>    
+        </member>
+        <member name="M:TestHub.Api.Controllers.ProjectsController.GetTestResults(System.String,System.String)">
+            <summary>
+            Get historical test results series
+            </summary>        
+        </member>
+        <member name="M:TestHub.Api.Controllers.ProjectsController.GetProjectCoverage(System.String,System.String)">
+            <summary>
+            Get historical coverage data for project
+            </summary>        
+        </member>
+        <member name="M:TestHub.Api.Controllers.TestRunsController.GetTestRuns(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String)">
+            <summary>
+            Get list of test runs for a project. Paginated
+            </summary>
+            <param name="org"></param>
+            <param name="project"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestHub.Api.Controllers.TestRunsController.GetCoverage(System.String,System.String,System.String)">
+            <summary>
+            Not implemented 
+            </summary>      
+        </member>
+        <member name="M:TestHub.Api.Controllers.TestRunsController.GetSourceCode(System.String,System.String,System.String,System.String)">
+            <summary>
+            Not implemented 
+            </summary>      
+        </member>
+    </members>
+</doc>

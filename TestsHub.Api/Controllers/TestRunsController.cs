@@ -35,9 +35,16 @@ namespace TestHub.Api.Controllers
                 return BadRequest();
             }
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var testRunEntity = dataProvider.GetTestRunSummary(project, testRun);
-
-            return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
+            
+            try
+            {
+                var testRunEntity = dataProvider.GetTestRunSummary(project, testRun);
+                return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
+            }
+            catch
+            {
+                return NoContent();
+            }
         }
 
         [HttpGet("{testrun}/tests")]        
@@ -48,9 +55,16 @@ namespace TestHub.Api.Controllers
                 return BadRequest();
             }
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var testRunEntity = dataProvider.GetTests(project, testRun);
 
-            return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
+            try
+            {
+                var testRunEntity = dataProvider.GetTests(project, testRun);
+                return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
+            }
+            catch
+            {
+                return NoContent();
+            }
         }
 
         /// <summary>
@@ -65,8 +79,7 @@ namespace TestHub.Api.Controllers
         [HttpGet]
         public ActionResult<PaginatedList<Data.TestRunSummary>> GetTestRuns(string org, string project, [FromQuery]int? page, [FromQuery]int? pageSize, [FromQuery]string filter)
         {
-            if (filter == null)
-                filter = string.Empty;
+            filter ??= string.Empty;
             var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
             
             var res = dataProvider.GetTestRuns(project).AsQueryable()
@@ -153,14 +166,13 @@ namespace TestHub.Api.Controllers
                 }
             }
 
-            if (Request.Form.Files[CoverageKey] != null && Request.Form.Files[CoverageKey].Length > 0)
+            if (Request.Form.Files[CoverageKey] == null || Request.Form.Files[CoverageKey].Length <= 0)
+                return Ok(new {count = files.Count, size});
+            using (var coverageStream = Request.Form.Files[CoverageKey].OpenReadStream()) 
             {
-                using (var coverageStream = Request.Form.Files[CoverageKey].OpenReadStream()) 
-                {
-                    var factory = new CoverageReaderFactory();
-                    var coberturaReader = factory.CreateReader(coverageStream, dataLoader);
-                    coberturaReader.Read(coverageStream, testRun);
-                }
+                var factory = new CoverageReaderFactory();
+                var coberturaReader = factory.CreateReader(coverageStream, dataLoader);
+                coberturaReader.Read(coverageStream, testRun);
             }
 
             return Ok(new { count = files.Count, size });
@@ -173,7 +185,7 @@ namespace TestHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubWritableDataProvider(org, Url);                        
             var dataLoader = new DataLoader(repository.TestHubDBContext, project, org, testRun);
 
-            using (var ms = new MemoryStream(2048))
+            await using (var ms = new MemoryStream(2048))
             {
                 await Request.Body.CopyToAsync(ms);
                 ms.Seek(0, SeekOrigin.Begin);
