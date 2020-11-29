@@ -5,15 +5,26 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"strings"
+	"testhub-cli/pkg/console"
 )
 
 // We have to use it only when we take org name from environment and not from user
 // otherwise it's really easy to workaround
 func getApiKey(orgAndProject string, testhubDomain string) (string, error) {
+
 	org, _, err := getOrgAndProject(orgAndProject)
 	if err != nil {
 		return "", err
 	}
+
+	if !isEnvQuialifiesForAutoToken(orgAndProject) {
+		return "", fmt.Errorf("Api Token must be provided as an argument")
+	} else {
+		console.PrintLn("Auto-retrieval of API token")
+	}
+
 	url := fmt.Sprintf("https://%s/api/%s/apikey", testhubDomain, org)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -30,4 +41,14 @@ func getApiKey(orgAndProject string, testhubDomain string) (string, error) {
 		log.Fatal(err)
 	}
 	return string(k), nil
+}
+
+func isEnvQuialifiesForAutoToken(orgAndProject string) bool {
+	isGhActions := os.Getenv("GITHUB_ACTIONS")
+	ghActionsRepos := os.Getenv("GITHUB_REPOSITORY")
+
+	if isGhActions == "true" && strings.EqualFold(ghActionsRepos, orgAndProject) {
+		return true
+	}
+	return false
 }
