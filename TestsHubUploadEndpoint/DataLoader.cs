@@ -46,7 +46,7 @@ namespace TestsHubUploadEndpoint
 
         public void Add(TestRun testRun)
         {
-            var project = _testHubDBContext.Projects.SingleOrDefault(p => p.Name == ProjectName);
+            var project = _testHubDBContext.Projects.SingleOrDefault(p => p.Name == ProjectName && p.OrganisationId == Organisation.Id);
             if (project == null && testRun.Project == null)
             {
                 project = new Project()
