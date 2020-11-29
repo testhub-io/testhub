@@ -33,6 +33,15 @@ const ApiKeyHeader = "ApiToken"
 func (u *UploadFilesParameters) UploadTestResultFiles() error {
 	u.setTesthubDomain()
 
+	if len(u.ApiToken) == 0 {
+		t, err := getApiKey(u.OrgAndProject, u.testhubDomain)
+		if err != nil {
+			fmt.Printf("Error to retreive token. Err: %s", err.Error())
+			return fmt.Errorf("Api Toke is missing")
+		}
+		u.ApiToken = strings.Replace(t, "\"", "", -1)
+	}
+
 	root := ""
 	if len(u.ContextDir) != 0 {
 		root = u.ContextDir + string(filepath.Separator)
