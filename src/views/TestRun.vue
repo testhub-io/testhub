@@ -256,4 +256,10 @@
   .groupedClass {
     margin-top: 20px !important;
   }
+
+  .testrun-block__table-row {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
 </style>

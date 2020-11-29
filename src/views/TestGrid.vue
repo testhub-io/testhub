@@ -21,13 +21,13 @@
 
         <div class="testrun-block__table-wrapper mt-3" v-if="testClasses.length">
            
-          <div v-for="group in testClasses.slice(0, 5)" :key="group.className" class="groupedClass">
+          <div v-for="group in filteredClasses" :key="group.className" class="groupedClass">
           
             <div class="testrun-block__table-title" v-if="group.test.length">{{ group.className }}</div>
 
             <div class="testrun-block__table" v-if="group.test.length">
 
-              <div v-for="(test, index) in group.test.slice(0, 10)" :key="index" class="testrun-block__table-item">
+              <div v-for="(test, index) in group.test" :key="index" class="testrun-block__table-item">
                 <div class="testrun-block__table-row">
                   <div class="testrun-block__table-main-td"> {{ test.name }} </div>
                   
@@ -40,6 +40,7 @@
                         :testRun="run"
                         @mouseover.native="highlightColumn(run.testRun)"
                         @mouseleave.native="removeHighlight(run.testRun)"
+                        :id="test.id + run.testRun"
                         :key="test.id + run.testRun">
                       </TestHistoryCell>
                     </div>
@@ -66,9 +67,8 @@
       return {
         searchString: null,
         testClasses: [],
-        testRuns: [],
-        mappedTests: [],
-        filteredTestResults: []
+        filteredClasses: [],
+        testRuns: []
       }
     },
     computed: { },
@@ -80,34 +80,16 @@
 
           const groups = tests.filter(group => group.test.some(filter))
 
-          this.filteredTestResults = groups.map(grp => {
-              const matches = grp.test.filter(filter)
-              return { ...grp, test: matches }
+          this.filteredClasses = groups.map(grp => {
+              const test = grp.test.filter(filter)
+              return { ...grp, test }
             })
         } else {              
-          this.filteredTestResults = this.mappedTests
+          this.filteredClasses = this.testClasses
         }
       }
     },
     methods: {
-      // mapTestsToClasses(testClasses, testRuns) {
-
-      //   return testClasses.map(group => {  
-      //     group.test.forEach(test => { 
-      //       test.testRuns = []
-      //       //runIds.forEach(run => test.testRuns[run] = { testRunName: run })
-
-      //       testRuns.forEach((run, index) => { 
-      //         run.testCases.forEach(item => {
-      //           if(item.id === test.id) test.testRuns.push({ runIndex: index, testRunName: run.testRun, ...item })              
-      //         })
-      //       })
-      //     });
-
-      //     return group;
-      //   });
-      // },
-
       highlightColumn(runId) {
         this.$refs[runId].forEach(cell => { cell.$el.classList.add('highlighted') })
       },
@@ -134,9 +116,7 @@
             const { data, tests } = response.data
         
             this.testRuns = Object.freeze(data)
-            this.testClasses = Object.freeze(tests)
-
-            // this.mappedTests = this.filteredTestResults = Object.freeze(this.mapTestsToClasses(tests, data))
+            this.testClasses = this.filteredClasses = Object.freeze(tests)
           })                
       }
     },
@@ -155,6 +135,12 @@
   }
   
   .highlighted {
-    background-color: rgba(0,56,255, 0.5) !important;
+    background-color: rgba(0,56,255, 0.2) !important;
   }
+
+  .testrun-block__table-row {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+
 </style>

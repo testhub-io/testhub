@@ -1,17 +1,17 @@
-
 <script>
   export default {
     props: { 
       testResult: { type: Object },
       testRun: { type: Object }, 
-      matches: { type: Array }
+      matches: { type: Array },
+      id: { type: String }
     },
     data() {
       return {
         result: null
       }
     },
-    computed: {
+    methods: {
       testResultStatus() {
         if(!this.result) return ''
         if(this.result.status === null) return 'result-cell missing'
@@ -19,18 +19,9 @@
         return this.result.status === 1 ? 
           "result-cell good" : "result-cell bad"
       },
-      tooltipHTML() {
-        if(!this.result) return ''
-        const date = this.getDateTime();
-        const dateString = date ? `Date: ${date}` : 'Date: N/A';
-        const tooltipData = {
-          title: `<span style="white-space: nowrap;">Test Run: ${this.result.testRunName} <br /> ${dateString}</span>`
-        };
-        return tooltipData;
-      }, 
-    },
-    methods: {
-      gotoRun(event) {
+
+      getRunUrl() {
+        if(!this.result) return
         const project = this.$route.params.project
         const runId = this.result.testRunName.toString().trim()
 
@@ -39,10 +30,7 @@
           params: { org: this.$route.params.org, project: project, run: runId }
         }
 
-        if(event.ctrlKey) {
-          const page = this.$router.resolve(options)
-          window.open(page.href, "_blank");
-         } else { this.$router.push(options) }
+        return this.$router.resolve(options).href
       }, 
 
       getDateTime() {
@@ -72,15 +60,40 @@
         }
       } else { this.result = this.testResult }
     },
+
     render(createElement) {
       const self = this
-      return createElement('div', {
-          class: self.testResultStatus,
+      const date = this.getDateTime()
+
+      const element = createElement('div', {
+        attrs: { class: 'dashboard-block__results-column' }
+      }, [
+        createElement('div', {
+          class: self.testResultStatus(),
+          attrs: {
+            id: self.id
+          }
         }, [
           createElement('a', {
-            attrs: {}
-          })
-        ])
+            attrs: {
+              href: self.getRunUrl()
+            }
+          }),
+        ]),
+
+        createElement('b-tooltip', {
+          attrs: {
+            trigger: 'hover',
+            target: self.id
+          }
+        }, [
+          createElement('span', {
+            attrs: { style: 'white-space: pre-wrap;' }
+          }, `Test Run: ${self.result.testRunName}\nDate: ${date ? date : '' }`)
+        ]) 
+      ])
+
+      return element
     }
   }
 </script>
@@ -94,7 +107,11 @@
   }
 
   .result-cell {
-    min-width: 16px
-  }
+    min-width: 16px;
+  } 
 
+  .dashboard-block__results-column {
+    padding: 20% 2px;
+  }
+ 
  </style>
