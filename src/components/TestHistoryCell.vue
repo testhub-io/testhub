@@ -4,11 +4,12 @@
       testResult: { type: Object },
       testRun: { type: Object }, 
       matches: { type: Array },
-      id: { type: String }
+      id: { type: String },
+      isFirstRow: { type: Boolean }
     },
     data() {
       return {
-        result: null
+        result: {}
       }
     },
     methods: {
@@ -21,7 +22,7 @@
       },
 
       getRunUrl() {
-        if(!this.result) return
+        if(!this.result.testRunName) return
         const project = this.$route.params.project
         const runId = this.result.testRunName.toString().trim()
 
@@ -64,6 +65,21 @@
     render(createElement) {
       const self = this
       const date = this.getDateTime()
+      const runName = this.result.testRunName ? this.result.testRunName : ''
+
+      const displayTooltip = this.isFirstRow ? 
+        (
+          createElement('b-tooltip', {
+            attrs: {
+              trigger: 'hover',
+              target: self.id
+            }
+          }, [
+            createElement('span', {
+              attrs: { style: 'white-space: pre-wrap;' }
+            }, `Test Run: ${runName}\nDate: ${date ? date : '' }`)
+          ]) 
+        ) : null
 
       const element = createElement('div', {
         attrs: { class: 'dashboard-block__results-column' }
@@ -80,17 +96,7 @@
             }
           }),
         ]),
-
-        createElement('b-tooltip', {
-          attrs: {
-            trigger: 'hover',
-            target: self.id
-          }
-        }, [
-          createElement('span', {
-            attrs: { style: 'white-space: pre-wrap;' }
-          }, `Test Run: ${self.result.testRunName}\nDate: ${date ? date : '' }`)
-        ]) 
+        displayTooltip
       ])
 
       return element
