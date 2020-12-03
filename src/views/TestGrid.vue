@@ -21,13 +21,13 @@
 
         <div class="testrun-block__table-wrapper mt-3" v-if="testClasses.length">
            
-          <div v-for="group in filteredClasses" :key="group.className" class="groupedClass">
+          <div v-for="(group, groupIndex) in filteredClasses" :key="group.className" class="groupedClass">
           
             <div class="testrun-block__table-title" v-if="group.test.length">{{ group.className }}</div>
 
             <div class="testrun-block__table" v-if="group.test.length">
 
-              <div v-for="(test, index) in group.test" :key="index" class="testrun-block__table-item">
+              <div v-for="(test, testIndex) in group.test" :key="testIndex" class="testrun-block__table-item">
                 <div class="testrun-block__table-row">
                   <div class="testrun-block__table-main-td"> {{ test.name }} </div>
                   
@@ -41,6 +41,7 @@
                         @mouseover.native="highlightColumn(run.testRun)"
                         @mouseleave.native="removeHighlight(run.testRun)"
                         :id="test.id + run.testRun"
+                        :isFirstRow="groupIndex === 0 && testIndex === 0"
                         :key="test.id + run.testRun">
                       </TestHistoryCell>
                     </div>
