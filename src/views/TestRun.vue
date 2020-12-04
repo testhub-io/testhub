@@ -95,13 +95,14 @@
 
                     <div class="testrun-block__table-results-td">
                       <div class="dashboard-block__results-cells">
-                        <TestHistoryCell 
-                          v-for="(result, resultIndex) in test.recentResults"
-                          :testResult="result"
+                        <div v-for="(result, resultIndex) in test.recentResults"
+                          v-b-tooltip.hover.html="getTooltipHTML(result)"
                           :key="resultIndex"
+                          :class="getTestResultStatus(result)"
                           :id="`${result.testRunName}-${resultIndex}`"
                           :v-if="test.recentResults">
-                        </TestHistoryCell>
+                          <a @click.prevent="gotoRun(result)"></a>
+                        </div>
                         <span v-if="test.recentResults === null">New test</span>
                       </div>
                     </div>
@@ -132,8 +133,6 @@
 
   <script>
     import CoverageTab from '../components/CoverageTab'
-    import TestHistoryCell from '../components/TestHistoryCell'
-
     export default {
       data: function () {
           return {
@@ -151,12 +150,11 @@
             const filteredTests = [...this.testRuns.tests].filter(test => {
               return this.selectedFilters.some(key => test.status === parseInt(key))
             });
-
             this.groupedTests = this.groupTestsByClass(filteredTests);
-          }
         }
-      },
-    components: { CoverageTab, TestHistoryCell },
+      }
+    },
+    components: { CoverageTab },
     computed: {
       passed() {
           if (this.testRuns.tests === undefined) {
@@ -239,6 +237,35 @@
             return accumulator; 
           }, {}); 
         },
+        getTestResultStatus(result) {
+            return result.status === 1 ? "result-cell good" : "result-cell bad"
+        },
+        gotoRun(result) {
+          const project = this.$route.params.project
+          const runId = result.testRunName.toString().trim();
+          this.$router.push({
+            name: 'test-run', 
+            params: { org: this.$route.params.org, project: project, run: runId }
+          })
+        },
+        getTooltipHTML(test) {
+          const date = this.getDateTime(test);
+          const dateString = date ? `Date: ${date}` : '';
+          const tooltipData = {
+            title: `<span style="white-space: nowrap;">Test Run: ${test.testRunName} <br /> ${dateString}</span>`
+          };
+          return tooltipData;
+        },
+        getDateTime(result) {
+          let { timestamp } = result; 
+          timestamp = new Date(timestamp);
+          const date = timestamp.getDate().toString().padStart(2, "0");
+          const month = timestamp.getMonth().toString().padStart(2, "0"); 
+          const year = timestamp.getFullYear().toString().padStart(4, "0");
+          const time = `${timestamp.getHours()}:${timestamp.getMinutes()}`;
+          const dateString = `${year}-${month}-${date} ${time}`;
+          return month !== "00" ? dateString : null;
+        }
     },
     mounted() {
         this.baseRunUrl = `${this.$route.params.org}/projects/${this.$route.params.project}/runs/${this.$route.params.run}/`
@@ -253,13 +280,12 @@
   a {
     cursor: pointer;
   }
+  .dashboard-block__results-cells > div > a {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
   .groupedClass {
     margin-top: 20px !important;
   }
-
-  .testrun-block__table-row {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-
 </style>
