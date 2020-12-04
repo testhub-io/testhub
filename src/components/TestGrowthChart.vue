@@ -1,5 +1,5 @@
 <script>
-import {Bar} from 'vue-chartjs'
+import {Line} from 'vue-chartjs'
 import moment from 'moment'
 export default {
   data() {
@@ -97,7 +97,7 @@ export default {
       return this.$store.getters.currentUser
     }
   },
-  extends: Bar,
+  extends: Line,
   mounted() {
     var self = this
     this.$http.get(this.$route.params.org + '/testresults')

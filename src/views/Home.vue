@@ -17,7 +17,7 @@
             </div>
 
             <div class="dashboard-block__number-item">
-              <div class="dashboard-block__num">{{ this.org.summary.avgCoverage }}%</div>
+              <div class="dashboard-block__num">{{ parseFloat(this.org.summary.avgCoverage*100).toFixed(2)  }}%</div>
               <div class="dashboard-block__number-caption">Average coverage</div>
             </div>
           </div>
@@ -27,7 +27,7 @@
       <div class="col-12 col-xl-6 order-3 order-xl-2">
         <div class="panel mb-3">
           <div class="form-row no-gutters justify-content-between align-items-center mb-3">
-            <div class="h5 mb-0">Test count trend</div>
+            <div class="h5 mb-0">Tests Count</div>
           </div>
 
           <div class="dashboard-block__chart-element">
