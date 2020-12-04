@@ -100,7 +100,7 @@ export default {
   extends: Bar,
   mounted() {
     var self = this
-    this.$http.get(this.user.org + '/testresults')
+    this.$http.get(this.$route.params.org + '/testresults')
         .then((response) => {
           var data = response.data.data
           for(var i=0; i<data.length; i++) {
