@@ -3,6 +3,10 @@ import { Line } from 'vue-chartjs'
 
 export default {
   data() {
+
+    let borderWidht = 1
+    let pointRadius = 3
+    let pointHoverRadius = 5
     return {
       testResultsChartData: {},
       chartData: {
@@ -16,9 +20,9 @@ export default {
           fill: true,
           pointBackgroundColor: '#F98809',
           pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 5
+          pointBorderWidth: borderWidht,
+          pointRadius: pointRadius,
+          pointHoverRadius: pointHoverRadius
         },
         // Failed
         {
@@ -28,9 +32,9 @@ export default {
           fill: true,
           pointBackgroundColor: '#E63F34',
           pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 5
+          pointBorderWidth: borderWidht,
+          pointRadius: pointRadius,
+          pointHoverRadius: pointHoverRadius
         },
         // Passed
         {
@@ -40,9 +44,9 @@ export default {
           fill: true,
           pointBackgroundColor: '#24A44C',
           pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 5
+          pointBorderWidth: borderWidht,
+          pointRadius: pointRadius,
+          pointHoverRadius: pointHoverRadius
         }
         ]
       },

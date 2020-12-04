@@ -3,6 +3,7 @@ import { Line } from 'vue-chartjs'
 
 export default {
   data() {
+    
     return {
       coverage: {},
       chartData: {
@@ -15,8 +16,8 @@ export default {
           fill: true,
           pointBackgroundColor: '#0038FF',
           pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
+          pointBorderWidth: 1,
+          pointRadius: 3,
           pointHoverRadius: 5
         }]
       },
