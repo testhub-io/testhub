@@ -31,14 +31,14 @@ namespace TestHub.Api.Controllers
         [ProducesDefaultResponseType]        
         public ActionResult<Data.TestRun> Get(string org, string project, string testRun)
         {
-            if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
-            {
-                return BadRequest();
-            }
-            var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            
             try
             {
+                if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
+                {
+                    return BadRequest();
+                }
+                var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            
                 var testRunEntity = dataProvider.GetTestRunSummary(project, testRun);
                 return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
             }
@@ -51,14 +51,15 @@ namespace TestHub.Api.Controllers
         [HttpGet("{testrun}/tests")]        
         public ActionResult<Data.TestRun> GetTests(string org, string project, string testRun)
         {
-            if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
-            {
-                return BadRequest();
-            }
-            var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-
             try
             {
+                if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
+                {
+                    return BadRequest();
+                }
+                var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
+
+            
                 var testRunEntity = dataProvider.GetTests(project, testRun);
                 return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
             }
@@ -78,17 +79,21 @@ namespace TestHub.Api.Controllers
         /// <param name="filter"></param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public ActionResult<PaginatedList<Data.TestRunSummary>> GetTestRuns(string org, string project, [FromQuery]int? page, [FromQuery]int? pageSize, [FromQuery]string filter)
         {
-            filter ??= string.Empty;
-            var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            
-            var res = dataProvider.GetTestRuns(project).AsQueryable()
-                    .Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
-
             try
             {
-                return PaginatedListBuilder.CreatePaginatedList(res, page, pageSize, Request.Path);
+                    filter ??= string.Empty;
+                var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            
+                var res = dataProvider.GetTestRuns(project).AsQueryable()
+                        .Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
+
+            
+                    return PaginatedListBuilder.CreatePaginatedList(res, page, pageSize, Request.Path);
             }
             catch(TesthubApiException)
             {

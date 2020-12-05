@@ -27,7 +27,7 @@ namespace TestHub.Api.ApiDataProvider
 
         public int TestRunsCount { get; private set; }
 
-        public DataProvider(TestHubDBContext testHubDBContext, string organisation, UrlBuilder url, bool autoCreateOrg)
+        public DataProvider(TestHubDBContext testHubDBContext, string organisation, UrlBuilder url, bool autoCreateOrg = false)
         {
             _autoCreateOrg = autoCreateOrg;
             _testHubDBContext = testHubDBContext;
@@ -173,7 +173,12 @@ namespace TestHub.Api.ApiDataProvider
             var project = _testHubDBContext.Projects
                 .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase)
                 && p.Organisation.Id == _organisation.Id);
-            
+
+            if (project == null)
+            {
+                TesthubApiException.ThrowProjectDoesNotExist(projectName);
+            }
+
             return project;
         }
 
@@ -488,12 +493,7 @@ namespace TestHub.Api.ApiDataProvider
 
         public CoverageHistoricalData GetCoverageHistory(string projectName)
         {
-            var project = getProjectIntity(projectName);
-            
-            if (project == null)
-            {
-                TesthubApiException.ThrowProjectDoesNotExist(projectName);
-            }
+            var project = getProjectIntity(projectName);        
 
             var coverage =  _testHubDBContext.Query<CoverageHistoricalItem>(@"select tr.TestRunName, tr.Timestamp, sum(c.LinesCovered)/sum(c.LinesValid)*100 as percent
                       from  TestRuns tr
