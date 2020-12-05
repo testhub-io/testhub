@@ -101,7 +101,7 @@
                           :class="getTestResultStatus(result)"
                           :id="`${result.testRunName}-${resultIndex}`"
                           :v-if="test.recentResults">
-                          <a @click.prevent="gotoRun(result)"></a>
+                          <a :href="gotoRun(result)"></a>
                         </div>
                         <span v-if="test.recentResults === null">New test</span>
                       </div>
@@ -243,10 +243,11 @@
         gotoRun(result) {
           const project = this.$route.params.project
           const runId = result.testRunName.toString().trim();
-          this.$router.push({
+          
+          return this.$router.resolve({
             name: 'test-run', 
             params: { org: this.$route.params.org, project: project, run: runId }
-          })
+          }).href
         },
         getTooltipHTML(test) {
           const date = this.getDateTime(test);
