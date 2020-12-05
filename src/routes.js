@@ -1,6 +1,7 @@
 import Home from './views/Home.vue'
 import ProjectRuns from './views/ProjectRuns.vue'
 import TestRun from './views/TestRun.vue'
+import TestGrid from './views/TestGrid.vue'
 
 export const routes = [
     {
@@ -30,6 +31,12 @@ export const routes = [
         path: '/:org/projects/:project/runs/:run',
         name: 'test-run',
         component: TestRun,
+        meta: {requiresAuth: false}
+    },
+    {
+        path: '/:org/projects/:project/tests',
+        name: 'test-grid',
+        component: TestGrid,
         meta: {requiresAuth: false}
     },
 ]
