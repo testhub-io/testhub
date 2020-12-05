@@ -17,6 +17,7 @@ namespace TestHub.Api.ApiDataProvider
         private readonly TestHub.Data.DataModel.Organisation _organisation;
         private readonly TestHubDBContext _testHubDBContext;
         private readonly UrlBuilder _urlBuilder;
+        private bool _autoCreateOrg;
 
         public string Organisation => _organisation.Name;
 
@@ -26,14 +27,21 @@ namespace TestHub.Api.ApiDataProvider
 
         public int TestRunsCount { get; private set; }
 
-        public DataProvider(TestHubDBContext testHubDBContext, string organisation, UrlBuilder url)
+        public DataProvider(TestHubDBContext testHubDBContext, string organisation, UrlBuilder url, bool autoCreateOrg = false)
         {
+            _autoCreateOrg = autoCreateOrg;
             _testHubDBContext = testHubDBContext;
             _organisation = TestHubDBContext.Organisations.SingleOrDefault(o => o.Name.Equals(organisation, StringComparison.OrdinalIgnoreCase));
             if (_organisation == null)
             {
-                TestHubDBContext.Organisations.Add(new TestHub.Data.DataModel.Organisation() { Name = organisation.ToLower() });
-                TestHubDBContext.SaveChanges();
+                if (_autoCreateOrg)
+                {
+                    TestHubDBContext.Organisations.Add(new TestHub.Data.DataModel.Organisation() { Name = organisation.ToLower() });
+                    TestHubDBContext.SaveChanges();
+                }else
+                {
+                    TesthubApiException.ThrowOrganizationDoesntExist(organisation);
+                }
             }
             _organisation = getOrganisation(organisation);
 
@@ -208,11 +216,14 @@ namespace TestHub.Api.ApiDataProvider
 
         public Data.Organisation GetOrgSummary()
         {
-            var organisation = getOrganisation(Organisation);    
+            var organisation = getOrganisation(Organisation);
 
-            if (organisation != null)
+            if (organisation == null)
             {
-                var result = _testHubDBContext.Query<(decimal cov, int casesCount, int status, int pId)>(@"WITH tc
+                TesthubApiException.ThrowOrganizationDoesntExist(Organisation);
+            }
+
+            var result = _testHubDBContext.Query<(decimal cov, int casesCount, int status, int pId)>(@"WITH tc
     AS(
       SELECT
            Timestamp,
@@ -255,11 +266,6 @@ namespace TestHub.Api.ApiDataProvider
                         ProjectsInRed = result.Where(c => c.status == 0).Count()
                     }
                 };
-            }
-            else
-            {
-                return null;
-            }
         }
 
 
@@ -272,14 +278,7 @@ namespace TestHub.Api.ApiDataProvider
         public IQueryable<ProjectSummary> GetProjects()
         {
             var org = getOrganisation(Organisation);
-            if (org != null)
-            {
-                return getProjectsSummary(org);
-            }
-            else
-            {
-                return new List<ProjectSummary>().AsQueryable();
-            }
+            return org != null ? getProjectsSummary(org) : null;
         }
 
         private IQueryable<ProjectSummary> getProjectsSummary(TestHub.Data.DataModel.Organisation org)
@@ -397,10 +396,6 @@ namespace TestHub.Api.ApiDataProvider
         public ProjectSummary GetProjectSummary(string projectName)
         {
             var projectSummary = GetProjects().FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase));
-            if (projectSummary == null)
-            {
-                TesthubApiException.ThrowProjectDoesNotExist(projectName);
-            }
             return projectSummary;
         }
 
@@ -455,6 +450,11 @@ namespace TestHub.Api.ApiDataProvider
         {
             var project = getProjectIntity(projectName);
 
+            if (project == null)
+            {
+                return null;
+            }
+
             var data = _testHubDBContext.Query<TestResultsHistoricalItem>(@"SELECT r.id,  r.TestRunName, r.Timestamp, tc.Status, COUNT(tc.Id) as count
                                                               from TestRuns r
                                                               left JOIN TestCases tc on tc.TestRunId = r.Id
@@ -493,7 +493,7 @@ namespace TestHub.Api.ApiDataProvider
 
         public CoverageHistoricalData GetCoverageHistory(string projectName)
         {
-            var project = getProjectIntity(projectName);
+            var project = getProjectIntity(projectName);        
 
             var coverage =  _testHubDBContext.Query<CoverageHistoricalItem>(@"select tr.TestRunName, tr.Timestamp, sum(c.LinesCovered)/sum(c.LinesValid)*100 as percent
                       from  TestRuns tr

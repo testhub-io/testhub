@@ -27,30 +27,46 @@ namespace TestHub.Api.Controllers
         [HttpGet("{testrun}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]        
         public ActionResult<Data.TestRun> Get(string org, string project, string testRun)
         {
-            if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
+            try
             {
-                return BadRequest();
+                if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
+                {
+                    return BadRequest();
+                }
+                var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            
+                var testRunEntity = dataProvider.GetTestRunSummary(project, testRun);
+                return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
             }
-            var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var testRunEntity = dataProvider.GetTestRunSummary(project, testRun);
-
-            return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
+            catch(TesthubApiException)
+            {
+                return NotFound();
+            }
         }
 
         [HttpGet("{testrun}/tests")]        
         public ActionResult<Data.TestRun> GetTests(string org, string project, string testRun)
         {
-            if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
+            try
             {
-                return BadRequest();
-            }
-            var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var testRunEntity = dataProvider.GetTests(project, testRun);
+                if (string.IsNullOrEmpty(org) || string.IsNullOrEmpty(project) || string.IsNullOrEmpty(testRun))
+                {
+                    return BadRequest();
+                }
+                var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
 
-            return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
+            
+                var testRunEntity = dataProvider.GetTests(project, testRun);
+                return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
+            }
+            catch(TesthubApiException)
+            {
+                return NotFound();
+            }
         }
 
         /// <summary>
@@ -63,13 +79,26 @@ namespace TestHub.Api.Controllers
         /// <param name="filter"></param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public ActionResult<PaginatedList<Data.TestRunSummary>> GetTestRuns(string org, string project, [FromQuery]int? page, [FromQuery]int? pageSize, [FromQuery]string filter)
         {
-            if (filter == null)
-                filter = string.Empty;
-            var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var res = dataProvider.GetTestRuns(project).AsQueryable().Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
-            return PaginatedListBuilder.CreatePaginatedList(res, page, pageSize, this.Request.Path); 
+            try
+            {
+                    filter ??= string.Empty;
+                var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            
+                var res = dataProvider.GetTestRuns(project).AsQueryable()
+                        .Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
+
+            
+                    return PaginatedListBuilder.CreatePaginatedList(res, page, pageSize, Request.Path);
+            }
+            catch(TesthubApiException)
+            {
+                return NotFound();
+            }
         }
 
 
@@ -144,14 +173,13 @@ namespace TestHub.Api.Controllers
                 }
             }
 
-            if (Request.Form.Files[CoverageKey] != null && Request.Form.Files[CoverageKey].Length > 0)
+            if (Request.Form.Files[CoverageKey] == null || Request.Form.Files[CoverageKey].Length <= 0)
+                return Ok(new {count = files.Count, size});
+            using (var coverageStream = Request.Form.Files[CoverageKey].OpenReadStream()) 
             {
-                using (var coverageStream = Request.Form.Files[CoverageKey].OpenReadStream()) 
-                {
-                    var factory = new CoverageReaderFactory();
-                    var coberturaReader = factory.CreateReader(coverageStream, dataLoader);
-                    coberturaReader.Read(coverageStream, testRun);
-                }
+                var factory = new CoverageReaderFactory();
+                var coberturaReader = factory.CreateReader(coverageStream, dataLoader);
+                coberturaReader.Read(coverageStream, testRun);
             }
 
             return Ok(new { count = files.Count, size });
@@ -165,7 +193,7 @@ namespace TestHub.Api.Controllers
             var repository = RepositoryFactory.GetTestHubWritableDataProvider(org, Url);                        
             var dataLoader = new DataLoader(repository.TestHubDBContext, project, org, testRun);
 
-            using (var ms = new MemoryStream(2048))
+            await using (var ms = new MemoryStream(2048))
             {
                 await Request.Body.CopyToAsync(ms);
                 ms.Seek(0, SeekOrigin.Begin);
