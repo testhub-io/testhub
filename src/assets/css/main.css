@@ -4773,16 +4773,17 @@ input[type=number]::-webkit-outer-spin-button {
 
 .testrun-block__table-title {
   font-weight: 600;
-  font-size: 20px;
+  font-size: 15px;
   line-height: 24px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 7px;
+  padding-bottom: 7px;
   padding-left: 24px;
   padding-right: 24px;
   background-color: #fff;
   border-radius: 8px;
-  color: #000;
-  display: inline-block; }
+  color: #000; }
+  /* display: inline-block;  */
+
 
 .testrun-block__table {
   margin-top: 10px; }
@@ -4790,8 +4791,8 @@ input[type=number]::-webkit-outer-spin-button {
 .testrun-block__table-main-td {
   padding-right: 24px;
   padding-left: 24px;
-  font-size: 18px;
-  font-weight: 500; }
+  font-size: 15px;
+  font-weight: 400; }
 
 .testrun-block__table-item {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
@@ -4852,9 +4853,9 @@ input[type=number]::-webkit-outer-spin-button {
       flex-shrink: 0; }
 
 .testrun-block__table-row {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  min-height: 50px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  min-height: 30px;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: row;

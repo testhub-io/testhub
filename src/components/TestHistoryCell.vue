@@ -117,7 +117,7 @@
   } 
 
   .dashboard-block__results-column {
-    padding: 20% 2px;
+    padding: 5% 2px;
   }
  
  </style>
