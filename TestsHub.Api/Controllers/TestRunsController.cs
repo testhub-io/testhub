@@ -42,7 +42,7 @@ namespace TestHub.Api.Controllers
                 var testRunEntity = dataProvider.GetTestRunSummary(project, testRun);
                 return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
             }
-            catch
+            catch(TesthubApiException)
             {
                 return NotFound();
             }
