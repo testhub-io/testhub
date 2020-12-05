@@ -65,10 +65,16 @@ namespace TestHub.Api.Controllers
         [HttpGet("{org}/testresults")]
         public ActionResult<Data.TestResultsHistoricalData> GetTestResults(string org)
         {
-            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var testResultsSeries = repository.GetTestResultsForOrganisation();
-
-            return Ok(testResultsSeries);
+            try
+            {
+                var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+                var testResultsSeries = repository.GetTestResultsForOrganisation();
+                return Ok(testResultsSeries);
+            }
+            catch (TesthubApiException)
+            {
+                return NotFound();
+            }
         }
 
     }

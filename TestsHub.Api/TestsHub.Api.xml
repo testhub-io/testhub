@@ -4,6 +4,11 @@
         <name>TestsHub.Api</name>
     </assembly>
     <members>
+        <member name="M:TestHub.Api.Controllers.OrganisationController.GetTestResults(System.String)">
+            <summary>
+            Get historical test results series
+            </summary>        
+        </member>
         <member name="M:TestHub.Api.Controllers.ProjectsController.Get(System.String,System.String)">
             <summary>
             Get project summary
@@ -17,6 +22,11 @@
         <member name="M:TestHub.Api.Controllers.ProjectsController.GetProjectCoverage(System.String,System.String)">
             <summary>
             Get historical coverage data for project
+            </summary>        
+        </member>
+        <member name="M:TestHub.Api.Controllers.ProjectsController.GetTest(System.String,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Get tests analytics for project
             </summary>        
         </member>
         <member name="M:TestHub.Api.Controllers.TestRunsController.GetTestRuns(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String)">
