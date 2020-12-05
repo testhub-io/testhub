@@ -6,6 +6,7 @@ using System.Reflection;
 using TestHub.Api.ApiDataProvider;
 using TestHub.Api.Authentication;
 using TestHub.Api.Controllers.Helpers;
+using Microsoft.AspNetCore.Http;
 
 namespace TestHub.Api.Controllers
 {    
@@ -26,6 +27,9 @@ namespace TestHub.Api.Controllers
         }
 
         [HttpGet("{org}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public ActionResult<Data.Organisation> Get(string org)
         {
             try
@@ -55,7 +59,7 @@ namespace TestHub.Api.Controllers
         public ActionResult<IEnumerable<Data.CoverageDataItem>> GetCoverage(string org, [FromQuery]int? page, [FromQuery]int? pageSize)
         {
             // retrieve list from database/whereverand
-            return Ok(DummyDataProvider.GetDummyCoverage());
+            throw new NotImplementedException();
         }
  
 
@@ -63,6 +67,9 @@ namespace TestHub.Api.Controllers
         /// Get historical test results series
         /// </summary>        
         [HttpGet("{org}/testresults")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public ActionResult<Data.TestResultsHistoricalData> GetTestResults(string org)
         {
             try

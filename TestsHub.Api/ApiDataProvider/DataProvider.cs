@@ -17,6 +17,7 @@ namespace TestHub.Api.ApiDataProvider
         private readonly TestHub.Data.DataModel.Organisation _organisation;
         private readonly TestHubDBContext _testHubDBContext;
         private readonly UrlBuilder _urlBuilder;
+        private bool _autoCreateOrg;
 
         public string Organisation => _organisation.Name;
 
@@ -26,14 +27,21 @@ namespace TestHub.Api.ApiDataProvider
 
         public int TestRunsCount { get; private set; }
 
-        public DataProvider(TestHubDBContext testHubDBContext, string organisation, UrlBuilder url)
+        public DataProvider(TestHubDBContext testHubDBContext, string organisation, UrlBuilder url, bool autoCreateOrg)
         {
+            _autoCreateOrg = autoCreateOrg;
             _testHubDBContext = testHubDBContext;
             _organisation = TestHubDBContext.Organisations.SingleOrDefault(o => o.Name.Equals(organisation, StringComparison.OrdinalIgnoreCase));
             if (_organisation == null)
             {
-                TestHubDBContext.Organisations.Add(new TestHub.Data.DataModel.Organisation() { Name = organisation.ToLower() });
-                TestHubDBContext.SaveChanges();
+                if (_autoCreateOrg)
+                {
+                    TestHubDBContext.Organisations.Add(new TestHub.Data.DataModel.Organisation() { Name = organisation.ToLower() });
+                    TestHubDBContext.SaveChanges();
+                }else
+                {
+                    TesthubApiException.ThrowOrganizationDoesntExist(organisation);
+                }
             }
             _organisation = getOrganisation(organisation);
 
@@ -484,7 +492,7 @@ namespace TestHub.Api.ApiDataProvider
             
             if (project == null)
             {
-                return null;
+                TesthubApiException.ThrowProjectDoesNotExist(projectName);
             }
 
             var coverage =  _testHubDBContext.Query<CoverageHistoricalItem>(@"select tr.TestRunName, tr.Timestamp, sum(c.LinesCovered)/sum(c.LinesValid)*100 as percent
