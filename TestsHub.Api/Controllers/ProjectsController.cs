@@ -90,6 +90,23 @@ namespace TestHub.Api.Controllers
             {
                 return NotFound();
             }
-        }    
+        }
+
+        /// <summary>
+        /// Get tests analytics for project
+        /// </summary>        
+        [HttpGet("{project}/tests")]
+        public ActionResult<Data.TestResultsHistoricalData> GetTest(string org, string project, [FromQuery] int? runsLimit)
+        {          
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            
+            if ( !runsLimit.HasValue) {
+                runsLimit = 45;
+            }
+
+            var testResultsSeries = repository.GetTestGrid(project, runsLimit.Value);
+
+            return Ok(testResultsSeries);
+        }
     }
 }

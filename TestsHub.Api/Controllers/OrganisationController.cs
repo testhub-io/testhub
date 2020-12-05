@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TestHub.Api.ApiDataProvider;
+using TestHub.Api.Authentication;
 using TestHub.Api.Controllers.Helpers;
 
 namespace TestHub.Api.Controllers
-{
-    //[Route("")]
+{    
     [Route("api")]
     [ApiController]
     [Produces("application/json")]
@@ -41,12 +41,35 @@ namespace TestHub.Api.Controllers
 
         }
 
+        [HttpGet("{org}/apikey")]
+        public ActionResult<Data.Organisation> Get(string org, [FromHeader] string token)
+        {
+            if (token != null && token.Equals("WinLost2020$")){
+                return Ok(ApiKeyValidator.GenerateApiKey(org));
+            }
+
+            return Forbid();
+        }
+
         [HttpGet("{org}/coverage")]
         public ActionResult<IEnumerable<Data.CoverageDataItem>> GetCoverage(string org, [FromQuery]int? page, [FromQuery]int? pageSize)
         {
             // retrieve list from database/whereverand
             return Ok(DummyDataProvider.GetDummyCoverage());
         }
-        
+ 
+
+        /// <summary>
+        /// Get historical test results series
+        /// </summary>        
+        [HttpGet("{org}/testresults")]
+        public ActionResult<Data.TestResultsHistoricalData> GetTestResults(string org)
+        {
+            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+            var testResultsSeries = repository.GetTestResultsForOrganisation();
+
+            return Ok(testResultsSeries);
+        }
+
     }
 }

@@ -47,9 +47,10 @@ namespace TestHub.Data.DataModel
 
         // ReadOnly query
         public IEnumerable<T> Query<T>(string sql, object param)
-        {
+        {            
             return this.Database.GetDbConnection().Query<T>(sql, param);
-        }
+        }        
+
 
         public IQueryable<TestCase> OrganisationTestCases(string org)
         {

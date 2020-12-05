@@ -40,6 +40,8 @@ parser.add_argument("--org", "-o", help="Organisation")
 parser.add_argument("--project", "-p", help="Project name")
 parser.add_argument("--build", "-b", help="Build id")
 parser.add_argument("--branch", "-br", help="Branch name")
+parser.add_argument("--token", "-t", help="Api Token")
+
 
 
 args = parser.parse_args()
@@ -73,10 +75,12 @@ for root, dirs, files in os.walk("."):
             # get branch name
             print("Branch name is {}".format(args.branch))             
             
+            headers = {'ApiToken': args.token}
             response = requests.put(url,
                          files=toUpload,
                          data={'branch': args.branch },
-                         verify=False)
+                         verify=False,
+                         headers=headers)
                                     
             if response.status_code != 200:
                 #exit(1)

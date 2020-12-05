@@ -63,7 +63,7 @@ stages:
       inputs:
         scriptSource: 'filePath'
         scriptPath: 'upload-test-results.py'
-        arguments: '--file th-test-results.xml --org test-hub --project testhub-api --build $(Build.BuildNumber) --coverage coverage.cobertura.xml --branch $(Build.SourceBranchName)'
+        arguments: '--file th-test-results.xml --org test-hub --project testhub-api --build $(Build.BuildNumber) --coverage coverage.cobertura.xml --branch $(Build.SourceBranchName) --token 6754ad18cd53c84a34118dcb7ac915d2cbcb9f36'
 
     - task: Docker@2
       displayName: Build and push an image to container registry

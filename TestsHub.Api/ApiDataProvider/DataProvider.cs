@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollector.InProcDataCollector;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -385,6 +386,53 @@ namespace TestHub.Api.ApiDataProvider
             return projectSummary;
         }
 
+        public TestCountHistoricalData GetTestResultsForOrganisation()
+        {                        
+            var data = _testHubDBContext.Query<dynamic>(@"select DATE_FORMAT(t.Timestamp, '%Y-%m-%d') 'Timestamp', YEAR(t.Timestamp) *1000 + DAYOFYEAR(t.Timestamp) as Id, 
+                                                                    t.ProjectId, max(t.TestCasesCount) as 'Count' from TestRuns t
+                                                                    inner join Projects p on p.Id = t.ProjectId and p.OrganisationId = @orgId  
+                                                                    where p.OrganisationId = @orgId 
+                                                                    group by DAYOFYEAR(t.Timestamp), YEAR(t.Timestamp), t.Status, t.ProjectId
+                                                                    order by id",
+                                                            new { orgId = this._organisation.Id });
+
+
+            var dataConverted = new Dictionary<string, int>();
+            var projCount = new Dictionary<int, int>();
+            long lastId = -1;
+            foreach (var d in data)
+            {                                                
+                if (lastId != d.Id && lastId != -1)
+                {
+                    dataConverted[d.Timestamp] = projCount.Values.Sum();
+                }
+
+                projCount[d.ProjectId] = d.Count;
+                lastId = d.Id;
+            }       
+            
+            if (!dataConverted.ContainsKey(data.Last().Timestamp))
+            {
+                dataConverted[data.Last()] = projCount.Values.Sum();
+            }
+
+            return new TestCountHistoricalData
+            {
+                Data = dataConverted.Select(kv=>new TestCountDataItem()
+                {
+                    DateTime = DateTime.ParseExact(kv.Key, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
+                    TestsCount = kv.Value
+                }).OrderBy(l => l.DateTime),
+                Uri = _urlBuilder.Action(
+                    "GetTestResults",
+                    typeof(OrganisationController),
+                    new
+                    {
+                        org = _organisation.Name
+                    })
+            };
+        }
+
         public TestResultsHistoricalData GetTestResultsForProject(string projectName)
         {
             var project = getProjectIntity(projectName);
@@ -402,14 +450,7 @@ namespace TestHub.Api.ApiDataProvider
                                                               ORDER BY r.Timestamp DESC",
                                                               new { projId = project.Id });
 
-            var dataConverted = data.GroupBy(g => g.Id).Select(g => new TestResultsDataItem
-            {
-                DateTime = g.First().Timestamp,
-                Name = g.First().TestRunName,
-                Passed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Passed)?.Count ?? 0,
-                Failed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Failed)?.Count ?? 0,
-                Skipped = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Skipped)?.Count ?? 0
-            });
+            var dataConverted = convertToTestResultsDataItems(data);
 
             return new TestResultsHistoricalData
             {
@@ -423,6 +464,18 @@ namespace TestHub.Api.ApiDataProvider
                         project = project.Name
                     })
             };
+        }
+
+        private static IEnumerable<TestResultsDataItem> convertToTestResultsDataItems(IEnumerable<TestResultsHistoricalItem> data)
+        {
+            return data.GroupBy(g => g.Id).Select(g => new TestResultsDataItem
+            {
+                DateTime = g.First().Timestamp,
+                Name = g.First().TestRunName,
+                Passed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Passed)?.Count ?? 0,
+                Failed = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Failed)?.Count ?? 0,
+                Skipped = g.FirstOrDefault(s => s.Status == (int)Data.TestResult.Skipped)?.Count ?? 0
+            });
         }
 
         public CoverageHistoricalData GetCoverageHistory(string projectName)
@@ -460,6 +513,58 @@ namespace TestHub.Api.ApiDataProvider
                     })
             };
         }
+
+        public TestGridData GetTestGrid(string projectName, int testRunsLimit)
+        {
+            var project = getProjectIntity(projectName);
+
+            var generator = new IdGenerator();
+            var cases = getCasesList(project, generator);
+
+            var runTemplate = "TEST_RUN_TO_REPLACE_THAT_HOPEFULLY_NOBODY_USES";
+            var urlTempalte = _urlBuilder.Action("Get", typeof(TestRunsController), new { org = Organisation, project = projectName, testRun = runTemplate });
+
+            var testRun = _testHubDBContext.TestRuns
+                .Include(c => c.TestCases)
+                .Where(t => t.ProjectId == project.Id)
+                .Take(testRunsLimit)
+                .Select(t => new TestRunTestData()
+                {
+                    TestRun = t.TestRunName,
+                    Uri = urlTempalte.Replace(runTemplate, t.TestRunName),
+                    Timestamp = t.Timestamp,
+                    TestCases = t.TestCases.Select(tc => new TestCaseWithResult()
+                    {
+                        Id = generator.GetId(tc.Name),
+                        Status = (short)tc.Status
+                    })
+                });
+                        
+
+            return new TestGridData()
+            {
+                Data = testRun.ToList(),
+                Tests = cases
+            };
+
+        }
+
+        private List<TestsCategory> getCasesList(Project project, IdGenerator generator)
+        {
+            var testCases = (from tc in _testHubDBContext.TestCases
+                             join tr in _testHubDBContext.TestRuns on tc.TestRunId equals tr.Id
+                             where tr.ProjectId == project.Id
+                             select new { tc.Name, Id = generator.GetId(tc.Name), Suite = tc.ClassName }).ToList();
+
+            // first group by to select distinct only test names. Second to group by suite
+            var cases = testCases.GroupBy(t => t.Name)
+                .Select(g => g.FirstOrDefault())
+                .GroupBy(t => t.Suite, t => new TestCaseNameIdPair() { Id = t.Id, Name = t.Name })
+                .Select(r => new TestsCategory { ClassName = r.Key, Test = r.ToList() })
+                .ToList();
+            return cases;
+        }
+
 
     }
 

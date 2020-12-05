@@ -23,7 +23,12 @@ namespace TestHub.Api.ApiDataProvider
         
         TestResultsHistoricalData GetTestResultsForProject(string project);
 
+        TestCountHistoricalData GetTestResultsForOrganisation();
+
         TestRunTests GetTests(string projectName, string testRunName);
-        Data.CoverageHistoricalData GetCoverageHistory(string project);
+
+        CoverageHistoricalData GetCoverageHistory(string project);
+
+        TestGridData GetTestGrid(string project, int testRunLimit);
     }
 }
