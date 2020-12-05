@@ -1,5 +1,5 @@
 <script>
-import {Bar} from 'vue-chartjs'
+import {Line} from 'vue-chartjs'
 import moment from 'moment'
 export default {
   data() {
@@ -54,11 +54,16 @@ export default {
         },
         scales: {
           xAxes: [{
+            type: "time",
             display: true,
+            time:      {
+                        unit: "day",                        
+                    },
+            distribution: 'series',
             scaleLabel: {
-              display: true,
-              fontColor: 'rgba(0,0,0,0.7)',
-            },
+                display:     true,                
+                fontColor: 'rgba(0,0,0,0.7)',
+            },          
             gridLines: {
               display: false
             }
@@ -71,8 +76,8 @@ export default {
               },
               min: 0,
 
-              // forces step size to be 5 units
-              stepSize: 25 // <----- This prop sets the stepSize
+              // // forces step size to be 5 units
+              // stepSize: 25 // <----- This prop sets the stepSize
             },
 
             display: true,
@@ -97,14 +102,14 @@ export default {
       return this.$store.getters.currentUser
     }
   },
-  extends: Bar,
+  extends: Line,
   mounted() {
     var self = this
-    this.$http.get(this.user.org + '/testresults')
+    this.$http.get(this.$route.params.org + '/testresults')
         .then((response) => {
           var data = response.data.data
           for(var i=0; i<data.length; i++) {
-            var dateLabel = moment(data[i].dateTime).format("M-D")
+            var dateLabel = moment(data[i].dateTime)
             self.chartData.labels.push(dateLabel)
             self.chartData.datasets[0].data.push(data[i].testsCount)
           }
