@@ -27,6 +27,7 @@ namespace TestHub.Api.Controllers
         [HttpGet("{testrun}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]        
         public ActionResult<Data.TestRun> Get(string org, string project, string testRun)
         {
@@ -43,7 +44,7 @@ namespace TestHub.Api.Controllers
             }
             catch
             {
-                return NoContent();
+                return NotFound();
             }
         }
 
@@ -61,9 +62,9 @@ namespace TestHub.Api.Controllers
                 var testRunEntity = dataProvider.GetTests(project, testRun);
                 return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
             }
-            catch
+            catch(TesthubApiException)
             {
-                return NoContent();
+                return NotFound();
             }
         }
 
@@ -89,9 +90,9 @@ namespace TestHub.Api.Controllers
             {
                 return PaginatedListBuilder.CreatePaginatedList(res, page, pageSize, Request.Path);
             }
-            catch
+            catch(TesthubApiException)
             {
-                return NoContent();
+                return NotFound();
             }
         }
 
