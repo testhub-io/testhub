@@ -31,5 +31,10 @@ namespace TestHub.Api.ApiDataProvider
         {
             throw new TesthubApiException($"Test-run {testRun} does not exist");
         }
+
+        public static void ThrowOrganizationDoesntExist(string organisation)
+        {
+            throw new TesthubApiException($"Organization {organisation} does not exist");
+        }
     }
 }

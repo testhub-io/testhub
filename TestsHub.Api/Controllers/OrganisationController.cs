@@ -28,10 +28,17 @@ namespace TestHub.Api.Controllers
         [HttpGet("{org}")]
         public ActionResult<Data.Organisation> Get(string org)
         {
-            var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
-            var orgSummary = repository.GetOrgSummary();
+            try
+            {
+                var repository = RepositoryFactory.GetTestHubDataProvider(org, Url);
+                var orgSummary = repository.GetOrgSummary();
+                return FormatResult(orgSummary, $"{org}");
+            }
+            catch (TesthubApiException)
+            {
+                return NotFound();
+            }
 
-            return FormatResult(orgSummary, $"{org}");
         }
 
         [HttpGet("{org}/coverage")]

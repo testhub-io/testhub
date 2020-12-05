@@ -202,11 +202,14 @@ namespace TestHub.Api.ApiDataProvider
 
         public Data.Organisation GetOrgSummary()
         {
-            var organisation = getOrganisation(Organisation);    
+            var organisation = getOrganisation(Organisation);
 
-            if (organisation != null)
+            if (organisation == null)
             {
-                var result = _testHubDBContext.Query<(decimal cov, int casesCount, int status, int pId)>(@"WITH tc
+                TesthubApiException.ThrowOrganizationDoesntExist(Organisation);
+            }
+
+            var result = _testHubDBContext.Query<(decimal cov, int casesCount, int status, int pId)>(@"WITH tc
     AS(
       SELECT
            Timestamp,
@@ -249,11 +252,6 @@ namespace TestHub.Api.ApiDataProvider
                         ProjectsInRed = result.Where(c => c.status == 0).Count()
                     }
                 };
-            }
-            else
-            {
-                return null;
-            }
         }
 
 
