@@ -1,10 +1,20 @@
 <template>
   <b-container fluid id="project-view">
+    
+    <b-alert show variant="danger">
+        <h4 class="alert-heading mb-0">Coming Soon</h4>
+        <hr/>
+        <p>
+          This functionality is not ready yet. We are working hard on making it available soon. Below is an example of how it will look like.
+        </p> 
+        </b-alert>
+    
+
     <b-card
       class="mb-12"
       border-variant="light"
       v-if="projectSummary && activeView === 'FileTree'"
-    >
+    >    
       <b-card-text >
         <b-row>
           <b-col>
