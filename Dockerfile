@@ -1,5 +1,5 @@
 FROM nginx:1.17-alpine
-RUN apk add --update nodejs npm
+RUN apk add --update nodejs npm git
 
 COPY nginx/default.conf /etc/nginx/conf.d/
 
