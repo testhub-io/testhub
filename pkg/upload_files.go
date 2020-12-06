@@ -68,6 +68,21 @@ func (u *UploadFilesParameters) UploadTestResultFiles() error {
 		}
 	}
 
+	err = u.printTestHubUrl(err)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *UploadFilesParameters) printTestHubUrl(err error) error {
+	org, proj, err := getOrgAndProject(u.OrgAndProject)
+	if err != nil {
+		return err
+	}
+	testhubUrl := fmt.Sprintf("https://test-hub.io/%s/projects/%s/runs/%s", org, proj, u.Build)
+	console.PrintGreen("Test results are available at: %s", testhubUrl)
 	return nil
 }
 
