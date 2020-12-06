@@ -111,7 +111,7 @@
 
                 <td>
                   <div class="mobile-label">Timestamp</div>
-                  <div class="val">{{ getTestRunTime(test.timeStamp) }}</div>
+                  <div class="val">{{ getTestRunTime(test.timestamp) }}</div>
                 </td>
 
                 <td>
