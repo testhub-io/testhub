@@ -19,12 +19,3 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-public/css/*
-public/img/chevron*
-public/img/heart*
-public/img/ico-font*
-public/img/main_logo*
-public/js/app*
-public/js/chunk-vendors*
-public/precache-manifest*
-public/service-worker.js
