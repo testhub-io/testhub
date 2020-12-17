@@ -86,7 +86,7 @@ namespace TestHub.Api.Controllers
         {
             try
             {
-                    filter ??= string.Empty;
+                filter ??= string.Empty;
                 var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
             
                 var res = dataProvider.GetTestRuns(project).AsQueryable()

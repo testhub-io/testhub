@@ -50,13 +50,9 @@ namespace TestHub.Api.ApiDataProvider
 
         public IEnumerable<TestRunSummary> GetTestRuns(string projectName)
         {
-            var project = _testHubDBContext.Projects.FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.CurrentCultureIgnoreCase));
-            if (project == null)
-            {
-                TesthubApiException.ThrowProjectDoesNotExist(projectName);
-            }
+            var project = getProjectIntity(projectName);            
 
-            var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id)
+            var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id )
                 .OrderByDescending(t => t.Timestamp).Include(c => c.Coverage);
             TestHub.Data.DataModel.TestRun previousTestRun = null;
             decimal? previousCoverage = null;
@@ -276,7 +272,7 @@ namespace TestHub.Api.ApiDataProvider
         }
 
         public IQueryable<ProjectSummary> GetProjects()
-        {
+        {            
             var org = getOrganisation(Organisation);
             return org != null ? getProjectsSummary(org) : null;
         }

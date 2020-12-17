@@ -25,7 +25,7 @@ namespace TestsHubUploadEndpoint
             _testHubDBContext = testHubDBContext;
             _testHubDBContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
-            ProjectName = projectName;
+            ProjectName = projectName;            
             TestRun = testRun;
             Organisation = testHubDBContext.Organisations.SingleOrDefault(s => s.Name.Equals(org, StringComparison.OrdinalIgnoreCase));
             if (Organisation == null)
@@ -33,7 +33,7 @@ namespace TestsHubUploadEndpoint
                 Organisation = new Organisation() { Name = org };
             }
 
-            testHubDBContext.Entry<Organisation>(Organisation);
+            testHubDBContext.Entry(Organisation);
 
             _mapper = MapperFactory.CreateMapper();
         }
