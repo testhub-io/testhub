@@ -46,7 +46,6 @@ export default {
    },
    watch: {
      $route (to) {
-       console.log(to);
        if (to.fullPath === "/") {
          this.colorVariant = 'transparent'
        }else{

@@ -21,6 +21,7 @@ window.$ = window.jQuery = require('jquery')
 require('./assets/js/main.min.js')
 require('./assets/js/plugins.min.js')
 
+import '@/assets/Scss/mail.scss'
 import './registerServiceWorker'
 
 Vue.use(BootstrapVue)
