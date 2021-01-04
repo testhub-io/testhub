@@ -7,7 +7,7 @@
             class="d-flex flex-column align-items-start justify-content-between h-100"
           >
             <div class="page-footer_logo">
-              <b-img src="images/logo-dark.png" fluid />
+              <b-img :src="require('@/assets/img/main_logo_footer.png')" fluid />
             </div>
 
             <div class="page-footer_copyright">© 2020 TestHub, Inc.</div>

@@ -1,8 +1,8 @@
 <template>
   <b-navbar toggleable="lg" type="dark" :variant="colorVariant" fixed="top" >
     <div class="container">
-      <b-navbar-brand to=/>
-        <img src="images/logo-dark.png" height="24" alt="">
+      <b-navbar-brand to="/">
+        <img src="@/assets/img/main_logo.png" height="24" alt="">
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
