@@ -1370,7 +1370,7 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0; }
 
-.btn {
+/* .btn {
   position: relative;
   outline: none !important;
   border: none;
@@ -1392,7 +1392,7 @@ input[type=number]::-webkit-outer-spin-button {
   line-height: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
-  transition: all 0.2s ease-in-out; }
+  transition: all 0.2s ease-in-out; } */
   .btn:hover {
     background-color: #1a4cff;
     box-shadow: none; }
