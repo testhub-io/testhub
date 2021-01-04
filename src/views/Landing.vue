@@ -25,7 +25,10 @@
           <b-col lg="5" md="6" class="mt-4 pt-2 mt-sm-0 pt-sm-0">
             <div class="position-relative landing_bg-wrapper">
               <div class="position-relative landing_bg-box">
-                <b-img src="images/saas/classic01.png" class="img"></b-img>
+                <b-img
+                  :src="require('@/assets/img/classic01.png')"
+                  class="img"
+                ></b-img>
               </div>
             </div>
           </b-col>
@@ -43,7 +46,7 @@
             <div class="text-center features">
               <div class="d-inline-block position-relative features_icon-box">
                 <b-img
-                  src="images/icon/user.svg"
+                  :src="require('@/assets/img/user.svg')"
                   :height="65"
                   :width="65"
                   center
@@ -62,7 +65,7 @@
             <div class="text-center features">
               <div class="d-inline-block position-relative features_icon-box">
                 <b-img
-                  src="images/icon/calendar.svg"
+                  :src="require('@/assets/img/calendar.svg')"
                   :height="65"
                   :width="65"
                   center
@@ -81,7 +84,7 @@
             <div class="text-center features">
               <div class="d-inline-block position-relative features_icon-box">
                 <b-img
-                  src="images/icon/sand-clock.svg"
+                  :src="require('@/assets/img/sand-clock.svg')"
                   :height="65"
                   :width="65"
                   center
@@ -106,7 +109,7 @@
           <b-col lg="7">
             <div class="position-relative bubble-shape-left">
               <b-img
-                src="images/saas/classic02.jpg"
+                :src="require('@/assets/img/classic02.jpeg')"
                 fluid
                 rounded
                 class="mx-auto d-block shadow"
@@ -132,7 +135,7 @@
                 <Slide>
                   <div class="statistics_customer text-left py-3">
                     <b-avatar
-                      src="images/client/01.jpg"
+                      :src="require('@/assets/img/01.jpeg')"
                       size="65px"
                       class="shadow"
                     ></b-avatar>
@@ -148,7 +151,7 @@
                 <Slide>
                   <div class="statistics_customer text-left py-3">
                     <b-avatar
-                      src="images/client/02.jpg"
+                      :src="require('@/assets/img/02.jpeg')"
                       size="65px"
                       class="shadow"
                     ></b-avatar>
@@ -164,7 +167,7 @@
                 <Slide>
                   <div class="statistics_customer text-left py-3">
                     <b-avatar
-                      src="images/client/03.jpg"
+                      :src="require('@/assets/img/03.jpeg')"
                       size="65px"
                       class="shadow"
                     ></b-avatar>
@@ -181,7 +184,7 @@
                 <Slide>
                   <div class="statistics_customer text-left py-3">
                     <b-avatar
-                      src="images/client/04.jpg"
+                      :src="require('@/assets/img/04.jpeg')"
                       size="65px"
                       class="shadow"
                     ></b-avatar>
@@ -264,7 +267,7 @@
           <b-col lg="7" order="1" order-lg="2">
             <div class="bubble-shape-right position-relative">
               <b-img
-                src="images/saas/classic03.jpg"
+                :src="require('@/assets/img/classic03.jpeg')"
                 fluid
                 class="shadow"
               ></b-img>
