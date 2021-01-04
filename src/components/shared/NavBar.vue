@@ -46,7 +46,7 @@ export default {
    },
    watch: {
      $route (to) {
-       if (to.fullPath === "/") {
+       if (to.fullPath === "/landing") {
          this.colorVariant = 'transparent'
        }else{
          this.colorVariant = 'white'
@@ -55,7 +55,7 @@ export default {
    },
    created () {
     window.addEventListener('scroll', this.handleScroll);
-    if (this.$route.fullPath === "/") {
+    if (this.$route.fullPath === "/landing") {
          this.colorVariant = 'transparent'
        }else{
          this.colorVariant = 'white'
@@ -67,7 +67,7 @@ export default {
   methods: {
     handleScroll () {
       // Any code to be executed when the window is scrolled
-      if (window.scrollY < 50 && this.$route.fullPath === '/') {
+      if (window.scrollY < 50 && this.$route.fullPath === '/landing') {
           this.isLight = false
           this.colorVariant = 'transparent'
           
