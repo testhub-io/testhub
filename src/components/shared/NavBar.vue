@@ -70,11 +70,11 @@ export default {
   watch: {
     $route(to) {
       if (to.fullPath === "/") {
-        this.colorVariant = "transparent";
         this.fixed = "top";
+        this.colorVariant = "transparent";
       } else {
-        this.colorVariant = "white";
         this.fixed = "";
+        this.colorVariant = "white";
       }
     },
   },
@@ -94,7 +94,7 @@ export default {
   methods: {
     handleScroll() {
       // Any code to be executed when the window is scrolled
-      if (window.scrollY < 50 && this.$route.fullPath === "/landing") {
+      if (window.scrollY < 50 && this.$route.fullPath === "/") {
         this.isLight = false;
         this.colorVariant = "transparent";
       } else {
