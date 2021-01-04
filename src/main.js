@@ -13,7 +13,7 @@ import App from './App.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './assets/css/main.css'
+//import './assets/css/main.css'
 var VueScrollTo = require('vue-scrollto')
 window.moment = require('moment-timezone')
 window.authService = authService
@@ -21,6 +21,7 @@ window.$ = window.jQuery = require('jquery')
 require('./assets/js/main.min.js')
 require('./assets/js/plugins.min.js')
 
+// impotr mainc scss file
 import '@/assets/Scss/mail.scss'
 import './registerServiceWorker'
 
