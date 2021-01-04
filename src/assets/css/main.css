@@ -1846,7 +1846,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.btn {
+/* .btn {
   position: relative;
   outline: none !important;
   border: none;
@@ -1883,10 +1883,9 @@ input[type="number"]::-webkit-outer-spin-button {
 .btn:active,
 .btn:focus,
 .btn:hover {
-  color: #fff;
   text-decoration: none !important;
   outline: none !important;
-}
+} */
 
 .d-none {
   display: none !important;
