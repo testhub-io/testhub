@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h6>{{ userOrg }}</h6>
 
     <div class="row dashboard-block__topbar-row">

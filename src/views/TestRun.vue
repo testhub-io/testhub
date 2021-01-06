@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  class="container">
     <div class="breadcrumbs-block">
       <ul>
           <li><a 
