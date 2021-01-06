@@ -353,10 +353,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.landing{
+.landing {
   background-color: #ffffff !important;
   position: relative;
-  z-index: -1;
+  z-index: 0;
 }
 </style>
 
