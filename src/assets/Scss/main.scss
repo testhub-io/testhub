@@ -7,3 +7,8 @@ $body-color: #000;
 @import "~bootstrap/scss/bootstrap";
 // BootstrapVue and its default variables
 @import "~bootstrap-vue/src/index.scss";
+
+// General style overrides and custom classes
+body {
+  font-family: Work Sans, sans-serif;
+}
