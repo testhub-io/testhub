@@ -1,0 +1,22 @@
+// Your variable overrides
+$primary: #2f55d4;
+$body-bg: #f3f3f3;
+$body-color: #000;
+
+// Bootstrap and its default variables
+@import "~bootstrap/scss/bootstrap";
+// BootstrapVue and its default variables
+@import "~bootstrap-vue/src/index.scss";
+
+// General style overrides and custom classes
+body {
+  font-family: Work Sans, sans-serif;
+}
+.container {
+  max-width: 1270px;
+}
+.table td {
+  padding: 30px 24px;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
