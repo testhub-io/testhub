@@ -12,3 +12,11 @@ $body-color: #000;
 body {
   font-family: Work Sans, sans-serif;
 }
+.container {
+  max-width: 1270px;
+}
+.table td {
+  padding: 30px 24px;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
