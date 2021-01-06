@@ -8,7 +8,7 @@
   >
     <div class="container">
       <b-navbar-brand to="/">
-        <img src="@/assets/img/main_logo.png" height="24" alt="" />
+        <img src="@/assets/img/main_logo.png" height="32" alt="" />
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
