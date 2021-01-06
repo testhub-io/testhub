@@ -33,7 +33,7 @@ namespace TestHub.Api
 
             services.AddCors(options => options.AddPolicy(AllowTestsHubOrigins,
                 builder =>
-                       builder.WithOrigins("http://testshub.com", "https://testshub.com",
+                       builder.WithOrigins("http://testshub.com", "http://testhub-frontend-dev.s3-website.us-east-2.amazonaws.com",
                         "https://test-hub.io", "http://test-hub.io", "https://test-hub-frontend.azurewebsites.net",
                         // TODO: remove when on prod
                         "http://localhost:8080")
