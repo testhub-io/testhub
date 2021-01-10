@@ -16,25 +16,26 @@ import (
 )
 
 type UploadFilesParameters struct {
-	FilePattern   string
-	OrgAndProject string
-	Build         string
-	ContextDir    string
-	Branch        string
-	IsCoverage    bool
-	IsTestRun     bool
-	ApiToken      string
-	testhubDomain string
+	FilePattern      string
+	OrgAndProject    string
+	Build            string
+	ContextDir       string
+	Branch           string
+	IsCoverage       bool
+	IsTestRun        bool
+	ApiToken         string
+	testhubApiDomain string
+	isOnPremise      bool
 }
 
 const defaultTesthubDomain = "test-hub-api.azurewebsites.net"
 const ApiKeyHeader = "ApiToken"
 
 func (u *UploadFilesParameters) UploadTestResultFiles() error {
-	u.setTesthubDomain()
+	u.loadConfig()
 
 	if len(u.ApiToken) == 0 {
-		t, err := getApiKey(u.OrgAndProject, u.testhubDomain)
+		t, err := getApiKey(u.OrgAndProject, u.testhubApiDomain, u.isOnPremise)
 		if err != nil {
 			fmt.Printf("Error to retreive token. Err: %s", err.Error())
 			return fmt.Errorf("Api Toke is missing")
@@ -86,11 +87,15 @@ func (u *UploadFilesParameters) printTestHubUrl(err error) error {
 	return nil
 }
 
-func (u *UploadFilesParameters) setTesthubDomain() {
-	u.testhubDomain = os.Getenv("TESTHUB_DOMAIN")
-	if len(u.testhubDomain) == 0 {
-		u.testhubDomain = defaultTesthubDomain
+func (u *UploadFilesParameters) loadConfig() {
+	u.testhubApiDomain = os.Getenv("TESTHUB_DOMAIN")
+	if len(u.testhubApiDomain) == 0 {
+		u.testhubApiDomain = defaultTesthubDomain
 	}
+
+	p := os.Getenv("ON_PREMISE")
+	u.isOnPremise = strings.EqualFold(p, "true") || strings.EqualFold(p, "1")
+
 }
 
 func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
@@ -99,7 +104,7 @@ func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 	if err != nil {
 		return err
 	}
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", u.testhubDomain, org, proj, u.Build)
+	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", u.testhubApiDomain, org, proj, u.Build)
 
 	fileParamName := "testResult"
 	if isCoverage {
@@ -117,7 +122,7 @@ func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 }
 
 func (u *UploadFilesParameters) uploadCoverage(org string, proj string, build string, file *os.File) error {
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s/coverage", u.testhubDomain, org, proj, u.Build)
+	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s/coverage", u.testhubApiDomain, org, proj, u.Build)
 
 	req, err := http.NewRequest(http.MethodPut, url, file)
 	if err != nil {
