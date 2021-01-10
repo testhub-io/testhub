@@ -6,4 +6,5 @@
 
 # Configuration 
 `TESTHUB_DOMAIN` - testhub api domain (test-hub-api.azurewebsites.net is default)
+
 `ON_PREMISE` - set to 'true' if it runs in on premise configuration
