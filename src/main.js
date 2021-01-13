@@ -24,6 +24,7 @@ require("./assets/js/plugins.min.js");
 // impotr mainc scss file
 import "@/assets/Scss/main.scss";
 import "./registerServiceWorker";
+require('dotenv').config()
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
@@ -48,7 +49,7 @@ Vue.use(VueScrollTo, {
   y: true,
 });
 
-Vue.http.options.root = "https://test-hub-api.azurewebsites.net/API/";
+Vue.http.options.root = process.env.API_BASE
 let lang = window.Sitedata !== undefined ? window.SiteData.lang : "en";
 const i18n = new VueI18n({
   locale: lang, // set locale
