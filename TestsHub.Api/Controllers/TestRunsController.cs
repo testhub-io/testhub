@@ -136,7 +136,7 @@ namespace TestHub.Api.Controllers
             return File(stream, "text/plain");
         }
 
-        // PUT api/values/5
+        // PUT 
         [HttpPut("{testrun}")]
         [ApiKeyAuth]
         public ActionResult<string> Put(string org, string project, string testRun)

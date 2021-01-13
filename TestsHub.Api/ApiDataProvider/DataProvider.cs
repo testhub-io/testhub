@@ -397,12 +397,13 @@ namespace TestHub.Api.ApiDataProvider
 
         public TestCountHistoricalData GetTestResultsForOrganisation()
         {                        
-            var data = _testHubDBContext.Query<dynamic>(@"select DATE_FORMAT(t.Timestamp, '%Y-%m-%d') 'Timestamp', YEAR(t.Timestamp) *1000 + DAYOFYEAR(t.Timestamp) as Id, 
-                                                                    t.ProjectId, max(t.TestCasesCount) as 'Count' from TestRuns t
-                                                                    inner join Projects p on p.Id = t.ProjectId and p.OrganisationId = @orgId  
-                                                                    where p.OrganisationId = @orgId 
-                                                                    group by DAYOFYEAR(t.Timestamp), YEAR(t.Timestamp), t.Status, t.ProjectId
-                                                                    order by id",
+            var data = _testHubDBContext.Query<dynamic>(@"select YEAR(t.Timestamp) year , DAYOFYEAR(t.Timestamp) day,
+                                                                   t.ProjectId, max(t.TestCasesCount) as 'Count'
+                                                            from TestRuns t
+                                                                inner join Projects p on p.Id = t.ProjectId and p.OrganisationId = @orgId
+                                                            where p.OrganisationId = @orgId
+                                                            group by YEAR(t.Timestamp),  DAYOFYEAR(t.Timestamp) , t.ProjectId
+                                                            order by year, day ",
                                                             new { orgId = this._organisation.Id });
 
 
@@ -410,14 +411,18 @@ namespace TestHub.Api.ApiDataProvider
             var projCount = new Dictionary<int, int>();
             long lastId = -1;
             foreach (var d in data)
-            {                                                
-                if (lastId != d.Id && lastId != -1)
+            {
+                // add missing properties
+                d.id = d.year * 1000 + d.day;
+                d.Timestamp = new DateTime(d.year, 1, 1).AddDays(d.day - 1).ToString("yyyy-MM-dd");
+
+                if (lastId != d.id && lastId != -1)
                 {
                     dataConverted[d.Timestamp] = projCount.Values.Sum();
                 }
 
                 projCount[d.ProjectId] = d.Count;
-                lastId = d.Id;
+                lastId = d.id;
             }       
             
             if (!dataConverted.ContainsKey(data.Last().Timestamp))
