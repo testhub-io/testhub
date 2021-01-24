@@ -19,13 +19,13 @@ func getApiKey(orgAndProject string, testhubDomain string, onPremise bool) (stri
 		return "", err
 	}
 
-	if !isGithubActionEnv(orgAndProject) || !isOnPremiseEnv(onPremise, testhubDomain) {
-		return "", fmt.Errorf("Api Token must be provided as an argument")
+	if !isGithubActionEnv(orgAndProject) && !isOnPremiseEnv(onPremise, testhubDomain) {
+		return "", fmt.Errorf("Api Token must be provided as an argument.")
 	} else {
 		console.PrintLn("Auto-retrieval of API token")
 	}
 
-	url := fmt.Sprintf("https://%s/api/%s/apikey", testhubDomain, org)
+	url := fmt.Sprintf("%s/api/%s/apikey", testhubDomain, org)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("token", "WinLost2020$")

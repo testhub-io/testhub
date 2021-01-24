@@ -28,17 +28,16 @@ type UploadFilesParameters struct {
 	isOnPremise      bool
 }
 
-const defaultTesthubDomain = "test-hub-api.azurewebsites.net"
+const defaultTesthubDomain = "https://test-hub-api.azurewebsites.net"
 const ApiKeyHeader = "ApiToken"
 
 func (u *UploadFilesParameters) UploadTestResultFiles() error {
 	u.loadConfig()
-
 	if len(u.ApiToken) == 0 {
 		t, err := getApiKey(u.OrgAndProject, u.testhubApiDomain, u.isOnPremise)
 		if err != nil {
-			fmt.Printf("Error to retreive token. Err: %s", err.Error())
-			return fmt.Errorf("Api Toke is missing")
+			fmt.Printf("Error retreiving API Token. Err: %s\n", err.Error())
+			return fmt.Errorf("Api Token is missing")
 		}
 		u.ApiToken = strings.Replace(t, "\"", "", -1)
 	}
@@ -82,9 +81,14 @@ func (u *UploadFilesParameters) printTestHubUrl(err error) error {
 	if err != nil {
 		return err
 	}
-	testhubUrl := fmt.Sprintf("https://test-hub.io/%s/projects/%s/runs/%s", org, proj, u.Build)
+	testhubUrl := u.getTestHubApiUrl(org, proj, u.Build)
 	console.PrintGreen("Test results are available at: %s", testhubUrl)
 	return nil
+}
+
+func (u *UploadFilesParameters) getTestHubApiUrl(org string, proj string, build string) string {
+	domain := os.Getenv("TESTHUB_DOMAIN")
+	return fmt.Sprintf("%s/api/%s/projects/%s/runs/%s", domain, org, proj, build)
 }
 
 func (u *UploadFilesParameters) loadConfig() {
@@ -104,8 +108,7 @@ func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 	if err != nil {
 		return err
 	}
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", u.testhubApiDomain, org, proj, u.Build)
-
+	url := u.getTestHubApiUrl(org, proj, u.Build)
 	fileParamName := "testResult"
 	if isCoverage {
 		file := mustOpen(f)
@@ -122,7 +125,7 @@ func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
 }
 
 func (u *UploadFilesParameters) uploadCoverage(org string, proj string, build string, file *os.File) error {
-	url := fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s/coverage", u.testhubApiDomain, org, proj, u.Build)
+	url := u.getTestHubApiUrl(org, proj, build) + "/coverage"
 
 	req, err := http.NewRequest(http.MethodPut, url, file)
 	if err != nil {
