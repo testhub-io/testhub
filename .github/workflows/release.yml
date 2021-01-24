@@ -3,19 +3,24 @@
 on: release
 name: Build Release
 jobs:
-  release-linux-amd64:
-    name: release linux/amd64
+  
+  release-linux-amd64-2:
+    name: alternative-amd64
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: compile and release
-        uses: ngs/go-release.action@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOARCH: amd64
-          GOOS: linux
-          EXTRA_FILES: "LICENSE"
-          GO111MODULE: "on"
+    steps:      
+       - uses: actions/checkout@master        
+       - name: alternative-amd64-step
+         uses: wangyoucao577/go-release-action@v1.14
+         with:
+            # GITHUB_TOKEN for uploading releases to Github asserts.
+            github_token:  ${{ secrets.GITHUB_TOKEN }}
+            # GOOS is the running programs operating system target: one of darwin, freebsd, linux, and so on.
+            goos: linux
+            # GOARCH is the running programs architecture target: one of 386, amd64, arm, s390x, and so on.
+            goarch:  amd64
+        
+
+
    
   release-linux-386:
     name: release linux/386
