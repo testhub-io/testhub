@@ -4,73 +4,39 @@ on: release
 name: Build Release
 jobs:
   
-  release-linux-amd64-2:
+  release:
     name: alternative-amd64
     runs-on: ubuntu-latest
     steps:      
        - uses: actions/checkout@master        
-       - name: alternative-amd64-step
+       - name: linux-amd64
          uses: wangyoucao577/go-release-action@v1.14
-         with:
-            # GITHUB_TOKEN for uploading releases to Github asserts.
-            github_token:  ${{ secrets.GITHUB_TOKEN }}
-            # GOOS is the running programs operating system target: one of darwin, freebsd, linux, and so on.
-            goos: linux
-            # GOARCH is the running programs architecture target: one of 386, amd64, arm, s390x, and so on.
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: linux            
             goarch:  amd64
-        
-
-
-   
-  release-linux-386:
-    name: release linux/386
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: compile and release
-        uses: ngs/go-release.action@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOARCH: "386"
-          GOOS: linux
-          EXTRA_FILES: "LICENSE"
-          GO111MODULE: "on"
-  release-darwin-amd64:
-    name: release darwin/amd64
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: compile and release
-        uses: ngs/go-release.action@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOARCH: amd64
-          GOOS: darwin
-          EXTRA_FILES: "LICENSE"
-          GO111MODULE: "on"
-  release-windows-386:
-    name: release windows/386
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: compile and release
-        uses: ngs/go-release.action@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOARCH: "386"
-          GOOS: windows
-          EXTRA_FILES: "LICENSE"
-          GO111MODULE: "on"
-  release-windows-amd64:
-    name: release windows/amd64
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: compile and release
-        uses: ngs/go-release.action@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOARCH: amd64
-          GOOS: windows
-          EXTRA_FILES: "LICENSE"
-          GO111MODULE: "on"
+       - name: linux-386
+         uses: wangyoucao577/go-release-action@v1.14
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: linux            
+            goarch: 386
+       - name: darwin-amd64
+         uses: wangyoucao577/go-release-action@v1.14
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: darwin            
+            goarch: amd64  
+       - name: windows-386
+         uses: wangyoucao577/go-release-action@v1.14
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: windows
+            goarch: 386 
+       - name: windows-amd64
+         uses: wangyoucao577/go-release-action@v1.14
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: windows
+            goarch: amd64 
+      
