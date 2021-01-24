@@ -30,20 +30,6 @@ jobs:
           GOOS: linux
           EXTRA_FILES: "LICENSE"
           GO111MODULE: "on"
-
-  release-linux-arm64:
-    name: release linux/arm64
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: compile and release
-        uses: ngs/go-release.action@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOARCH: arm64
-          GOOS: linux
-          EXTRA_FILES: "LICENSE"
-          GO111MODULE: "on"
   release-darwin-amd64:
     name: release darwin/amd64
     runs-on: ubuntu-latest
