@@ -6,11 +6,17 @@
 # Usage 
 
 `$GITHUB_REPOSITORY`  -  organisation and reposirory. Example `test-org/java-project`
+
 `$INPUT_TEST_RESULT_PATTERN` - glob patter to search for test results files. Example `/target/surefire-reports/**/*.xml`
+
 `$BUILD_NUMBER` - bulid number
+
 `$WORKING_DIR` - directory where to start search for test files. (optional)
+
 `$BRANCH` - branch name
+
 `$INPUT_TEST_COVERAGE_PATTERN` -  glob patter to search for coverage files
+
 
 
 ## Upload test results
