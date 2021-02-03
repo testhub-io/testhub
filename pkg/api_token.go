@@ -25,7 +25,7 @@ func getApiKey(orgAndProject string, testhubDomain string, onPremise bool) (stri
 		console.PrintLn("Auto-retrieval of API token")
 	}
 
-	url := fmt.Sprintf("https://%s/api/%s/apikey", testhubDomain, org)
+	url := fmt.Sprintf("%s/api/%s/apikey", testhubDomain, org)
 	log.Printf("Requestin token url: %s", url)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Set("token", "WinLost2020$")
