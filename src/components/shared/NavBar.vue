@@ -15,13 +15,13 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="m-auto">
-          <b-nav-item
+          <!-- <b-nav-item
             :class="{ 'is-active': $route.path === '/' }"
             to="/"
             class="px-3"
             >Home</b-nav-item
-          >
-          <b-nav-item-dropdown
+          > -->
+          <!-- <b-nav-item-dropdown
             :class="{ 'is-active': $route.path !== '/' }"
             class="px-3"
             no-caret
@@ -42,7 +42,7 @@
             </template>
             <b-dropdown-item to="/Dashboard">dashboard</b-dropdown-item>
             <b-dropdown-item to="/changelog">Changelog</b-dropdown-item>
-          </b-nav-item-dropdown>
+          </b-nav-item-dropdown> -->
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
