@@ -48,8 +48,17 @@ Vue.use(VueScrollTo, {
     x: false,
     y: true,
 });
+let apiEndpoint = API_ENDPOINT
+var urlPattern = /^((http|https):\/\/)/;
+if(!urlPattern.test(apiEndpoint)) {
+    apiEndpoint = "http://" + apiEndpoint;
+}
 
-Vue.http.options.root = API_ENDPOINT
+if (apiEndpoint.slice(-1) !== "/") {
+    apiEndpoint = apiEndpoint + "/"
+}
+
+Vue.http.options.root = apiEndpoint + "api/"
 let lang = window.Sitedata !== undefined ? window.SiteData.lang : "en";
 const i18n = new VueI18n({
     locale: lang, // set locale
