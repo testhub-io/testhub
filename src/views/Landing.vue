@@ -16,7 +16,7 @@
                 free forever for open source.
               </p>
               <div class="mt-4 pt-2">
-                <b-button variant="primary">Getting started</b-button>
+                <b-button variant="primary" @click.prevent="gotoGetStarted">Getting started</b-button>
               </div>
             </div>
           </b-col>
@@ -126,12 +126,11 @@
                 cumulative dashboards.
               </p>
 
-              <Carousel
+              <!-- <Carousel
                 class="owl-carousel owl-theme"
                 :per-page="1"
                 :autoplay="true"
               >
-                <!-- slide 1 -->
                 <Slide>
                   <div class="statistics_customer text-left py-3">
                     <b-avatar
@@ -146,8 +145,6 @@
                     <h6 class="text-primary">- Jhonis De Souza</h6>
                   </div>
                 </Slide>
-
-                <!-- slide 2 -->
                 <Slide>
                   <div class="statistics_customer text-left py-3">
                     <b-avatar
@@ -162,8 +159,6 @@
                     <h6 class="text-primary">- Michelle Gemstone</h6>
                   </div>
                 </Slide>
-
-                <!-- slide 3 -->
                 <Slide>
                   <div class="statistics_customer text-left py-3">
                     <b-avatar
@@ -179,8 +174,6 @@
                     <h6 class="text-primary">- Youssephine Gomatova</h6>
                   </div>
                 </Slide>
-
-                <!-- slide 4 -->
                 <Slide>
                   <div class="statistics_customer text-left py-3">
                     <b-avatar
@@ -196,6 +189,7 @@
                   </div>
                 </Slide>
               </Carousel>
+              -->
             </div>
           </b-col>
         </b-row>
@@ -277,7 +271,7 @@
       </b-container>
       <!-- End Choose-us section -->
 
-      <!-- Get Started Section -->
+      <!-- Get Started Section
       <b-container class="pt-4 get-started">
         <b-row class="justify-content-center">
           <b-col md="8">
@@ -311,7 +305,7 @@
           </b-col>
         </b-row>
       </b-container>
-      <!-- Get access Section -->
+      Get access Section -->
 
       <!-- Get Started Section -->
       <b-container class="pt-4 access">
@@ -330,7 +324,7 @@
             </b-col>
             <b-col md="4" class="mt-4 mt-sm-0">
               <div class="text-md-right text-center">
-                <b-button variant="light">Get Started</b-button>
+                <b-button variant="light" @click.prevent="gotoGetStarted">Get Started</b-button>
               </div>
             </b-col>
           </b-row>
@@ -342,13 +336,19 @@
 </template>
 
 <script>
-import { Carousel, Slide } from "vue-carousel";
+// import { Carousel, Slide } from "vue-carousel";
+import {consts} from "@/const";
 
 export default {
   components: {
-    Carousel,
-    Slide,
+    // Carousel,
+    // Slide,
   },
+  methods: {
+    gotoGetStarted() {
+      window.location.href = consts.gettingStartedUrl
+    }
+  }
 };
 </script>
 

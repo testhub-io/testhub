@@ -49,7 +49,7 @@
         <b-navbar-nav>
           <b-nav-item right>
             <!-- Using 'button-content' slot -->
-            <b-button variant="primary">Try Now</b-button>
+            <b-button @click.prevent="gotoDownload()" variant="primary">Try Now</b-button>
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import {consts} from "@/const";
+
 export default {
   data() {
     return {
@@ -109,6 +111,9 @@ export default {
         this.degree = 0;
       }
     },
+    gotoDownload() {
+      window.location.href= consts.cliDownloadUrl
+    }
   },
 };
 </script>
