@@ -61,7 +61,7 @@ func isTravisCiEnv(orgAndProject string) bool {
 	isTravis := os.Getenv("TRAVIS")
 	user := os.Getenv("USER")
 	home := os.Getenv("HOME")
-	repo := os.Getenv("TRAVIS_REPO_SLUG ")
+	repo := os.Getenv("TRAVIS_REPO_SLUG")
 
 	if isTravis == "true" && user == "travis" && strings.Contains(home, "travis") &&
 		strings.EqualFold(repo, orgAndProject) {
@@ -75,7 +75,7 @@ func isCircleCiEnv(orgAndProject string) bool {
 	isTravis := os.Getenv("CIRCLECI")
 	circleJob := os.Getenv("CIRCLE_JOB")
 	work_dir := os.Getenv("CIRCLE_WORKING_DIRECTORY")
-	repoUrl := "CIRCLE_REPOSITORY_URL"
+	repoUrl := os.Getenv("CIRCLE_REPOSITORY_URL")
 
 	if isTravis == "true" && len(circleJob) != 0 && len(work_dir) != 0 &&
 		strings.Contains(strings.ToLower(orgAndProject), strings.ToLower(repoUrl)) {

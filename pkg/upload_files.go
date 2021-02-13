@@ -87,8 +87,8 @@ func (u *UploadFilesParameters) printTestHubUrl(err error) error {
 }
 
 func (u *UploadFilesParameters) getTestHubApiUrl(org string, proj string, build string) string {
-	domain := os.Getenv("TESTHUB_DOMAIN")
-	return fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", domain, org, proj, build)
+
+	return fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", u.testhubApiDomain, org, proj, build)
 }
 
 func (u *UploadFilesParameters) loadConfig() {
@@ -96,6 +96,7 @@ func (u *UploadFilesParameters) loadConfig() {
 
 	if len(u.testhubApiDomain) == 0 {
 		u.testhubApiDomain = defaultTesthubDomain
+		return
 	}
 
 	if !strings.HasPrefix(u.testhubApiDomain, "https://") && !strings.HasPrefix(u.testhubApiDomain, "http://") {
@@ -104,7 +105,6 @@ func (u *UploadFilesParameters) loadConfig() {
 
 	p := os.Getenv("ON_PREMISE")
 	u.isOnPremise = strings.EqualFold(p, "true") || strings.EqualFold(p, "1")
-
 }
 
 func (u *UploadFilesParameters) uploadFile(f string, isCoverage bool) error {
