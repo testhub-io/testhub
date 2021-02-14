@@ -88,7 +88,7 @@ func (u *UploadFilesParameters) printTestHubUrl(err error) error {
 
 func (u *UploadFilesParameters) getTestHubApiUrl(org string, proj string, build string) string {
 
-	return fmt.Sprintf("https://%s/api/%s/projects/%s/runs/%s", u.testhubApiDomain, org, proj, build)
+	return fmt.Sprintf("%s/api/%s/projects/%s/runs/%s", u.testhubApiDomain, org, proj, build)
 }
 
 func (u *UploadFilesParameters) loadConfig() {
