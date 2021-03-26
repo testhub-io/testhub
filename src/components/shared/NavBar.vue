@@ -49,7 +49,7 @@
         <b-navbar-nav>
           <b-nav-item right>
             <!-- Using 'button-content' slot -->
-            <b-button @click.prevent="gotoDownload()" variant="primary">Try Now</b-button>
+            <!-- <b-button @click.prevent="gotoDownload()" variant="primary">Try Now</b-button> -->
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
