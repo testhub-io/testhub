@@ -17,8 +17,17 @@ namespace TestsHubUploadEndpoint.Coverage
             {
                 return new JacocoReader(dataLoader);
             }
-
-            return new CoberturaReader(dataLoader);
+            else if (content.Contains("<coverage", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (content.Contains("<packages>", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return new CoberturaReader(dataLoader);
+                }else if(content.Contains("<project", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return new CloverReader(dataLoader);
+                }                
+            }            
+            throw new InvalidOperationException("Unknown coverage format");            
         }
     }
 }
