@@ -43,7 +43,7 @@ namespace TestsHubUploadEndpoint
                     {
                         case XmlNodeType.Element:
                           
-                            if (string.Equals(reader.Name, "testcase", StringComparison.OrdinalIgnoreCase))
+                            if (reader.IsStartElement() && string.Equals(reader.Name, "testcase", StringComparison.OrdinalIgnoreCase))
                             {
                                 var subTree = reader.ReadSubtree();
 
@@ -53,7 +53,7 @@ namespace TestsHubUploadEndpoint
                                 Visitor?.TestCaseAdded(testCase);
                                 testCases.Add(testCase);
                             }
-                            else if (string.Equals(reader.Name, "testsuite", StringComparison.OrdinalIgnoreCase))
+                            else if (reader.IsStartElement() && string.Equals(reader.Name, "testsuite", StringComparison.OrdinalIgnoreCase))
                             {
                                 testSuite = new TestSuite();
                                 if (reader.HasAttributes)

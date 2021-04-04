@@ -52,6 +52,7 @@ namespace Tests
             case1.Time.ShouldBe(0.0000749m);
             case1.TestSuite.Name.ShouldBe("aspnetappDependency.Tests.UnitTest1");
             _testRunReported.TestCasesCount.ShouldBe(2);
+            _testCasesReported.Select(t => t.TestSuite.Name).Distinct().Count().ShouldBe(1);
         }
 
         [Test]
@@ -101,6 +102,27 @@ namespace Tests
                     .Count(t => t.Status.Equals("passed", System.StringComparison.OrdinalIgnoreCase))
                     .ShouldBe(2)
                 );
+        }
+
+        [Test]
+        public void Test_ReadFileWithCoupleOfTestSuites()
+        {
+            // Arrange 
+            var xmlReader = TestData.GetTestReport("junit", "redundant-suite-issue.xml");
+
+            // Act 
+            Task.WaitAll(_reader.Read(xmlReader, "tr1", "develop", ""));
+
+            // Assert
+            var d = _testCasesReported.Select(t => t.TestSuite.Name).Distinct();
+            foreach (var v  in d)
+            {
+                System.Diagnostics.Debug.WriteLine(v);
+            }
+
+            _testCasesReported.ShouldSatisfyAllConditions(
+                () => _testCasesReported.Count.ShouldBe(158),
+                () => d.Count().ShouldBe(18));
         }
     }
 }
