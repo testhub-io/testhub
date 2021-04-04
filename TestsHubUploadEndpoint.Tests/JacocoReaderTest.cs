@@ -16,7 +16,7 @@ namespace TestsHubUploadEndpoint.Tests
                 .Verifiable();
 
             var jacocoReader = new JacocoReader(dl.Object);
-            using (var coverageStream = TestData.GetFile("coverage/jacoco.xml"))
+            using (var coverageStream = TestData.GetCoverageReport("jacoco", "jacoco.xml"))
             {
 
                 jacocoReader.Read(coverageStream, TestRunName);

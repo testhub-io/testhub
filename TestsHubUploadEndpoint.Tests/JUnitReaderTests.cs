@@ -37,7 +37,7 @@ namespace Tests
         public void Test_Read()
         {
             // Arrange             
-            var xmlReader = TestData.GetFile("MinimalJUnit.xml");
+            var xmlReader = TestData.GetTestReport("junit", "MinimalJUnit.xml");
 
             // Act 
             Task.WaitAll(_reader.Read(xmlReader, "tr1", "develop", ""));
@@ -58,7 +58,7 @@ namespace Tests
         public void Test_ReadFileWithFailure()
         {
             // Arrange 
-            var xmlReader = TestData.GetFile("failure.xml");
+            var xmlReader = TestData.GetTestReport("junit", "failure.xml");
 
             // Act 
             Task.WaitAll(_reader.Read(xmlReader, "tr1", "develop", ""));
@@ -82,7 +82,7 @@ namespace Tests
         public void Test_ReadFileWithFailureAndSkip()
         {
             // Arrange 
-            var xmlReader = TestData.GetFile("FailedAndSkipped.xml");
+            var xmlReader = TestData.GetTestReport("junit", "FailedAndSkipped.xml");
 
             // Act 
             Task.WaitAll(_reader.Read(xmlReader, "tr1", "develop", ""));

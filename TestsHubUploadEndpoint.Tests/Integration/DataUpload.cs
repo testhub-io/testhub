@@ -24,35 +24,35 @@ namespace TestsHubUploadEndpoint.Tests.Integration
         [Test]
         public void FillInDb()
         {
-            LoadJunitFile(TestData.GetFile("Kiln\\HugeNumberOfTests.xml"), "TestDataUpload-HugeReport");
+            LoadJunitFile(TestData.GetTestReport("junit", "HugeNumberOfTests.xml"), "TestDataUpload-HugeReport");
 
             for (var i = 0; i < 20; i++)
             {
-                LoadJunitFile(TestData.GetFile("Kiln\\Frontend-JUnit.xml"), "TestDataUpload-Regular");
+                LoadJunitFile(TestData.GetTestReport("junit", "Frontend-JUnit.xml"), "TestDataUpload-Regular");
             }
 
-            LoadJunitFile(TestData.GetFile("test-results-rpclib.xml"), "TestDataUpload-SmallJUnit");
-            LoadJunitFile(TestData.GetFile("test-results-rpclib.xml"), "TestDataUpload-SmallJUnit");
+            LoadJunitFile(TestData.GetTestReport("junit", "test-results-rpclib.xml"), "TestDataUpload-SmallJUnit");
+            LoadJunitFile(TestData.GetTestReport("junit", "test-results-rpclib.xml"), "TestDataUpload-SmallJUnit");
         }
 
         [Test]
         public void UploadHugeJUnitFile()
         {
-            LoadJunitFile(TestData.GetFile("Kiln\\HugeNumberOfTests.xml"), "TestDataUpload-HugeReport");
+            LoadJunitFile(TestData.GetTestReport("junit", "HugeNumberOfTests.xml"), "TestDataUpload-HugeReport");
             Assert.Pass();
         }
 
         [Test]
         public void UploadSmallJUnitFile()
         {
-            LoadJunitFile(TestData.GetFile("test-results-rpclib.xml"), "TestDataUpload-SmallJUnit");
+            LoadJunitFile(TestData.GetTestReport("junit", "test-results-rpclib.xml"), "TestDataUpload-SmallJUnit");
             Assert.Pass();
         }
 
         [Test]
         public void UploadRegularJUnitFile()
         {
-            LoadJunitFile(TestData.GetFile("Kiln\\Frontend-JUnit.xml"), "TestDataUpload - Regular");
+            LoadJunitFile(TestData.GetTestReport("junit", "Frontend-JUnit.xml"), "TestDataUpload - Regular");
             Assert.Pass();
         }
 
@@ -65,8 +65,8 @@ namespace TestsHubUploadEndpoint.Tests.Integration
                 new DataLoader(_testHubDBContext, "TestDataUpload-SmallJUnit", _org.Name));
 
             var testRun = $"{DateTime.Now.ToString("ddMMyyyy_hh:mm")}-{++counter}";
-            var task = jUnitReader.Read(TestData.GetFile("Kiln\\Frontend-JUnit.xml"), testRun, "develop", "");
-            var task2 = jUnitReader.Read(TestData.GetFile("test-results-rpclib.xml"), testRun, "develop", "");
+            var task = jUnitReader.Read(TestData.GetTestReport("junit", "Frontend-JUnit.xml"), testRun, "develop", "");
+            var task2 = jUnitReader.Read(TestData.GetTestReport("junit", "test-results-rpclib.xml"), testRun, "develop", "");
             
 
             Task.WaitAll(task, task2);

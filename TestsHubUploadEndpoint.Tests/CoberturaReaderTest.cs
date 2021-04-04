@@ -18,7 +18,7 @@ namespace TestsHubUploadEndpoint.Tests
 
             var coberturaReader = new CoberturaReader(dl.Object);
 
-            var coverageStream = TestData.GetFile("coverage/cobertura-coverage.xml");
+            var coverageStream = TestData.GetCoverageReport("cobertura", "cobertura-coverage.xml");
             
             coberturaReader.Read(coverageStream, TestRunName);
             dl.VerifyAll();
