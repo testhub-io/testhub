@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite failures="1" tests="6" time="303.252592128">
+    <testcase classname="e2e.go" name="Extract" time="32.710133036"></testcase>
+    <testcase classname="e2e.go" name="TearDown Previous" time="1.131575952"></testcase>
+    <testcase classname="e2e.go" name="listResources Before" time="13.235286421"></testcase>
+    <testcase classname="e2e.go" name="Up" time="65.697068885">
+        <failure>error creating cluster</failure>
+        <failure>Second string</failure>
+    </testcase>
+    <testcase classname="e2e.go" name="DumpClusterLogs (--up failed)" time="4.191150531"></testcase>
+    <testcase classname="e2e.go" name="Deferred TearDown" time="139.654776375"></testcase>
+    <testcase classname="e2e.go" name="Timeout" time="30000"></testcase>
+</testsuite>
