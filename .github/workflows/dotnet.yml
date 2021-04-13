@@ -27,6 +27,6 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}        
         repository: 'testhubio/testhub-api'
-        tag_with_ref: true
-        context: ./TestsHub.Api/Dockerfile
+        tag_with_ref: true        
+        file: ./TestsHub.Api/Dockerfile
         
