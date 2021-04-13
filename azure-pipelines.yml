@@ -11,9 +11,7 @@ resources:
 variables:
    
   imageRepository: 'testhub-api'
-  containerRegistry: 'testhubio.azurecr.io'  
-  publicContainerRegistry: 'testhubio'
-  publicImageRepository: 'testhub-api'
+  containerRegistry: 'testhubio.azurecr.io'    
   
   tag: '$(Build.BuildId)'
   
@@ -75,18 +73,6 @@ stages:
         repository: $(imageRepository)
         dockerfile: '$(Build.SourcesDirectory)/TestsHub.Api/Dockerfile'
         containerRegistry: 'testhub-registry-connection'
-        buildContext: $(Build.SourcesDirectory)
-        tags: |
-          $(tag)
-          latest
-
-    - task: Docker@2
-      displayName: Push to Dockerhub
-      inputs:
-        command: buildAndPush
-        repository: $(publicImageRepository)
-        dockerfile: '$(Build.SourcesDirectory)/TestsHub.Api/Dockerfile'
-        containerRegistry: 'testhub-io-dockerhub'
         buildContext: $(Build.SourcesDirectory)
         tags: |
           $(tag)
