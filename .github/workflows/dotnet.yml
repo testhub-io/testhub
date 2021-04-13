@@ -28,4 +28,5 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}        
         repository: 'testhubio/testhub-api'
         tag_with_ref: true
+        context: TestsHub.Api/Dockerfile
         
