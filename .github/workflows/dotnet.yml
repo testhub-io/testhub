@@ -31,6 +31,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: testhubio/testhub-api:latest 
+        tags: testhubio/testhub-api:latest  testhubio/testhub-api:${{ github.run_id	}}
         file: ./TestsHub.Api/Dockerfile
         
