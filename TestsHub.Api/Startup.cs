@@ -90,7 +90,7 @@ namespace TestHub.Api
             app.UseResponseCompression();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
