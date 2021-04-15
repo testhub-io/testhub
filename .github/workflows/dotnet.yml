@@ -22,7 +22,7 @@ jobs:
       id: hello
       uses: testhub-io/testhub-io.action@v0.58
       with:        
-        test_result_pattern: "TestResults/th-test-results.xml"
+        test_result_pattern: "**/TestResults/th-test-results.xml"
         test_coverage_pattern: "**/coverage.cobertura.xml"
               
     - name: Set up Docker Buildx
