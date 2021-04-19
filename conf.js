@@ -1,1 +1,1 @@
-export default "https://test-hub-api.azurewebsites.net"
+export default "https://api.test-hub.io"
