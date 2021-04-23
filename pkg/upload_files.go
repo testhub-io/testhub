@@ -28,7 +28,7 @@ type UploadFilesParameters struct {
 	isOnPremise      bool
 }
 
-const defaultTesthubDomain = "https://test-hub-api.azurewebsites.net"
+const defaultTesthubDomain = "https://api.test-hub.io"
 const ApiKeyHeader = "ApiToken"
 
 func (u *UploadFilesParameters) UploadTestResultFiles() error {
