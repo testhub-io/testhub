@@ -30,6 +30,7 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
+        [ResponseCache(Duration=DefaultCachingDuration)]
         public ActionResult<Data.Organisation> Get(string org)
         {
             try
@@ -56,6 +57,7 @@ namespace TestHub.Api.Controllers
         }
 
         [HttpGet("{org}/coverage")]
+        [ResponseCache(Duration = DefaultCachingDuration)]
         public ActionResult<IEnumerable<Data.CoverageDataItem>> GetCoverage(string org, [FromQuery]int? page, [FromQuery]int? pageSize)
         {
             // retrieve list from database/whereverand
@@ -70,6 +72,7 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
+        [ResponseCache(Duration = DefaultCachingDuration)]
         public ActionResult<Data.TestResultsHistoricalData> GetTestResults(string org)
         {
             try

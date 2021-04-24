@@ -23,6 +23,7 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
+        [ResponseCache(Duration = DefaultCachingDuration)]
         public ActionResult<string> Get(string org, string project)
         {
             try
@@ -52,6 +53,7 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
+        [ResponseCache(Duration = DefaultCachingDuration)]
         public ActionResult<Data.TestResultsHistoricalData> GetTestResults(string org, string project)
         {
             try
@@ -82,6 +84,7 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
+        [ResponseCache(Duration = DefaultCachingDuration)]
         public ActionResult<Data.CoverageHistoricalData> GetProjectCoverage(string org, string project)
         {
             try
@@ -108,6 +111,7 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
+        [ResponseCache(Duration = DefaultCachingDuration, VaryByQueryKeys =new string[]{ "page", "pageSize", "filter" })]
         public ActionResult<PaginatedList<Data.ProjectSummary>> GetProjects(string org, [FromQuery]int? page, [FromQuery]int? pageSize, [FromQuery]string filter)
         {
             try
@@ -133,6 +137,7 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
+        [ResponseCache(Duration = DefaultCachingDuration, VaryByQueryKeys = new string[] { "runsLimit" })]
         public ActionResult<Data.TestResultsHistoricalData> GetTest(string org, string project, [FromQuery] int? runsLimit)
         {
             try
