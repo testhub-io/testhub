@@ -43,7 +43,6 @@ namespace TestHub.Api.Controllers
             {
                 return NotFound();
             }
-
         }
 
         [HttpGet("{org}/apikey")]
@@ -62,8 +61,7 @@ namespace TestHub.Api.Controllers
         {
             // retrieve list from database/whereverand
             throw new NotImplementedException();
-        }
- 
+        } 
 
         /// <summary>
         /// Get historical test results series

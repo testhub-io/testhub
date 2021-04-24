@@ -19,7 +19,7 @@ namespace TestHub.Api.ApiDataProvider
 
         ProjectSummary GetProjectSummary(string project);
 
-        IEnumerable<TestRunSummary> GetTestRuns(string projectName);
+        IEnumerable<TestRunSummary> GetTestRuns(string projectName, string branch);
         
         TestResultsHistoricalData GetTestResultsForProject(string project);
 

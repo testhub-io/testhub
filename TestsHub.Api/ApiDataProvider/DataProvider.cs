@@ -48,12 +48,19 @@ namespace TestHub.Api.ApiDataProvider
             _urlBuilder = url;
         }
 
-        public IEnumerable<TestRunSummary> GetTestRuns(string projectName)
+        public IEnumerable<TestRunSummary> GetTestRuns(string projectName, string branch)
         {
-            var project = getProjectIntity(projectName);            
+            var project = getProjectIntity(projectName);
 
-            var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id )
-                .OrderByDescending(t => t.Timestamp).Include(c => c.Coverage);
+            var testRuns = _testHubDBContext.TestRuns.Where(t => t.ProjectId == project.Id);                
+
+            if (branch != null)
+            {
+                testRuns = testRuns.Where(t => t.Branch.Equals(branch));
+            }
+
+            testRuns = testRuns.OrderByDescending(t => t.Timestamp).Include(c => c.Coverage).Include(t=>t.TestCases);
+
             TestHub.Data.DataModel.TestRun previousTestRun = null;
             decimal? previousCoverage = null;
             foreach (var t in testRuns)
@@ -87,7 +94,9 @@ namespace TestHub.Api.ApiDataProvider
                 Stats = new TestRunStats()
                 {
                     TotalCount = t.TestCasesCount,
-
+                    Failed = t.TestCases.Count(i=>i.Status == TestHub.Data.DataModel.TestResult.Failed),
+                    Passed = t.TestCases.Count(i => i.Status == TestHub.Data.DataModel.TestResult.Passed),
+                    Skipped = t.TestCases.Count(i => i.Status == TestHub.Data.DataModel.TestResult.Skipped),
                 },
                 CoverageGrowth = !currentCoverage.HasValue ? null : (currentCoverage - previousCoverage),
                 TestCountGrowth = t.TestCasesCount - (previousTestRun?.TestCasesCount ?? 0),
