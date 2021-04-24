@@ -91,7 +91,7 @@ namespace TestHub.Api.Controllers
                 filter ??= string.Empty;
                 var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
             
-                var res = dataProvider.GetTestRuns(project).AsQueryable()
+                var res = dataProvider.GetTestRuns(project, null).AsQueryable()
                         .Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
 
             

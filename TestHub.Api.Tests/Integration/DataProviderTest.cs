@@ -52,7 +52,7 @@ namespace TestHub.Api.Tests.Integration
         public void GetTestRuns()
         {
             var dataProvider = new DataProvider(_db, org, new UrlBuilder(Mock.Of<IUrlHelper>()));
-            var results = dataProvider.GetTestRuns("TestDataUpload-Regular");
+            var results = dataProvider.GetTestRuns("TestDataUpload-Regular", null);
             Assert.AreEqual(20, results.Count());
             System.Diagnostics.Debug.WriteLine(JsonSerializer.Serialize(results));
         }
