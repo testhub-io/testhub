@@ -68,6 +68,8 @@ namespace TestHub.Api
 #endif
             });
 
+            services.AddResponseCaching();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +88,7 @@ namespace TestHub.Api
                 app.UseHsts();
             }
 
+            app.UseResponseCaching();
             app.UseCors(AllowTestsHubOrigins);
             app.UseResponseCompression();
             app.UseRouting();

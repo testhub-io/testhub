@@ -28,7 +28,8 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]        
+        [ProducesDefaultResponseType]
+        [ResponseCache(Duration = DefaultCachingDuration)]
         public ActionResult<Data.TestRun> Get(string org, string project, string testRun)
         {
             try
@@ -48,7 +49,8 @@ namespace TestHub.Api.Controllers
             }
         }
 
-        [HttpGet("{testrun}/tests")]        
+        [HttpGet("{testrun}/tests")]
+        [ResponseCache(Duration = DefaultCachingDuration)]
         public ActionResult<Data.TestRun> GetTests(string org, string project, string testRun)
         {
             try
@@ -59,7 +61,6 @@ namespace TestHub.Api.Controllers
                 }
                 var dataProvider = RepositoryFactory.GetTestHubDataProvider(org, Url);
 
-            
                 var testRunEntity = dataProvider.GetTests(project, testRun);
                 return FormatResult(testRunEntity, $"{org}/{project}/{testRun}");
             }
@@ -82,6 +83,7 @@ namespace TestHub.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
+        [ResponseCache(Duration = DefaultCachingDuration, VaryByQueryKeys = new string[] { "page", "pageSize", "filter" })]
         public ActionResult<PaginatedList<Data.TestRunSummary>> GetTestRuns(string org, string project, [FromQuery]int? page, [FromQuery]int? pageSize, [FromQuery]string filter)
         {
             try
@@ -108,7 +110,8 @@ namespace TestHub.Api.Controllers
         [HttpGet("{testrun}/coverage")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]  
+        [ProducesDefaultResponseType]
+        [ResponseCache(Duration = DefaultCachingDuration)]
         public IActionResult GetCoverage(string org, string project, string testRun)
         {
             var stream = DummyDataProvider.GetDummyTestRunCoverage();
@@ -125,7 +128,7 @@ namespace TestHub.Api.Controllers
         [HttpGet("{testrun}/code/{**file_path}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
+        [ProducesDefaultResponseType]        
         public IActionResult GetSourceCode(string org, string project, string testRun, string filepath)
         {
             var stream = DummyDataProvider.GetDummyTestRunCode();

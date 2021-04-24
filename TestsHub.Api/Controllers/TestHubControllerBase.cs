@@ -7,6 +7,7 @@ namespace TestHub.Api.Controllers
 {
     public abstract class TestHubControllerBase : ControllerBase
     {
+        public const int DefaultCachingDuration = 60;
 
         protected IDataProviderFactory RepositoryFactory { get; }
 
