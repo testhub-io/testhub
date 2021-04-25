@@ -17,6 +17,7 @@ RUN dotnet publish "TestsHub.Api.csproj" -c Release -o /app
 ENV ASPNETCORE_ENVIRONMENT Docker
 
 FROM base AS final
+RUN apt-get update && apt-get install -y libgdiplus
 WORKDIR /app
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "TestsHub.Api.dll"]
