@@ -67,20 +67,24 @@ export default {
               }
             }
           }],
-          yAxes: [{
+          yAxes: [{            
             ticks: {
               // Include a percent sign in the ticks
               callback: function(value) {
                 return value + '%';
               },
               source: 'data',
+              precision: 0,
+              min: 0,
+              max: 100,
+              stepSize: 25
             },
 
             display: true,
             scaleLabel: {
               display: false,
               fontColor: 'rgba(0,0,0,0.7)',
-            },
+            },            
             gridLines: {
               color: '#d7e1ea',
               borderDash: [5, 15],
