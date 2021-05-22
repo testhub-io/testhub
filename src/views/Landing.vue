@@ -214,21 +214,6 @@
                 Coverage analysis tool.
               </p>
               <b-row>
-                <b-col cols="12">
-                  <div class="d-flex align-items-center pt-4">
-                    <h2>
-                      <b-icon icon="shield" variant="primary"></b-icon>
-                    </h2>
-                    <div class="ml-3">
-                      <h5>Fully Managed and provides actionable data</h5>
-                      <p class="text mb-0">
-                        See what you've been working on daily and how much time
-                        you spent on each task or project. You can use automatic
-                        or online timer for tracking different tasks.
-                      </p>
-                    </div>
-                  </div>
-                </b-col>
 
                 <b-col cols="12">
                   <div class="d-flex align-items-center pt-4">
@@ -246,8 +231,8 @@
                 </b-col>
 
                 <b-col cols="12" class="pt-4">
-                  <b-button variant="outline-primary"
-                    >Download TestHub CLI Now
+                  <b-button variant="outline-primary"  @click.prevent="gotoGetStarted">
+                    Download TestHub CLI Now
                     <b-icon
                       class="icon-margin"
                       font-scale="0.7"

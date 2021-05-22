@@ -15,7 +15,7 @@
         </b-col>
 
         <b-col cols="12" md="8" lg="6">
-          <b-row>
+          <!-- <b-row>
             <b-col cols="6" md="4">
               <div class="page-footer_nav-col">
                 <div class="page-footer_nav-title">Product</div>
@@ -48,7 +48,7 @@
                 </ul>
               </div>
             </b-col>
-          </b-row>
+          </b-row> -->
         </b-col>
       </b-row>
     </b-container>
