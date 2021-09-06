@@ -6,13 +6,13 @@ import (
 )
 
 func PrintError(format string, a ...interface{}) {
-	color.Red(format+"\n", a)
+	color.Red(format+"\n", a...)
 }
 
 func PrintLn(format string, a ...interface{}) {
-	fmt.Println(fmt.Sprintf(format, a))
+	fmt.Println(fmt.Sprintf(format, a...))
 }
 
 func PrintGreen(format string, a ...interface{}) {
-	color.Green(format+"\n", a)
+	color.Green(format+"\n", a...)
 }
