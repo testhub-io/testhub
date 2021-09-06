@@ -48,3 +48,24 @@ jobs:
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             AWS_DEFAULT_REGION: 'us-east-2'
       
+
+
+       - name: Set up Go 1.x
+         uses: actions/setup-go@v2
+         with:
+            go-version: ^1.16
+         id: go
+      
+       - name: Build
+         run: env CGO_ENABLED=0 go build -ldflags='-extldflags=-static' -v -o ./bin/testhub-cli .
+
+       - name: Buildah login
+         run: buildah login -u ${{ secrets.DOCKER_USERNAME }} -p  ${{ secrets.DOCKER_PASSWORD }} docker.io/testhubio
+      
+       - name: OCI Push registry-listener                     
+         run: |                        
+               buildah bud -t testhubio/cli:$RELEASE_TAG \                
+                  -t testhubio/cli\:latest .  && \
+               buildah push testhubio/cli:$RELEASE_TAG && \
+               buildah push testhubio/cli:latest 
+      
