@@ -1,8 +1,9 @@
 # .github/workflows/release.yaml
-on: release
+on:
+  release:
+    types: [created, edited]
 name: Build Release
 jobs:
-  
   release:
     name: Publish release
     runs-on: ubuntu-latest
