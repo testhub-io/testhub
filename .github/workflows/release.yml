@@ -57,6 +57,17 @@ jobs:
        - name: Build
          run: env CGO_ENABLED=0 go build -ldflags='-extldflags=-static' -v -o ./bin/testhub-cli .
 
+
+       - name: Buildah login
+         env:
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+         run: buildah login \
+              --username $DOCKER_USERNAME \
+              --password $DOCKER_PASSWORD \
+              docker.io/testhubio
+
+
        - name: Log in to Red Hat Registry
          uses: redhat-actions/podman-login@v1
          with:
