@@ -62,10 +62,7 @@ jobs:
          env:
             DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
             DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-         run: buildah login \
-              --username $DOCKER_USERNAME \
-              --password $DOCKER_PASSWORD \
-              docker.io/testhubio
+         run: buildah login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD docker.io/testhubio
 
 
        - name: Log in to Red Hat Registry
