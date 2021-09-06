@@ -42,7 +42,7 @@ jobs:
             
        - name: Upload to S3
          run: |
-            aws s3 sync --acl=public-read --storage-class=STANDARD_IA  --exclude "*" --include "testhub-cli-v*tar.gz"  . s3://testhub-cli-releases/$RELEASE_TAG
+            aws s3 sync --acl=public-read --storage-class=STANDARD_IA  --exclude "*" --include "testhub-cli-v*tar.gz"  . s3://testhub-cli-releases/${{ github.event.release.tag_name }}
          env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -65,9 +65,9 @@ jobs:
            password: ${{ secrets.DOCKER_PASSWORD }}
     
       
-       - name: OCI Push registry-listener                     
+       - name: OCI Push
          run: |                        
-               buildah bud -t testhubio/cli:$RELEASE_TAG -t testhubio/cli:latest . && \
-               buildah push testhubio/cli:$RELEASE_TAG && \
+               buildah bud -t testhubio/cli:${{ github.event.release.tag_name }} -t testhubio/cli:latest . && \
+               buildah push testhubio/cli:${{ github.event.release.tag_name }} && \
                buildah push testhubio/cli:latest 
       
