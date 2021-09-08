@@ -64,14 +64,6 @@ jobs:
             DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
          run: buildah login -u $DOCKER_USERNAME -p "$DOCKER_PASSWORD" docker.io/testhubio
 
-
-       - name: Log in to Red Hat Registry
-         uses: redhat-actions/podman-login@v1
-         with:
-           registry:  docker.io/testhubio
-           username: ${{ secrets.DOCKER_USERNAME }}
-           password: ${{ secrets.DOCKER_PASSWORD }}
-    
       
        - name: OCI Push
          run: |                        
