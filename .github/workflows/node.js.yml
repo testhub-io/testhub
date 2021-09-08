@@ -51,14 +51,16 @@ jobs:
 
       
     - name: Push testhubio/frontend image
-      run: |                        
-            buildah bud -t testhubio/frontend:${{ steps.vars_step.outputs.sha_short }} -t testhubio/frontend:latest . && \
+      run: buildah bud -t testhubio/frontend:${{ steps.vars_step.outputs.sha_short }} -t testhubio/frontend:latest . 
+    - name: Push testhubio/frontend image
+      run: |                      
             buildah push testhubio/frontend:${{ steps.vars_step.outputs.sha_short }} && \
             buildah push testhubio/frontend:latest 
 
+    - name: Build testhubio/frontend on-prem image
+      run: buildah bud -f Dockerfile-on-prem.dockerfile -t testhubio/frontend:${{ steps.vars_step.outputs.sha_short }}-on-prem -t testhubio/frontend:latest-on-prem -t testhubio/frontend:on-prem .     
     - name: Push testhubio/frontend on-prem image
-      run: |               
-            buildah bud -f Dockerfile-on-prem.dockerfile -t testhubio/frontend:${{ steps.vars_step.outputs.sha_short }}-on-prem -t testhubio/frontend:latest-on-prem -t testhubio/frontend:on-prem . && \
+      run: |  
             buildah push testhubio/frontend:${{ steps.vars_step.outputs.sha_short }}-on-prem && \
             buildah push testhubio/frontend:on-prem  &&  \
             buildah push testhubio/frontend:latest-on-prem  
