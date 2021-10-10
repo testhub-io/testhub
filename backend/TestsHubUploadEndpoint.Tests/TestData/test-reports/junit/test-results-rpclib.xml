@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="48" failures="0" disabled="0" errors="0" timestamp="2019-08-01T10:58:57" time="4.031" name="AllTests">
+  <testsuite name="binding_test" tests="9" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="freefunc_void_zeroarg" status="run" time="0" classname="binding_test" />
+    <testcase name="freefunc_void_singlearg" status="run" time="0" classname="binding_test" />
+    <testcase name="freefunc_void_multiarg" status="run" time="0" classname="binding_test" />
+    <testcase name="memfunc_void_zeroarg" status="run" time="0" classname="binding_test" />
+    <testcase name="memfunc_void_singlearg" status="run" time="0" classname="binding_test" />
+    <testcase name="memfunc_void_multiarg" status="run" time="0" classname="binding_test" />
+    <testcase name="stdfunc_void_zeroarg" status="run" time="0" classname="binding_test" />
+    <testcase name="stdfunc_void_singlearg" status="run" time="0" classname="binding_test" />
+    <testcase name="stdfunc_void_multiarg" status="run" time="0" classname="binding_test" />
+  </testsuite>
+  <testsuite name="dispatch_test" tests="7" failures="0" disabled="0" errors="0" time="0.001">
+    <testcase name="argcount_verified_void_nonzero_arg_too_few" status="run" time="0" classname="dispatch_test" />
+    <testcase name="argcount_verified_void_nonzero_arg_too_many" status="run" time="0" classname="dispatch_test" />
+    <testcase name="unbound_func_error_response" status="run" time="0" classname="dispatch_test" />
+    <testcase name="bad_format_msgpack_returns_empty" status="run" time="0.001" classname="dispatch_test" />
+    <testcase name="unique_names_zeroarg" status="run" time="0" classname="dispatch_test" />
+    <testcase name="unique_names_singlearg" status="run" time="0" classname="dispatch_test" />
+    <testcase name="unique_names_multiarg" status="run" time="0" classname="dispatch_test" />
+  </testsuite>
+  <testsuite name="client_test" tests="7" failures="0" disabled="0" errors="0" time="1.08">
+    <testcase name="instantiation" status="run" time="0" classname="client_test" />
+    <testcase name="call" status="run" time="0.001" classname="client_test" />
+    <testcase name="notification" status="run" time="0.051" classname="client_test" />
+    <testcase name="large_return" status="run" time="0.855" classname="client_test" />
+    <testcase name="timeout_setting_works" status="run" time="0.112" classname="client_test" />
+    <testcase name="timeout_right_msg" status="run" time="0.061" classname="client_test" />
+    <testcase name="timeout_clear" status="run" time="0" classname="client_test" />
+  </testsuite>
+  <testsuite name="client_test2" tests="1" failures="0" disabled="0" errors="0" time="0.051">
+    <testcase name="timeout_while_connection" status="run" time="0.051" classname="client_test2" />
+  </testsuite>
+  <testsuite name="response" tests="2" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="object_ctor" status="run" time="0" classname="response" />
+    <testcase name="writing" status="run" time="0" classname="response" />
+  </testsuite>
+  <testsuite name="server_workers_test" tests="2" failures="0" disabled="0" errors="0" time="1.105">
+    <testcase name="single_worker" status="run" time="0.601" classname="server_workers_test" />
+    <testcase name="multiple_workers" status="run" time="0.504" classname="server_workers_test" />
+  </testsuite>
+  <testsuite name="server_error_handling" tests="5" failures="0" disabled="0" errors="0" time="0.04">
+    <testcase name="no_suppress" status="run" time="0.037" classname="server_error_handling" />
+    <testcase name="suppress" status="run" time="0.001" classname="server_error_handling" />
+    <testcase name="suppress_right_msg" status="run" time="0.001" classname="server_error_handling" />
+    <testcase name="no_such_method_right_msg" status="run" time="0.001" classname="server_error_handling" />
+    <testcase name="wrong_arg_count_void_zeroarg" status="run" time="0" classname="server_error_handling" />
+  </testsuite>
+  <testsuite name="dispatch_unicode" tests="1" failures="0" disabled="0" errors="0" time="0.001">
+    <testcase name="narrow_unicode" status="run" time="0.001" classname="dispatch_unicode" />
+  </testsuite>
+  <testsuite name="server_misc" tests="2" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="single_param_ctor" status="run" time="0" classname="server_misc" />
+    <testcase name="server_is_moveable" status="run" time="0" classname="server_misc" />
+  </testsuite>
+  <testsuite name="this_handler_test" tests="5" failures="0" disabled="0" errors="0" time="0.103">
+    <testcase name="set_error" status="run" time="0.001" classname="this_handler_test" />
+    <testcase name="error_obj" status="run" time="0.001" classname="this_handler_test" />
+    <testcase name="set_special_response" status="run" time="0" classname="this_handler_test" />
+    <testcase name="disable_response" status="run" time="0.051" classname="this_handler_test" />
+    <testcase name="enable_response" status="run" time="0.05" classname="this_handler_test" />
+  </testsuite>
+  <testsuite name="this_session_test" tests="2" failures="0" disabled="0" errors="0" time="0.306">
+    <testcase name="post_exit" status="run" time="0.151" classname="this_session_test" />
+    <testcase name="post_exit_specific_to_session" status="run" time="0.155" classname="this_session_test" />
+  </testsuite>
+  <testsuite name="server_session_test" tests="3" failures="0" disabled="0" errors="0" time="1.217">
+    <testcase name="consume_big_param" status="run" time="0.946" classname="server_session_test" />
+    <testcase name="connection_closed_properly" status="run" time="0.271" classname="server_session_test" />
+    <testcase name="session_id_unique" status="run" time="0" classname="server_session_test" />
+  </testsuite>
+  <testsuite name="server_session_test_bug153" tests="1" failures="0" disabled="0" errors="0" time="0.026">
+    <testcase name="bug_153_crash_on_client_timeout" status="run" time="0.026" classname="server_session_test_bug153" />
+  </testsuite>
+  <testsuite name="this_server_test" tests="1" failures="0" disabled="0" errors="0" time="0.101">
+    <testcase name="stop" status="run" time="0.101" classname="this_server_test" />
+  </testsuite>
+</testsuites>

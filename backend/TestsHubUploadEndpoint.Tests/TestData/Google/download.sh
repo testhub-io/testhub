@@ -1,0 +1,1 @@
+gsutil cp -r gs://kubernetes-jenkins/logs/ci-kubernetes-e2enode-ubuntu1-k8sbeta-gkespec/*/artifacts/junit*.xml dir .

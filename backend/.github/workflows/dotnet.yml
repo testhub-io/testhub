@@ -1,0 +1,44 @@
+name: .NET
+on:  push   
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal --logger "junit;LogFilePath=TestResults/th-test-results.xml" --filter  TestCategory!=Integration --collect:"XPlat Code Coverage"      
+    - name: Upload test results
+      id: hello
+      uses: testhub-io/testhub-io.action@v0.58
+      with:        
+        test_result_pattern: "**/TestResults/th-test-results.xml"
+        test_coverage_pattern: "**/coverage.cobertura.xml"
+              
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and push
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: |
+           testhubio/testhub-api:latest   
+           testhubio/testhub-api:${{ github.run_number	}}
+        file: ./TestsHub.Api/Dockerfile
+        

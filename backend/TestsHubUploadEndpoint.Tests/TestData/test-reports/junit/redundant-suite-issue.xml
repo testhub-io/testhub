@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="158" failures="0" errors="0" time="8.749">
+  <testsuite name="SettingsService" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:47" time="4.136" tests="12">
+    <testcase classname="SettingsService should be defined" name="SettingsService should be defined" time="0.03">
+    </testcase>
+    <testcase classname="SettingsService validateSettings should create empty values" name="SettingsService validateSettings should create empty values" time="0.023">
+    </testcase>
+    <testcase classname="SettingsService getUserSettings" name="SettingsService getUserSettings" time="0.014">
+    </testcase>
+    <testcase classname="SettingsService getWebsiteRenderingVariables (TODO)" name="SettingsService getWebsiteRenderingVariables (TODO)" time="0.017">
+    </testcase>
+    <testcase classname="SettingsService getJWTPublicKey" name="SettingsService getJWTPublicKey" time="0.009">
+    </testcase>
+    <testcase classname="SettingsService getJWTPrivateKey" name="SettingsService getJWTPrivateKey" time="0.009">
+    </testcase>
+    <testcase classname="SettingsService getHomepageRedirectUrl" name="SettingsService getHomepageRedirectUrl" time="0.028">
+    </testcase>
+    <testcase classname="SettingsService getRedirectAfterLogin" name="SettingsService getRedirectAfterLogin" time="0.015">
+    </testcase>
+    <testcase classname="SettingsService getBaseUrl" name="SettingsService getBaseUrl" time="0.014">
+    </testcase>
+    <testcase classname="SettingsService getTopLevelUrl" name="SettingsService getTopLevelUrl" time="0.048">
+    </testcase>
+    <testcase classname="SettingsService (aux functions) htmlEncode" name="SettingsService (aux functions) htmlEncode" time="0.003">
+    </testcase>
+    <testcase classname="SettingsService (aux functions) mergeAll" name="SettingsService (aux functions) mergeAll" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="Payments Service" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:47" time="4.533" tests="13">
+    <testcase classname="Payments Service should be defined" name="Payments Service should be defined" time="0.038">
+    </testcase>
+    <testcase classname="Payments Service getActivePayments should return a single payment" name="Payments Service getActivePayments should return a single payment" time="0.017">
+    </testcase>
+    <testcase classname="Payments Service refreshPaymentsFromStripe should contact stripe for checking subscriptions updates" name="Payments Service refreshPaymentsFromStripe should contact stripe for checking subscriptions updates" time="0.015">
+    </testcase>
+    <testcase classname="Payments Service refreshPaymentsFromStripe should add new subscriptions" name="Payments Service refreshPaymentsFromStripe should add new subscriptions" time="0.015">
+    </testcase>
+    <testcase classname="Payments Service refreshPaymentsFromStripe should delete not existing subscriptions for this account" name="Payments Service refreshPaymentsFromStripe should delete not existing subscriptions for this account" time="0.012">
+    </testcase>
+    <testcase classname="Payments Service refreshPaymentsFromStripe should update existing subscriptions for this account" name="Payments Service refreshPaymentsFromStripe should update existing subscriptions for this account" time="0.012">
+    </testcase>
+    <testcase classname="Payments Service attachPaymentMethod should attach the payment method to the stripe customer" name="Payments Service attachPaymentMethod should attach the payment method to the stripe customer" time="0.013">
+    </testcase>
+    <testcase classname="Payments Service attachPaymentMethod should set the payment method as default" name="Payments Service attachPaymentMethod should set the payment method as default" time="0.01">
+    </testcase>
+    <testcase classname="Payments Service validators should validate active subscriptions" name="Payments Service validators should validate active subscriptions" time="0.012">
+    </testcase>
+    <testcase classname="Payments Service validators should validate traili subscriptions" name="Payments Service validators should validate traili subscriptions" time="0.014">
+    </testcase>
+    <testcase classname="Payments Service validators should not validate missing subscriptions" name="Payments Service validators should not validate missing subscriptions" time="0.01">
+    </testcase>
+    <testcase classname="Payments Service validators should not validate inactive subscriptions" name="Payments Service validators should not validate inactive subscriptions" time="0.024">
+    </testcase>
+    <testcase classname="Payments Service validators should validate null subscriptions when subscription is not required" name="Payments Service validators should validate null subscriptions when subscription is not required" time="0.007">
+    </testcase>
+  </testsuite>
+  <testsuite name="Accounts Service" errors="0" failures="0" skipped="4" timestamp="2021-04-04T09:09:47" time="5.145" tests="18">
+    <testcase classname="Accounts Service should be defined" name="Accounts Service should be defined" time="0.048">
+    </testcase>
+    <testcase classname="Accounts Service getAll should return an array of Accounts" name="Accounts Service getAll should return an array of Accounts" time="0.028">
+    </testcase>
+    <testcase classname="Accounts Service Add an account should create the account and give the proper name" name="Accounts Service Add an account should create the account and give the proper name" time="0.063">
+    </testcase>
+    <testcase classname="Accounts Service Add an account should link the account to the owner when called with the owner" name="Accounts Service Add an account should link the account to the owner when called with the owner" time="0.033">
+    </testcase>
+    <testcase classname="Accounts Service Add an account should add owner to the AccountUser model, when called with the owner" name="Accounts Service Add an account should add owner to the AccountUser model, when called with the owner" time="0.037">
+    </testcase>
+    <testcase classname="Accounts Service Add an account should not add owner to the AccountUser model, when called without the owner" name="Accounts Service Add an account should not add owner to the AccountUser model, when called without the owner" time="0.016">
+    </testcase>
+    <testcase classname="Accounts Service Invite user Invite a new User Should create a new User" name="Accounts Service Invite user Invite a new User Should create a new User" time="0.02">
+    </testcase>
+    <testcase classname="Accounts Service Invite user Invite a new User The new User should have a random password" name="Accounts Service Invite user Invite a new User The new User should have a random password" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Accounts Service Invite user Invite a new User The new User should have requested a reset password" name="Accounts Service Invite user Invite a new User The new User should have requested a reset password" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Accounts Service Invite user Invite a new User The new User should be associated with the correct account" name="Accounts Service Invite user Invite a new User The new User should be associated with the correct account" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Accounts Service Invite user Invite a new User Invite an existing User Should find or create a new User" name="Accounts Service Invite user Invite a new User Invite an existing User Should find or create a new User" time="0.019">
+    </testcase>
+    <testcase classname="Accounts Service Invite user Invite a new User Invite an existing User The new User should have not requested a reset password" name="Accounts Service Invite user Invite a new User Invite an existing User The new User should have not requested a reset password" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Accounts Service Invite user Subscriptions Add payments methods Should return error if account is not found" name="Accounts Service Invite user Subscriptions Add payments methods Should return error if account is not found" time="0.02">
+    </testcase>
+    <testcase classname="Accounts Service Invite user Subscriptions Add payments methods Should return error if account is malformed" name="Accounts Service Invite user Subscriptions Add payments methods Should return error if account is malformed" time="0.014">
+    </testcase>
+    <testcase classname="Accounts Service Invite user Subscriptions Add payments methods Should call the attachPaymentMethod method of paymentsService" name="Accounts Service Invite user Subscriptions Add payments methods Should call the attachPaymentMethod method of paymentsService" time="0.016">
+    </testcase>
+    <testcase classname="Accounts Service Invite user Subscriptions Add payments methods Should add a payment method if the account does not yet have any payment method" name="Accounts Service Invite user Subscriptions Add payments methods Should add a payment method if the account does not yet have any payment method" time="0.021">
+    </testcase>
+    <testcase classname="Accounts Service Invite user Subscriptions Add payments methods Should append a payment method if the account already has a payment method" name="Accounts Service Invite user Subscriptions Add payments methods Should append a payment method if the account already has a payment method" time="0.015">
+    </testcase>
+    <testcase classname="Accounts Service Invite user Subscriptions Subscribe to plan Should be possible to subscribe to plan choosing a payment method" name="Accounts Service Invite user Subscriptions Subscribe to plan Should be possible to subscribe to plan choosing a payment method" time="0.014">
+    </testcase>
+  </testsuite>
+  <testsuite name="AuthService" errors="0" failures="0" skipped="3" timestamp="2021-04-04T09:09:47" time="5.288" tests="23">
+    <testcase classname="AuthService should be defined" name="AuthService should be defined" time="0.029">
+    </testcase>
+    <testcase classname="AuthService Users authentication validateUser with email/password with registered email and valid password" name="AuthService Users authentication validateUser with email/password with registered email and valid password" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="AuthService Users authentication validateUser with email/password with registered email and empty password" name="AuthService Users authentication validateUser with email/password with registered email and empty password" time="0.039">
+    </testcase>
+    <testcase classname="AuthService Users authentication validateUser with email/password with unregistered email and password" name="AuthService Users authentication validateUser with email/password with unregistered email and password" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="AuthService Users authentication validateUser with email/password with unregistered email and empty password" name="AuthService Users authentication validateUser with email/password with unregistered email and empty password" time="0.009">
+    </testcase>
+    <testcase classname="AuthService Users authentication JWT generation Must add user data" name="AuthService Users authentication JWT generation Must add user data" time="0.011">
+    </testcase>
+    <testcase classname="AuthService Users authentication registerUser must fail when addUser fails" name="AuthService Users authentication registerUser must fail when addUser fails" time="0.006">
+    </testcase>
+    <testcase classname="AuthService Users authentication registerUser must fail when addUser fails" name="AuthService Users authentication registerUser must fail when addUser fails" time="0.014">
+    </testcase>
+    <testcase classname="AuthService Users authentication registerUser must fail when credential is not found" name="AuthService Users authentication registerUser must fail when credential is not found" time="0.012">
+    </testcase>
+    <testcase classname="AuthService Users authentication registerUser must fail if account is not added" name="AuthService Users authentication registerUser must fail if account is not added" time="0.012">
+    </testcase>
+    <testcase classname="AuthService Users authentication registerUser must return a ValidUser if there were no errors" name="AuthService Users authentication registerUser must return a ValidUser if there were no errors" time="0.006">
+    </testcase>
+    <testcase classname="AuthService Cookie Cookie domain for localhost" name="AuthService Cookie Cookie domain for localhost" time="0.005">
+    </testcase>
+    <testcase classname="AuthService Cookie Cookie domain for mysaasform.com" name="AuthService Cookie Cookie domain for mysaasform.com" time="0.007">
+    </testcase>
+    <testcase classname="AuthService Cookie Cookie domain for primary unset" name="AuthService Cookie Cookie domain for primary unset" time="0.018">
+    </testcase>
+    <testcase classname="AuthService Cookie Cookie domain for primary not listed" name="AuthService Cookie Cookie domain for primary not listed" time="0.009">
+    </testcase>
+    <testcase classname="AuthService Cookie Cookie domain for primary = 2nd level" name="AuthService Cookie Cookie domain for primary = 2nd level" time="0.069">
+    </testcase>
+    <testcase classname="AuthService Cookie Cookie domain for primary = 2nd level, request via 3rd" name="AuthService Cookie Cookie domain for primary = 2nd level, request via 3rd" time="0.006">
+    </testcase>
+    <testcase classname="AuthService Cookie Cookie domain for primary = 3rd level" name="AuthService Cookie Cookie domain for primary = 3rd level" time="0.007">
+    </testcase>
+    <testcase classname="AuthService Cookie Cookie domain for primary = 3rd level, request via 2nd" name="AuthService Cookie Cookie domain for primary = 3rd level, request via 2nd" time="0.008">
+    </testcase>
+    <testcase classname="AuthService onGoogleSignin with a registered email and a connected google account, should return the expected user model" name="AuthService onGoogleSignin with a registered email and a connected google account, should return the expected user model" time="0.012">
+    </testcase>
+    <testcase classname="AuthService onGoogleSignin with a registered email and without a connected google account, should create the entity and return the expected user model" name="AuthService onGoogleSignin with a registered email and without a connected google account, should create the entity and return the expected user model" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="AuthService onGoogleSignin without a registered email, should return a null value" name="AuthService onGoogleSignin without a registered email, should return a null value" time="0.008">
+    </testcase>
+    <testcase classname="AuthService onGoogleSignin with null arguments, should return a null value" name="AuthService onGoogleSignin with null arguments, should return a null value" time="0.007">
+    </testcase>
+  </testsuite>
+  <testsuite name="SettingsItemDTO" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:51" time="2.016" tests="1">
+    <testcase classname="SettingsItemDTO should be defined" name="SettingsItemDTO should be defined" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="AccountsUsers Service" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:51" time="1.463" tests="3">
+    <testcase classname="AccountsUsers Service should be defined" name="AccountsUsers Service should be defined" time="0.028">
+    </testcase>
+    <testcase classname="AccountsUsers Service getAll should return an array of AccountsUsers for the account called" name="AccountsUsers Service getAll should return an array of AccountsUsers for the account called" time="0.026">
+    </testcase>
+    <testcase classname="AccountsUsers Service delete accounts-user relationship should delete all of the user credentials" name="AccountsUsers Service delete accounts-user relationship should delete all of the user credentials" time="0.021">
+    </testcase>
+  </testsuite>
+  <testsuite name="NotificationsService" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:52" time="1.005" tests="10">
+    <testcase classname="NotificationsService should be defined" name="NotificationsService should be defined" time="0.01">
+    </testcase>
+    <testcase classname="NotificationsService isCertainlyInvalidApiKey should be invalid when empty" name="NotificationsService isCertainlyInvalidApiKey should be invalid when empty" time="0.044">
+    </testcase>
+    <testcase classname="NotificationsService isCertainlyInvalidApiKey should be invalid when ending with xxx" name="NotificationsService isCertainlyInvalidApiKey should be invalid when ending with xxx" time="0.008">
+    </testcase>
+    <testcase classname="NotificationsService isCertainlyInvalidApiKey should be valid otherwise" name="NotificationsService isCertainlyInvalidApiKey should be valid otherwise" time="0.005">
+    </testcase>
+    <testcase classname="NotificationsService sendEmail should send when everything is good" name="NotificationsService sendEmail should send when everything is good" time="0.058">
+    </testcase>
+    <testcase classname="NotificationsService sendEmail should NOT send when API key is not configured" name="NotificationsService sendEmail should NOT send when API key is not configured" time="0.011">
+    </testcase>
+    <testcase classname="NotificationsService sendEmail should NOT send when `to` is empty" name="NotificationsService sendEmail should NOT send when `to` is empty" time="0.006">
+    </testcase>
+    <testcase classname="NotificationsService sendEmail should NOT send when `template` is empty" name="NotificationsService sendEmail should NOT send when `template` is empty" time="0.006">
+    </testcase>
+    <testcase classname="NotificationsService sendEmail should NOT send when `template` is invalid" name="NotificationsService sendEmail should NOT send when `template` is invalid" time="0.02">
+    </testcase>
+    <testcase classname="NotificationsService sendEmail should NOT send when Sendgrid throws an exception" name="NotificationsService sendEmail should NOT send when Sendgrid throws an exception" time="0.025">
+    </testcase>
+  </testsuite>
+  <testsuite name="PlansService" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:52" time="0.827" tests="9">
+    <testcase classname="PlansService should be defined" name="PlansService should be defined" time="0.018">
+    </testcase>
+    <testcase classname="PlansService Update of a plan should change nothing if no plan is changed" name="PlansService Update of a plan should change nothing if no plan is changed" time="0.01">
+    </testcase>
+    <testcase classname="PlansService Update of a plan should create a new stripe pricing if plan is changed" name="PlansService Update of a plan should create a new stripe pricing if plan is changed" time="0.014">
+    </testcase>
+    <testcase classname="PlansService Update of a plan should be capable of updating more than on plan at the same time" name="PlansService Update of a plan should be capable of updating more than on plan at the same time" time="0.011">
+    </testcase>
+    <testcase classname="PlansService Add a plan should create 2 pricings on stripe" name="PlansService Add a plan should create 2 pricings on stripe" time="0.01">
+    </testcase>
+    <testcase classname="PlansService Add a plan should add a plan" name="PlansService Add a plan should add a plan" time="0.008">
+    </testcase>
+    <testcase classname="PlansService Create a plan should create a plan from two prices" name="PlansService Create a plan should create a plan from two prices" time="0.008">
+    </testcase>
+    <testcase classname="PlansService Get plans should return the list of plans" name="PlansService Get plans should return the list of plans" time="0.009">
+    </testcase>
+    <testcase classname="PlansService Get plans should create default plans if no plan is present" name="PlansService Get plans should create default plans if no plan is present" time="0.011">
+    </testcase>
+  </testsuite>
+  <testsuite name="User entity" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:53" time="0.451" tests="1">
+    <testcase classname="User entity should set the confirmation code when created" name="User entity should set the confirmation code when created" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="User Credentials entity" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:53" time="0.419" tests="2">
+    <testcase classname="User Credentials entity with email, should create the entity" name="User Credentials entity with email, should create the entity" time="0.002">
+    </testcase>
+    <testcase classname="User Credentials entity with email, should create the entity setting default values" name="User Credentials entity with email, should create the entity setting default values" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="ValditaionService" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:53" time="0.412" tests="6">
+    <testcase classname="ValditaionService should be defined" name="ValditaionService should be defined" time="0.037">
+    </testcase>
+    <testcase classname="ValditaionService isNilOrEmpty with null" name="ValditaionService isNilOrEmpty with null" time="0.006">
+    </testcase>
+    <testcase classname="ValditaionService isNilOrEmpty with undefined" name="ValditaionService isNilOrEmpty with undefined" time="0.005">
+    </testcase>
+    <testcase classname="ValditaionService isNilOrEmpty with empty string" name="ValditaionService isNilOrEmpty with empty string" time="0.006">
+    </testcase>
+    <testcase classname="ValditaionService isNilOrEmpty with empty array" name="ValditaionService isNilOrEmpty with empty array" time="0.004">
+    </testcase>
+    <testcase classname="ValditaionService isNilOrEmpty with not empty string" name="ValditaionService isNilOrEmpty with not empty string" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="SettingsEntity" errors="0" failures="0" skipped="1" timestamp="2021-04-04T09:09:53" time="0.353" tests="4">
+    <testcase classname="SettingsEntity should be defined" name="SettingsEntity should be defined" time="0.001">
+    </testcase>
+    <testcase classname="SettingsEntity setValuesFromJson works with empty values" name="SettingsEntity setValuesFromJson works with empty values" time="0.001">
+    </testcase>
+    <testcase classname="SettingsEntity JSON should deserialize" name="SettingsEntity JSON should deserialize" time="0.002">
+    </testcase>
+    <testcase classname="SettingsEntity JSON should reserialize" name="SettingsEntity JSON should reserialize" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="UserCredentials" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:47" time="6.719" tests="17">
+    <testcase classname="UserCredentials should be defined" name="UserCredentials should be defined" time="0.029">
+    </testcase>
+    <testcase classname="UserCredentials findUserCredentialByEmail with a registered user, should return the expected user" name="UserCredentials findUserCredentialByEmail with a registered user, should return the expected user" time="0.018">
+    </testcase>
+    <testcase classname="UserCredentials findUserCredentialByEmail with unregistered user, should not return the expected user" name="UserCredentials findUserCredentialByEmail with unregistered user, should not return the expected user" time="0.029">
+    </testcase>
+    <testcase classname="UserCredentials findUserCredentialByEmail with undefined user, should not return the expected user" name="UserCredentials findUserCredentialByEmail with undefined user, should not return the expected user" time="0.014">
+    </testcase>
+    <testcase classname="UserCredentials findUserCredentialByEmail with null user, should not return the expected user" name="UserCredentials findUserCredentialByEmail with null user, should not return the expected user" time="0.014">
+    </testcase>
+    <testcase classname="UserCredentials addUserCredentials with user" name="UserCredentials addUserCredentials with user" time="0.01">
+    </testcase>
+    <testcase classname="UserCredentials addUserCredentials with undefined user" name="UserCredentials addUserCredentials with undefined user" time="0.029">
+    </testcase>
+    <testcase classname="UserCredentials addUserCredentials with null user" name="UserCredentials addUserCredentials with null user" time="0.013">
+    </testcase>
+    <testcase classname="UserCredentials isRegistered with valid password" name="UserCredentials isRegistered with valid password" time="0.451">
+    </testcase>
+    <testcase classname="UserCredentials isRegistered with null password" name="UserCredentials isRegistered with null password" time="0.019">
+    </testcase>
+    <testcase classname="UserCredentials isRegistered with null stored password" name="UserCredentials isRegistered with null stored password" time="0.005">
+    </testcase>
+    <testcase classname="UserCredentials isRegistered with null paswords" name="UserCredentials isRegistered with null paswords" time="0.008">
+    </testcase>
+    <testcase classname="UserCredentials isRegistered with wrong password" name="UserCredentials isRegistered with wrong password" time="0.437">
+    </testcase>
+    <testcase classname="UserCredentials changePassword with registered credential and password" name="UserCredentials changePassword with registered credential and password" time="0.42">
+    </testcase>
+    <testcase classname="UserCredentials changePassword with unregistered credential and password" name="UserCredentials changePassword with unregistered credential and password" time="0.403">
+    </testcase>
+    <testcase classname="UserCredentials changePassword with undefined values" name="UserCredentials changePassword with undefined values" time="0.451">
+    </testcase>
+    <testcase classname="UserCredentials delete user credentials should delete all of the user credentials" name="UserCredentials delete user credentials should delete all of the user credentials" time="0.019">
+    </testcase>
+  </testsuite>
+  <testsuite name="AppController" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:53" time="0.143" tests="1">
+    <testcase classname="AppController root should return &quot;Welcome!&quot;" name="AppController root should return &quot;Welcome!&quot;" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="Entities" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:54" time="0.111" tests="2">
+    <testcase classname="Entities should set values from JSON" name="Entities should set values from JSON" time="0.001">
+    </testcase>
+    <testcase classname="Entities should put values to JSON" name="Entities should put values to JSON" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="HttpExceptionsFilter" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:53" time="0.238" tests="11">
+    <testcase classname="HttpExceptionsFilter should be defined" name="HttpExceptionsFilter should be defined" time="0.001">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should redirect to /login?next=... (UnauthorizedException)" name="HttpExceptionsFilter should redirect to /login?next=... (UnauthorizedException)" time="0.002">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should redirect to / (UnauthorizedException, admin)" name="HttpExceptionsFilter should redirect to / (UnauthorizedException, admin)" time="0.001">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should redirect to /login?next=... (ForbiddenException)" name="HttpExceptionsFilter should redirect to /login?next=... (ForbiddenException)" time="0.001">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should redirect to /login without next (ForbiddenException)" name="HttpExceptionsFilter should redirect to /login without next (ForbiddenException)" time="0.001">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should redirect to /login preserving next (ForbiddenException)" name="HttpExceptionsFilter should redirect to /login preserving next (ForbiddenException)" time="0">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should return 404 (NotFoundException)" name="HttpExceptionsFilter should return 404 (NotFoundException)" time="0.001">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should return 500" name="HttpExceptionsFilter should return 500" time="0.001">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should return 500 ignoring tenantId" name="HttpExceptionsFilter should return 500 ignoring tenantId" time="0.002">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should return the exception in json (UnauthorizedException)" name="HttpExceptionsFilter should return the exception in json (UnauthorizedException)" time="0.001">
+    </testcase>
+    <testcase classname="HttpExceptionsFilter should return the exception in json (InternalServerErrorException)" name="HttpExceptionsFilter should return the exception in json (InternalServerErrorException)" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="UsersService" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:47" time="7.017" tests="13">
+    <testcase classname="UsersService should be defined" name="UsersService should be defined" time="0.055">
+    </testcase>
+    <testcase classname="UsersService Email confirmation should set the email confirmation token and flag when a user is created" name="UsersService Email confirmation should set the email confirmation token and flag when a user is created" time="0.416">
+    </testcase>
+    <testcase classname="UsersService Email confirmation should send the confirmation email" name="UsersService Email confirmation should send the confirmation email" time="0.02">
+    </testcase>
+    <testcase classname="UsersService Email confirmation should remove the token and set the confirmation token " name="UsersService Email confirmation should remove the token and set the confirmation token " time="0.016">
+    </testcase>
+    <testcase classname="UsersService Email confirmation should NOT remove the token and set the confirmation token if the token is expired" name="UsersService Email confirmation should NOT remove the token and set the confirmation token if the token is expired" time="0.047">
+    </testcase>
+    <testcase classname="UsersService resetPassword should not change old password with new value with wrong token" name="UsersService resetPassword should not change old password with new value with wrong token" time="0.026">
+    </testcase>
+    <testcase classname="UsersService resetPassword should change old password with new value" name="UsersService resetPassword should change old password with new value" time="0.41">
+    </testcase>
+    <testcase classname="UsersService resetPassword should not change old password with new value with expired token" name="UsersService resetPassword should not change old password with new value with expired token" time="0.011">
+    </testcase>
+    <testcase classname="UsersService resetPassword should not change old password with null email" name="UsersService resetPassword should not change old password with null email" time="0.008">
+    </testcase>
+    <testcase classname="UsersService resetPassword should not change old password with null password" name="UsersService resetPassword should not change old password with null password" time="0.008">
+    </testcase>
+    <testcase classname="UsersService changePassword should not change password with unknown user" name="UsersService changePassword should not change password with unknown user" time="0.008">
+    </testcase>
+    <testcase classname="UsersService changePassword should not change password with wrong password" name="UsersService changePassword should not change password with wrong password" time="0.008">
+    </testcase>
+    <testcase classname="UsersService changePassword should change password with correct password" name="UsersService changePassword should change password with correct password" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="UsersService Lifecycle" errors="0" failures="0" skipped="0" timestamp="2021-04-04T09:09:47" time="7.365" tests="12">
+    <testcase classname="UsersService Lifecycle should be defined" name="UsersService Lifecycle should be defined" time="0.043">
+    </testcase>
+    <testcase classname="UsersService Lifecycle user creation should add the email" name="UsersService Lifecycle user creation should add the email" time="0.46">
+    </testcase>
+    <testcase classname="UsersService Lifecycle user creation should add the username if passed" name="UsersService Lifecycle user creation should add the username if passed" time="0.432">
+    </testcase>
+    <testcase classname="UsersService Lifecycle user creation should not add the username if not passed" name="UsersService Lifecycle user creation should not add the username if not passed" time="0.419">
+    </testcase>
+    <testcase classname="UsersService Lifecycle user creation should set additional data" name="UsersService Lifecycle user creation should set additional data" time="0.47">
+    </testcase>
+    <testcase classname="UsersService Lifecycle user creation should add user credentials" name="UsersService Lifecycle user creation should add user credentials" time="0.404">
+    </testcase>
+    <testcase classname="UsersService Lifecycle user creation should fail if duplicate email" name="UsersService Lifecycle user creation should fail if duplicate email" time="0.034">
+    </testcase>
+    <testcase classname="UsersService Lifecycle user creation should fail if duplicate username" name="UsersService Lifecycle user creation should fail if duplicate username" time="0.025">
+    </testcase>
+    <testcase classname="UsersService Lifecycle user update should update the user data" name="UsersService Lifecycle user update should update the user data" time="0.024">
+    </testcase>
+    <testcase classname="UsersService Lifecycle user update should keep the user data when not present in the updated data" name="UsersService Lifecycle user update should keep the user data when not present in the updated data" time="0.021">
+    </testcase>
+    <testcase classname="UsersService Lifecycle delete user should dete the user" name="UsersService Lifecycle delete user should dete the user" time="0.024">
+    </testcase>
+    <testcase classname="UsersService Lifecycle delete user should delete all of the userCredentials" name="UsersService Lifecycle delete user should delete all of the userCredentials" time="0.018">
+    </testcase>
+  </testsuite>
+</testsuites>
