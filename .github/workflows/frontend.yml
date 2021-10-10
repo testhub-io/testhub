@@ -5,8 +5,8 @@ name: Frontend
 on:  
   push:
     paths: 
-      - "backend/**"
-      - ".github/workflows/backend.yml"
+      - "frontend/**"
+      - ".github/workflows/frontend.yml"
 
 jobs:  
   build:
