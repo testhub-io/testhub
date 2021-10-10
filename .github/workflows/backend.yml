@@ -1,9 +1,9 @@
-name: .NET
+name: Backend
 on:  
   push:
     paths: 
       - "backend/**"
-      - ".github/backend.yml"
+      - ".github/workflows/backend.yml"
 
 jobs:
   build:
