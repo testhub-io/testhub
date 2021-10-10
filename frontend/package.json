@@ -1,0 +1,48 @@
+{
+  "name": "TestHub",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test": "echo test",
+    "deploy": "aws s3 sync dist/ s3://testhub-frontend-root"
+  },
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "cookies-js": "^1.2.3",
+    "core-js": "^3.6.1",
+    "jquery": "^3.4.1",
+    "lodash": "^4.17.15",
+    "lodash-uuid": "^0.0.3",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.27",
+    "register-service-worker": "^1.6.2",
+    "roboto-fontface": "^0.10.0",
+    "vue-bus": "^1.2.1",
+    "vue-carousel": "^0.18.0",
+    "vue-chartjs": "^3.5.0",
+    "vue-i18n": "^8.15.3",
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.1.3",
+    "vue-scrollto": "2.18.1",
+    "vuex": "^3.1.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.1.2",
+    "@vue/cli-plugin-eslint": "^4.1.2",
+    "@vue/cli-plugin-pwa": "^4.1.2",
+    "@vue/cli-service": "^4.1.2",
+    "babel-eslint": "^10.0.3",
+    "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.10.1",
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^6.1.2",
+    "sass": "^1.24.2",
+    "sass-loader": "^8.0.0",
+    "vue": "^2.6.11",
+    "vue-cli-plugin-vuetify": "^2.0.3",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
