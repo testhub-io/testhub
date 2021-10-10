@@ -1,0 +1,73 @@
+# .github/workflows/release.yaml
+on:
+  release:
+    types: [created]
+name: Build Release
+jobs:
+  release:
+    name: Publish release
+    runs-on: ubuntu-latest
+    steps:      
+       - uses: actions/checkout@master        
+       - name: linux-amd64
+         uses: wangyoucao577/go-release-action@v1.17
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: linux            
+            goarch:  amd64
+       - name: linux-386
+         uses: wangyoucao577/go-release-action@v1.17
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: linux            
+            goarch: 386
+       - name: darwin-amd64
+         uses: wangyoucao577/go-release-action@v1.17
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: darwin            
+            goarch: amd64  
+       - name: windows-386
+         uses: wangyoucao577/go-release-action@v1.17
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: windows
+            goarch: 386 
+       - name: windows-amd64
+         uses: wangyoucao577/go-release-action@v1.17
+         with:            
+            github_token:  ${{ secrets.GITHUB_TOKEN }}            
+            goos: windows
+            goarch: amd64 
+            
+       - name: Upload to S3
+         run: |
+            aws s3 sync --acl=public-read --storage-class=STANDARD_IA  --exclude "*" --include "testhub-cli-v*tar.gz"  . s3://testhub-cli-releases/${{ github.event.release.tag_name }}
+         env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_DEFAULT_REGION: 'us-east-2'
+      
+       - name: Set up Go 1.x
+         uses: actions/setup-go@v2
+         with:
+            go-version: ^1.16
+         id: go
+      
+       - name: Build
+         run: env CGO_ENABLED=0 go build -ldflags='-extldflags=-static' -v -o ./bin/testhub-cli .
+
+
+       - name: Buildah login
+         env:
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+         run: buildah login -u $DOCKER_USERNAME -p "$DOCKER_PASSWORD" docker.io/testhubio
+
+      
+       - name: OCI Push
+         run: |                        
+               buildah bud -t testhubio/cli:${{ github.event.release.tag_name }} -t testhubio/cli:latest . && \
+               buildah push testhubio/cli:${{ github.event.release.tag_name }} && \
+               buildah push testhubio/cli:latest 
+      
