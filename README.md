@@ -6,4 +6,4 @@ Testhub gives companies and IT managers insights into tests quality of their pro
 
 # Getting Started
 
-Check out our [getting started guide](https://testhub-io.github.io/) to onboatd you project in 5 minutes 
+Check out our [getting started guide](https://testhub-io.github.io/testhub/docs/) to onboatd you project in 5 minutes 
