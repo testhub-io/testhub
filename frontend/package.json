@@ -14,7 +14,7 @@
     "cookies-js": "^1.2.3",
     "core-js": "^3.6.1",
     "jquery": "^3.4.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "lodash-uuid": "^0.0.3",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
