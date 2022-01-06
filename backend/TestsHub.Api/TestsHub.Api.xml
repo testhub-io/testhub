@@ -29,6 +29,11 @@
             Get tests analytics for project
             </summary>        
         </member>
+        <member name="M:TestHub.Api.Controllers.ProjectsController.GetBadge(System.String,System.String,System.String)">
+            <summary>
+            Get badge
+            </summary>        
+        </member>
         <member name="M:TestHub.Api.Controllers.TestRunsController.GetTestRuns(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String)">
             <summary>
             Get list of test runs for a project. Paginated
