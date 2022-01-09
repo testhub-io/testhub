@@ -1,31 +1,33 @@
 version: '3'
 
 services:
-  app:
+  testhub-api:
     build: 
       context: .
       dockerfile: Dockerfile
       args:
         # Update 'VARIANT' to pick a version of .NET: 5.0, 3.1, 2.1
-        VARIANT: "3.1"
-        # Optional version of Node.js
+        VARIANT: "3.1"        
         NODE_VERSION: "lts/*"
 
     volumes:
-      - ..:/workspace:cached
-      
+      - ..:/workspace:cached      
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
-
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
     network_mode: service:db
 
-    # Uncomment the next line to use a non-root user for all processes.
-    # user: vscode
+  testhub-frontend:
+    container_name: testhub-frontend
+    build: 
+      context: ../../frontend/
+      dockerfile: Dockerfile-build
 
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    restart: always    
+    ports:
+      - "8080:80"
 
+    
   db:
     image: mysql:5.7
     restart: always
