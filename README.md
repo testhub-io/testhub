@@ -2,7 +2,7 @@
 
 Testhub is a tests results aggregator that makes it easy to upload tests results from CI pipeline and present them in a visual form, provides insightful analytics.
 
-|Organiaztion view | Project View | Test run view |
+|Organiaztion View | Project View | Test-run View |
 |-|-|-|
 |![screenshot1](docs/images/screenshot1.png) | ![screenshot1](docs/images/screenshot2.png) |![screenshot1](docs/images/screenshot3.png)|
 
