@@ -10,7 +10,7 @@ Jump to a demo project and play with interface [https://test-hub.io/testhub-io-e
 
 
 
-## Build Status
+## 👷 Build Status
 
 [![Frontend](https://github.com/testhub-io/testhub/actions/workflows/frontend.yml/badge.svg)](https://github.com/testhub-io/testhub/actions/workflows/frontend.yml)
 [![Backend](https://github.com/testhub-io/testhub/actions/workflows/backend.yml/badge.svg)](https://github.com/testhub-io/testhub/actions/workflows/backend.yml)
