@@ -41,6 +41,8 @@ We love help! Contribute by forking the repo and opening pull requests. Please e
 All pull requests should be submitted to the main branch.
 
 ### Running Porject Locally
+:warning: Please let us know if it tekes you more then 15 minutes to run the project locally. We will work on fixing that. 
+
 #### Dev-container 
 Easiest way to run project locally is to use 'dev-containers'
 You will need:
