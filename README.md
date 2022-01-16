@@ -39,3 +39,33 @@ Check the [docker-compose.yml](/docker-compose.yaml) to see how to run them toge
 We love help! Contribute by forking the repo and opening pull requests. Please ensure that your code passes the existing tests and linting, and write tests to test your changes if applicable.
 
 All pull requests should be submitted to the main branch.
+
+### Running Porject Locally
+#### Dev-container 
+Easiest way to run project locally is to use 'dev-containers'
+You will need:
+-  [VS Code](https://code.visualstudio.com/)
+-  [Docker](https://www.docker.com/products/docker-desktop)
+-  [Remote Development VS Code Extension pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
+I'm pretty sure you already have most of that. 
+Then open /frontend or /backend directories in VSCode and reopen them in DevContainer as VsCode suggests. If you did not get suggestion for some reason try `F1-> Remote-Containers: Rebuild and Reopen in Container`
+![image](https://user-images.githubusercontent.com/154290/149673225-dbae4680-06b7-4219-ae9e-5f2e6b4ae342.png)
+
+Then hit `F5` and you are done.
+
+#### Docker Compose 
+
+Use `[docker-compose.yml](/docker-compose.yml)' from the root of the project to run dependencies. It consist of 
+- DB - `MySQL`
+- Backend - `C# .Net Core`
+- Frontent - `Vue.js` 
+
+##### Backend
+If you work on backend then make sure you set two env vars
+```
+       ASPNETCORE_ENVIRONMENT: 'Dev'
+       CUSTOMCONNSTR_DEFAULTCONNECTION: 'Host=db;Database=testHub;Username=root;Password=password'
+```
+
+##### Frontend
+For frontend make sure you have your local [conf.js](/frontend/conf.js) pointing to locally running backend like `export default "https://localhost:8090"`
