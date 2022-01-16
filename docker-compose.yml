@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  testhub-api:
+    build: 
+      context: ./backend
+      dockerfile: ./TestsHub.Api/Dockerfile
+    restart: always
+    environment:    
+       ASPNETCORE_ENVIRONMENT: 'Dev'
+       CUSTOMCONNSTR_DEFAULTCONNECTION: 'Host=db;Database=testHub;Username=root;Password=password'
+    ports:
+      - "8090:80"
+
+  testhub-frontend:
+    container_name: testhub-frontend
+    build: 
+      context: ./frontend
+      dockerfile: ./Dockerfile-on-prem.dockerfile
+    restart: always
+    environment:
+      API_ENDPOINT: "http://localhost:8090"
+    ports:
+      - "8080:8080"
+
+  db:
+    restart: always
+    image:  mysql:8.0.19
+    environment:
+      MYSQL_ROOT_PASSWORD: password 
+      MYSQL_USER: test
+      MYSQL_PASS: password
+    volumes:
+        - ./.mysql:/var/lib/mysql
+    ports: 
+      - "3306:3306"
+  
+  mysql-adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8306:8080
+
+volumes:
+  my-db:
