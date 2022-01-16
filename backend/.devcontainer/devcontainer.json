@@ -5,6 +5,7 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "testhub-api",
 	"workspaceFolder": "/workspace",
+	// "mounts": [ "source=${localWorkspaceFolder},target=/workspace,type=bind" ],
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
