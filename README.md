@@ -8,7 +8,16 @@ Testhub is a tests results aggregator that makes it easy to upload tests results
 
 Jump to a demo project and play with interface [https://test-hub.io/testhub-io-examples](https://test-hub.io/testhub-io-examples) 
 
+### Contacts
 
+<p align="left">
+    <a href="https://discord.gg/2CJckrsk">
+        <img src="https://img.shields.io/discord/827273609445507072?logo=discord"
+            alt="chat on Discord"></a>              
+    <a href="https://t.me/teshub_io">
+        <img src="https://img.shields.io/badge/telegram-join-green"
+            alt="chat on Telegram"></a>
+</p>
 
 ## 👷 Build Status
 
