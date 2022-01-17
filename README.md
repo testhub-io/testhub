@@ -72,6 +72,7 @@ If you work on backend then make sure you set two env vars
 ##### Frontend
 For frontend make sure you have your local [conf.js](/frontend/conf.js) pointing to locally running backend like `export default "https://localhost:8090"`
 
-### Contributors 
-Thanks folks 🥇
+## Contributors 
+Thanks, folks 🥇 👏
+
 [![GitHub contributors](https://contrib.rocks/image?repo=testhub-io/testhub)](https://github.com/testhub-io/testhub/graphs/contributors)
