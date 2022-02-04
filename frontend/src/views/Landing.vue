@@ -8,12 +8,12 @@
             <div class="title-heading">
               <h1 class="mb-3 title-heading_title">
                 One home for all your <br />
-                tests and coverage
+                tests results
               </h1>
               <p class="title-heading_text">
                 Push directly from any pipeline. Visualize and automate code
                 quality. Get started in three simple steps. By the way, it's
-                free forever for open source.
+                open source.
               </p>
               <div class="mt-4 pt-2">
                 <b-button variant="primary" @click.prevent="gotoGetStarted">Getting started</b-button>
@@ -93,7 +93,7 @@
               <div class="content mt-4">
                 <h4 class="content_title">Zero gimmick fees</h4>
                 <p class="content_text mb-0">
-                  Pay a simple monthly fee for upto ten products. Unlimited
+                  Pay a simple monthly fee for managed version. Unlimited
                   builds.
                 </p>
               </div>

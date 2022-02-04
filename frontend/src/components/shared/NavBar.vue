@@ -47,9 +47,10 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav>
-          <b-nav-item right>
-            <!-- Using 'button-content' slot -->
-            <!-- <b-button @click.prevent="gotoDownload()" variant="primary">Try Now</b-button> -->
+           <b-nav-item right>
+            <a href="https://github.com/testhub-io/testhub" target="_blank">
+              <div> <img src="@/assets/img/GitHub-Mark-32px.png" height="16" alt="github" />  View on Github </div>
+            </a>
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -116,7 +117,9 @@ export default {
     }
   },
 };
+
 </script>
+
 
 <style lang="scss">
 .bg-transparent {

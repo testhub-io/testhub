@@ -2,7 +2,7 @@
   <footer class="page-footer">
     <b-container>
       <b-row>
-        <b-col cols="12" md="4" lg="4">
+        <b-col cols="8" md="4" >
           <div
             class="d-flex flex-column align-items-start justify-content-between h-100"
           >
@@ -10,11 +10,11 @@
               <b-img :src="require('@/assets/img/main_logo_footer.png')" fluid />
             </div>
 
-            <div class="page-footer_copyright">© 2020 TestHub, Inc.</div>
+            <div class="page-footer_copyright">© 2022 TestHub, Inc.</div>
           </div>
         </b-col>
 
-        <b-col cols="12" md="8" lg="6">
+        <b-col cols="2" md="4" >
           <!-- <b-row>
             <b-col cols="6" md="4">
               <div class="page-footer_nav-col">
@@ -48,8 +48,19 @@
                 </ul>
               </div>
             </b-col>
-          </b-row> -->
+          </b-row> -->          
         </b-col>
+        
+        <b-col cols="2" md="4" >
+          <div class="page-footer__nav-col" align="right" > 
+            <!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/testhub-io" data-size="large" aria-label="Follow @testhub-io on GitHub">Follow @testhub-io</a>
+            
+
+          </div>
+        </b-col>
+
+        
       </b-row>
     </b-container>
   </footer>
