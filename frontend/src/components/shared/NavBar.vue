@@ -47,11 +47,10 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav>
-           <b-nav-item right>
-            <a href="https://github.com/testhub-io/testhub" target="_blank">
-              <div> <img src="@/assets/img/GitHub-Mark-32px.png" height="16" alt="github" />  View on Github </div>
-            </a>
-          </b-nav-item>
+        <a  class="btn btn-outline-secondary sm" href="https://github.com/testhub-io/testhub" target="_blank">
+              <div style="color:black;"> <img src="@/assets/img/GitHub-Mark-32px.png" height="16" alt="github" />  View on Github </div>                       
+             </a>
+           
         </b-navbar-nav>
       </b-collapse>
     </div>
