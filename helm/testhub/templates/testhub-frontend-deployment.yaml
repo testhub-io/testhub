@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:    
+  name: testhub-frontend
+  labels:
+    app: testhub-frontend
+    {{- include "testhub.labels" . | nindent 4 }}    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: testhub-frontend
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        app: testhub-frontend
+    spec:
+      serviceAccountName: {{ include "testhub.serviceAccountName" . }}
+      containers:
+        - image: testhubio/testhub-frontend:on-prem
+          name: testhub-frontend
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources: {}
+          env:
+            - name: API_ENDPOINT
+              value: https://{{ .Values.ingress.api.host }}
+
+      restartPolicy: Always
+status: {}

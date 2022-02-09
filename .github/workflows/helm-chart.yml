@@ -1,0 +1,27 @@
+
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - main
+    paths: 
+      - "helm/**"
+      - ".github/workflows/helm-chart.yml"
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Publish Helm charts
+        uses: paschdan/helm-chart-release-to-repo-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: testhubio/testhub-helm
+          target_branch: gh-pages
+          commit_username: release-bot

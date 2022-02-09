@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:  
+  creationTimestamp: null
+  labels:
+      {{- include "testhub.labels" . | nindent 4 }}
+  name: testhub-frontend
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: testhub-frontend
+status:
+  loadBalancer: {}
