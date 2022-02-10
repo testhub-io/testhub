@@ -68,7 +68,7 @@ Then hit `F5` and you are done.
 
 Use `[docker-compose.yml](/docker-compose.yml)' from the root of the project to run dependencies. It consist of 
 - DB - `MySQL`
-- Backend - `C# .Net Core`
+- Backend - `C# .Net Core` moving to Golang
 - Frontent - `Vue.js` 
 
 ##### Backend
