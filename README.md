@@ -11,7 +11,7 @@ Jump to a demo project and play with interface [https://test-hub.io/testhub-io-e
 ### Contacts
 
 <p align="left">
-    <a href="https://discord.gg/2CJckrsk">
+    <a href="https://discord.gg/WYx5Ud8eK6">
         <img src="https://img.shields.io/discord/827273609445507072?logo=discord"
             alt="chat on Discord"></a>              
     <a href="https://t.me/teshub_io">
