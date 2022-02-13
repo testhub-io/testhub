@@ -33,7 +33,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.BOT_GITHUB_TOKEN }}
         with:
-          source-files: './release/*'
+          source-files: '**/release/*'
           destination-username: 'testhub-io'
           destination-repository: 'testhub-helm'
           destination-directory: '.'
