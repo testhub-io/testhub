@@ -26,17 +26,16 @@ jobs:
 
       - name: Create release
         working-directory: ./helm
-        run: helm package testhub
+        run: helm package testhub --destination ./release
 
-      - name: Pushes helm release file
-        uses: dmnemec/copy_file_to_another_repo_action@main
+      - name: Pushes to another repository
+        uses: nkoppel/push-files-to-another-repository@1.1.0
         env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+          API_TOKEN_GITHUB: ${{ secrets.BOT_GITHUB_TOKEN }}
         with:
-          source_file: 'teshub-*.tgz'
-          destination_repo: 'testhub-io/testhub-helm'
-          #destination_folder: 'test-dir'
-          user_email: 'bot@test-hub.io'
-          user_name: 'TesthubBot'
-          commit_message: 'New version of Testhub helm chart'
+          source-files: 'release/'
+          destination-username: 'TesthubBot'
+          destination-repository: 'testhub-helm'
+          destination-directory: '.'
+          commit-email: 'bot@test-hub.io'
 
