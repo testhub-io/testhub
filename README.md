@@ -36,6 +36,8 @@ Check out our [getting started guide](https://testhub-io.github.io/testhub/docs/
 ### Self-hosted
 
 #### Helm Charts 
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/teshub)](https://artifacthub.io/packages/search?repo=teshub)
+
 Easiest way to deploy Testhub in Kuberneted cluster in helm-chart package
 Here is a guide on how to do it: https://testhub-io.github.io/testhub-helm/
 
