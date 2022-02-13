@@ -34,8 +34,10 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.BOT_GITHUB_TOKEN }}
         with:
           source-files: 'release/'
-          destination-username: 'TesthubBot'
+          destination-username: 'testhub-io'
           destination-repository: 'testhub-helm'
           destination-directory: '.'
           commit-email: 'bot@test-hub.io'
+          commit-username: "TesthubBot"
+          commit-message: "Testhub helmchart release"
 
