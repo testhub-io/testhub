@@ -18,11 +18,25 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Publish Helm charts
-        uses: paschdan/helm-chart-release-to-repo-action@v1
+      
+      - name: Install Helm
+        uses: azure/setup-helm@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: testhubio/testhub-helm
-          target_branch: gh-pages
-          commit_username: release-bot
+          version: v3.5.2
+
+      - name: Create release
+        working-directory: ./helm
+        run: helm package testhub
+
+      - name: Pushes helm release file
+        uses: dmnemec/copy_file_to_another_repo_action@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source_file: 'teshub-*.tgz'
+          destination_repo: 'testhub-io/testhub-helm'
+          #destination_folder: 'test-dir'
+          user_email: 'bot@test-hub.io'
+          user_name: 'TesthubBot'
+          commit_message: 'New version of Testhub helm chart'
+
