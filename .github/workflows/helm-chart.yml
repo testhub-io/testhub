@@ -37,6 +37,7 @@ jobs:
           destination-username: 'testhub-io'
           destination-repository: 'testhub-helm'
           destination-directory: '.'
+          destination-branch: gh-pages
           commit-email: 'bot@test-hub.io'
           commit-username: "TesthubBot"
           commit-message: "Testhub helmchart release"
