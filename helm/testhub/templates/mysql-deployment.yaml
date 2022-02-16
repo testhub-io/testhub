@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels:
+    app: mysql
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:      
+      labels:
+        app: mysql
+    spec:
+      serviceAccountName: {{ include "testhub.serviceAccountName" . }}
+      containers:
+        - env:
+            - name: MYSQL_PASS
+              value: pass
+            - name: MYSQL_ROOT_PASSWORD
+              value: test_pass
+            - name: MYSQL_USER
+              value: test
+          image: mysql:8.0.17
+          name: mysql
+          ports:
+            - containerPort: 3306
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: testhub-mysql-claim
+      restartPolicy: Always
+      volumes:
+        - name: testhub-mysql-claim
+          persistentVolumeClaim:
+            claimName: testhub-mysql-claim
+status: {}

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: testhub-api
+  name: testhub-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: testhub-api
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: testhub-api
+    spec:
+      serviceAccountName: {{ include "testhub.serviceAccountName" . }}
+      containers:
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Dev
+            - name: CUSTOMCONNSTR_DEFAULTCONNECTION
+              value: Host=mysql;Database=testHub;Username=root;Password=test_pass
+          image: testhubio/testhub-api:on-prem
+          name: testhub-api
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          resources: {}      

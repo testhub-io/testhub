@@ -1,0 +1,44 @@
+
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - main
+      - helm-chart
+    paths: 
+      - "helm/**"
+      - ".github/workflows/helm-chart.yml"
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.5.2
+
+      - name: Create release
+        working-directory: ./helm
+        run: helm package testhub --destination ./release
+
+      - name: Pushes to another repository
+        uses: nkoppel/push-files-to-another-repository@v1.1.0
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.BOT_GITHUB_TOKEN }}
+        with:
+          source-files: '**/release/*'
+          destination-username: 'testhub-io'
+          destination-repository: 'testhub-helm'
+          destination-directory: '.'
+          destination-branch: gh-pages
+          commit-email: 'bot@test-hub.io'
+          commit-username: "TesthubBot"
+          commit-message: "Testhub helmchart release"
+
