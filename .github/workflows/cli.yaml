@@ -4,7 +4,7 @@ on:
   push:
     paths: 
       - "cli/**"
-      - ".github/workflows/backend.yml"
+      - ".github/workflows/cli.yml"
   workflow_dispatch:
 
 jobs:
