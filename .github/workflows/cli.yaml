@@ -25,7 +25,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build
+      working-directory: ${{ env.working-directory }}
       run: env CGO_ENABLED=0 go build -ldflags='-extldflags=-static' -v -o ./bin/testhub-cli .
 
     - name: Test
+      working-directory: ${{ env.working-directory }}
       run: go test -v ./...
