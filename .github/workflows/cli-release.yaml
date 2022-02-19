@@ -1,8 +1,8 @@
 # .github/workflows/release.yaml
+name: Cli Release
 on:
   release:
     types: [created]
-name: Build Release
 jobs:
   release:
     name: Publish release
