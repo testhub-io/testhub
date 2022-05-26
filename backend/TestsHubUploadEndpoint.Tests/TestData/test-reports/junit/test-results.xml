@@ -4,7 +4,7 @@
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="11.0.2+9-Ubuntu-3ubuntu118.04.3"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk-amd64/lib"/>
-    <property name="maven.multiModuleProjectDirectory" value="/mnt/d/crossover/devHub/denispalnitskytest/atsea-sample-shop-app-main"/>
+    <property name="maven.multiModuleProjectDirectory" value="atsea-sample-shop-app-main"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="java.vendor.url" value="http://java.oracle.com/"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
@@ -13,7 +13,7 @@
     <property name="sun.os.patch.level" value="unknown"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="/mnt/d/crossover/devHub/denispalnitskytest/atsea-sample-shop-app-main"/>
+    <property name="user.dir" value="atsea-sample-shop-app-main"/>
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="java.runtime.version" value="11.0.2+9-Ubuntu-3ubuntu118.04.3"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
