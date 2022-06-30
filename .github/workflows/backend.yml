@@ -31,12 +31,12 @@ jobs:
       working-directory: ${{ env.working-directory }}
       run: dotnet test --no-build --verbosity normal --logger "junit;LogFilePath=TestResults/th-test-results.xml" --filter  TestCategory!=Integration --collect:"XPlat Code Coverage"      
     
-    - name: Upload test results      
-      uses: testhub-io/testhub-io.action@v0.61      
-      with:        
-        test_result_pattern: "**/TestResults/th-test-results.xml"
-        test_coverage_pattern: "**/coverage.cobertura.xml"
-        base_directory: ${{ env.working-directory }}
+    # - name: Upload test results      
+    #   uses: testhub-io/testhub-io.action@v0.61      
+    #   with:        
+    #     test_result_pattern: "**/TestResults/th-test-results.xml"
+    #     test_coverage_pattern: "**/coverage.cobertura.xml"
+    #     base_directory: ${{ env.working-directory }}
               
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
