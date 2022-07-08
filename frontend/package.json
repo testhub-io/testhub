@@ -16,7 +16,7 @@
     "jquery": "^3.5.0",
     "lodash": "^4.17.21",
     "lodash-uuid": "^0.0.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.27",
     "register-service-worker": "^1.6.2",
     "roboto-fontface": "^0.10.0",
