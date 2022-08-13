@@ -3,6 +3,7 @@ name: Cli Release
 on:
   release:
     types: [created]
+  workflow_dispatch:
 jobs:
   release:
     name: Publish release
@@ -17,30 +18,35 @@ jobs:
             github_token:  ${{ secrets.GITHUB_TOKEN }}            
             goos: linux            
             goarch:  amd64
+            project_path: cli
        - name: linux-386
          uses: wangyoucao577/go-release-action@v1.17
          with:            
             github_token:  ${{ secrets.GITHUB_TOKEN }}            
             goos: linux            
             goarch: 386
+            project_path: cli
        - name: darwin-amd64
          uses: wangyoucao577/go-release-action@v1.17
          with:            
             github_token:  ${{ secrets.GITHUB_TOKEN }}            
             goos: darwin            
             goarch: amd64  
+            project_path: cli
        - name: windows-386
          uses: wangyoucao577/go-release-action@v1.17
          with:            
             github_token:  ${{ secrets.GITHUB_TOKEN }}            
             goos: windows
             goarch: 386 
+            project_path: cli
        - name: windows-amd64
          uses: wangyoucao577/go-release-action@v1.17
          with:            
             github_token:  ${{ secrets.GITHUB_TOKEN }}            
             goos: windows
             goarch: amd64 
+            project_path: cli
             
        - name: Upload to S3
          run: |
