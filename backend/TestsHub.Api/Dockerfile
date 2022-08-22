@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.3-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:6.0.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
