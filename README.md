@@ -1,12 +1,12 @@
 # Testhub
 
-Testhub is a tests results aggregator that makes it easy to upload tests results from CI pipeline and present them in a visual form, provides insightful analytics.
+Testhub is a tests results aggregator that makes it easy to upload tests results from CI pipeline and present them in a visual form, providing insightful analytics.
 
 |Organiaztion View | Project View | Test-run View | Testgrid |
 |-|-|-|-|
 |![Organiaztion](docs/images/screenshot1.png) | ![Project](docs/images/screenshot2.png) |![Test-run](docs/images/screenshot3.png)| ![Testgrid](docs/images/screenshot4.png)
 
-Jump to a demo project and play with interface [https://test-hub.io/testhub-io-examples](https://test-hub.io/testhub-io-examples) 
+Jump to a demo project and play with the interface [https://test-hub.io/testhub-io-examples](https://test-hub.io/testhub-io-examples) 
 
 ### Contacts
 
@@ -52,23 +52,23 @@ We love help! Contribute by forking the repo and opening pull requests. Please e
 All pull requests should be submitted to the main branch.
 
 ### Running Porject Locally
-:warning: Please let us know if it tekes you more then 15 minutes to run the project locally. We will work on fixing that. 
+:warning: Please let us know if it takes you more than 15 minutes to run the project locally. We will work on fixing that. 
 
 #### Dev-container 
-Easiest way to run project locally is to use 'dev-containers'
+The easiest way to run a project locally is to use 'dev-containers'
 You will need:
 -  [VS Code](https://code.visualstudio.com/)
 -  [Docker](https://www.docker.com/products/docker-desktop)
 -  [Remote Development VS Code Extension pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
 I'm pretty sure you already have most of that. 
-Then open /frontend or /backend directories in VSCode and reopen them in DevContainer as VsCode suggests. If you did not get suggestion for some reason try `F1-> Remote-Containers: Rebuild and Reopen in Container`
+Then open /frontend or /backend directories in VSCode and reopen them in DevContainer as VsCode suggests. If you did not get a suggestion for some reason try `F1-> Remote-Containers: Rebuild and Reopen in Container`
 ![image](https://user-images.githubusercontent.com/154290/149673225-dbae4680-06b7-4219-ae9e-5f2e6b4ae342.png)
 
 Then hit `F5` and you are done.
 
 #### Docker Compose 
 
-Use `[docker-compose.yml](/docker-compose.yml)' from the root of the project to run dependencies. It consist of 
+Use `[docker-compose.yml](/docker-compose.yml)' from the root of the project to run dependencies. It consists of 
 - DB - `MySQL`
 - Backend - `C# .Net Core` moving to Golang
 - Frontent - `Vue.js` 
