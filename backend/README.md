@@ -2,6 +2,62 @@
 
 [![test-hub](https://api.test-hub.io/api/test-hub/projects/testhub-api/badge.svg?branch=master)](https://test-hub.io/test-hub/projects/testhub-api/runs)&nbsp;
 
+# Running Locally
+
+## Prerequisites
+
+- [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) or later
+
+## Setup and Run
+
+1. **Restore dependencies**
+   ```
+   dotnet restore TestsHub.sln
+   ```
+
+2. **Build the solution**
+   ```
+   dotnet build TestsHub.sln
+   ```
+
+3. **Run the API**
+   ```
+   dotnet run --project TestsHub.Api/TestsHub.Api.csproj
+   ```
+
+## Running Tests
+
+Run all tests (unit + integration):
+```
+dotnet test TestsHub.sln
+```
+
+Run all tests with coverage:
+```
+dotnet test TestsHub.sln --collect:"XPlat Code Coverage"
+```
+
+Run unit tests only (excludes integration tests):
+```
+dotnet test TestsHub.sln --filter "TestCategory!=Integration"
+```
+
+Run unit tests with coverage:
+```
+dotnet test TestsHub.sln --filter "TestCategory!=Integration" --collect:"XPlat Code Coverage"
+```
+
+Run integration tests only:
+```
+dotnet test TestsHub.sln --filter "TestCategory=Integration"
+```
+
+Run integration tests with coverage:
+```
+dotnet test TestsHub.sln --filter "TestCategory=Integration" --collect:"XPlat Code Coverage"
+```
+
+**Note:** Integration tests require a running MySQL database. Unit tests can run without any external dependencies. Coverage reports are generated in the `TestResults` directory of each test project.
 
 # Contribute
 
