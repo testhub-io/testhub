@@ -81,8 +81,10 @@ namespace TestHub.Data.DataModel
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            var serverVersion = new MySqlServerVersion(new System.Version(8, 0, 21));
             optionsBuilder
-               .UseMySql(_connectionString)
+               .UseMySql(_connectionString, serverVersion, options =>
+                   options.EnableStringComparisonTranslations())
                .UseLazyLoadingProxies()
                .UseLoggerFactory(_myLoggerFactory);
         }

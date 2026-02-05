@@ -26,8 +26,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />      
     <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.2.0" />      
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" />      
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />      
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.25">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>      
